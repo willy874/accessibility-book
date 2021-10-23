@@ -1,0 +1,9 @@
+@function rem($pixels) {
+  @if ($pixels == unset) {
+    @return unset;
+  }
+
+  @else {
+    @return $pixels / 16px * 1rem;
+  }
+}

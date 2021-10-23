@@ -1,0 +1,14 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-recess-order", "stylelint-config-prettier"],
+  "plugins": ["stylelint-scss"],
+  "rules": {
+    "font-family-no-missing-generic-family-keyword": null,
+    "at-rule-no-unknown": null,
+    "no-descending-specificity": null,
+    "selector-pseudo-class-no-unknown": null,
+    "selector-pseudo-element-no-unknown": null,
+    "scss/selector-no-union-class-name": true,
+    "scss/declaration-nested-properties": "never",
+    "scss/declaration-nested-properties-no-divided-groups": true
+  }
+}
