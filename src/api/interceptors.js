@@ -1,22 +1,19 @@
 export function getRequestSuccess(axios) {
-  return () => {
-    const token = localStorage.getItem('token')
-    axios.headers.Authorization = `Token ${token}`
-  }
+  return (req) => req
 }
 
 export function getRequestError(axios) {
-  return () => {}
+  return (error) => error
 }
 
 export function getResponseSuccess(axios) {
-  return () => {}
+  return (res) => res
 }
 
 export function getResponseError(axios) {
-  return () => {}
+  return (error) => error
 }
 
 export function getAuthRequestSuccess(axios) {
-  return () => {}
+  return (req) => req
 }

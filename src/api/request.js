@@ -6,7 +6,7 @@ import {
   getResponseSuccess,
   getResponseError,
   getAuthRequestSuccess,
-} from 'interceptors'
+} from './interceptors'
 
 /**
  * api
@@ -20,6 +20,8 @@ export const instance = function () {
       ...config.api.headers,
     },
   })
+  const token = localStorage.getItem('token')
+  axios.defaults.headers.Authorization = `Token ${token}`
 
   axios.interceptors.request.use(getRequestSuccess(axios), getRequestError(axios))
   axios.interceptors.response.use(getResponseSuccess(axios), getResponseError(axios))

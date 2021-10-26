@@ -1,7 +1,6 @@
 const path = require('path')
 
 module.exports = {
-  publicPath: '/dev',
   productionSourceMap: false,
   devServer: {
     proxy: {
