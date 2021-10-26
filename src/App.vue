@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Markdown View</h1>
+    <h1>Markdown Viewer</h1>
     <router-view />
   </div>
 </template>

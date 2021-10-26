@@ -21,7 +21,7 @@ export const instance = function () {
     },
   })
   const token = localStorage.getItem('token')
-  axios.defaults.headers.Authorization = `Token ${token}`
+  axios.defaults.headers.Authorization = `Token ${config.key || token}`
 
   axios.interceptors.request.use(getRequestSuccess(axios), getRequestError(axios))
   axios.interceptors.response.use(getResponseSuccess(axios), getResponseError(axios))
