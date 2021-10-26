@@ -1,4 +1,7 @@
-@auth = Authorization: Bearer 23f20daaeebdf6ec97880c4d8e623d4224324869
+@auth = Authorization: Token 34541f0e1dd79fe7f45803da2061031b696b56f7
+
+
+## accept: application/json
 
 ### 登入
 POST https://library.pastwind.org/dj-rest-auth/login/
@@ -13,6 +16,13 @@ content-type: application/json
 ### 登出
 
 POST https://library.pastwind.org/dj-rest-auth/logout/
+{{auth}}
+
+### 取得書籍列表
+
+GET https://library.pastwind.org/api/v1/book/
+content-type: application/json
+{{auth}}
 
 ### 取得書籍列表
 
@@ -22,6 +32,6 @@ content-type: application/json
 
 ### 章節列表API
 
-GET https://library.pastwind.org/api/v1/chapter/
+GET https://library.pastwind.org/api/v1/chapter/1/
 content-type: application/json
 {{auth}}

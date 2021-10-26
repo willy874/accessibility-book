@@ -11,7 +11,7 @@ module.exports = {
       },
       '/api': {
         target: 'https://library.pastwind.org/',
-        pathRewrite: { '^/api': '/api' },
+        pathRewrite: { '^/api': '/api/v1' },
       },
     },
   },
