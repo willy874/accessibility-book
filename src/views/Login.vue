@@ -10,7 +10,7 @@
 </template>
 
 <script>
-// import { authRequest } from '../api/request'
+import { authRequest } from '../api/request'
 
 export default {
   data() {
@@ -22,7 +22,18 @@ export default {
     }
   },
   methods: {
-    signIn() {},
+    signIn() {
+      const vm = this
+      const user = vm.user
+      authRequest(user)
+    },
+    async fetchUserApi(user) {
+      try {
+        const res = await authRequest(user)
+        if (res.success) {
+        }
+      } catch (error) {}
+    },
   },
 }
 </script>
