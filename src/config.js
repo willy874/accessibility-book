@@ -2,7 +2,7 @@ console.log('process.env', process.env)
 
 export default {
   version: '0.0.1',
-  key: '34541f0e1dd79fe7f45803da2061031b696b56f7',
+  key: '8cbf85baafa13a8062883bbd5412c7e85a90c7a8',
   api: {
     baseUrl: location.protocol + '//' + location.host + '/api',
     headers: {},

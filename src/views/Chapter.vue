@@ -1,17 +1,19 @@
 <template>
   <div>
-    <div v-html="contentHtml"></div>
+    <div v-html="transformMarkdownToHtml(model.content)"></div>
   </div>
 </template>
 
 <script>
+import BasePage from '@/extends/base-page'
 import { apiGetChapterById } from '@/api/index'
 
 export default {
-  name: 'Home',
+  name: 'Chapter',
+  extends: BasePage,
   data() {
     return {
-      chapter: {
+      model: {
         book: '',
         content: '',
         created: '',
@@ -21,22 +23,17 @@ export default {
       },
     }
   },
-  computed: {
-    contentHtml() {
-      return this.$markdown.render(this.chapter.content)
-    },
-  },
   watch: {
-    $route(to) {
-      this.effectPage(to)
+    $route() {
+      this.effectPage()
     },
   },
   created() {
-    this.effectPage(this.$route)
+    this.effectPage()
   },
   methods: {
-    effectPage(route) {
-      const id = route.params.id
+    effectPage() {
+      const id = this.baseRoute.params.id
       if (id) {
         this.fetchChapterById(id)
       }
@@ -44,7 +41,7 @@ export default {
     async fetchChapterById(id) {
       try {
         const res = await apiGetChapterById(id)
-        this.chapter = res.data
+        this.model = res.data
       } catch (error) {}
     },
   },
