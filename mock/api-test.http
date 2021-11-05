@@ -1,4 +1,4 @@
-@auth = Authorization: Token 8cbf85baafa13a8062883bbd5412c7e85a90c7a8
+@auth = Authorization: Token 8ce5650b80eebdee3dd4a5357884231bc07d1d26
 
 
 ## accept: application/json

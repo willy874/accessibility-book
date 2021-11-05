@@ -1,38 +1,83 @@
 <template>
   <main>
-    <form title="帳號登入的表單" action="" @submit="signIn">
-      <h2 title="這裡是登入頁面">Login</h2>
-      <input id="user-email" v-model="user.email" type="email" name="user-email" title="這裡輸入帳號信箱" />
-      <input id="user-password" v-model="user.password" type="password" name="user-password" title="這裡輸入帳號密碼" />
-      <button type="submit" title="點擊登入">登入</button>
+    <form title="帳號登入的表單" @submit="signIn">
+      <h2 class="form-title" title="這裡是登入頁面">登入</h2>
+      <label class="form-label" for="user-email" title="帳號信箱">帳號信箱</label>
+      <input
+        id="user-email"
+        v-model="user.username"
+        class="form-input"
+        :class="[{ error: emailError }]"
+        type="text"
+        name="email"
+        title="這裡輸入帳號信箱"
+      />
+      <strong v-if="emailError" class="error-msg" title="帳號信箱格式錯誤">帳號信箱格式錯誤</strong>
+      <label class="form-label" for="user-password" title="密碼">密碼</label>
+      <input
+        id="user-password"
+        v-model="user.password"
+        class="form-input"
+        :class="[{ error: passwordError }]"
+        type="password"
+        name="password"
+        title="這裡輸入帳號密碼"
+      />
+      <strong v-if="passwordError" class="error-msg" title="帳號密碼格式錯誤">帳號密碼格式錯誤</strong>
+      <!-- <p>{{ emailError }}</p> -->
+      <button type="submit" title="點擊登入" class="btn-submit">登入</button>
     </form>
   </main>
 </template>
 
 <script>
-import { authRequest } from '../api/request'
+import { apiPostUser } from '@/api'
 
 export default {
   data() {
     return {
       user: {
-        email: '',
+        username: '',
         password: '',
       },
+      emailError: false,
+      passwordError: false,
     }
   },
   methods: {
-    signIn() {
+    signIn(e) {
+      e.preventDefault()
       const vm = this
       const user = vm.user
-      authRequest(user)
+      const error = false
+      // vm.validateEmail(user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
+      // vm.validatePassword(user.password) === false
+      //   ? (vm.passwordError = error = true)
+      //   : (vm.passwordError = error = false)
+
+      if (error === false) {
+        vm.fetchUserApi(user)
+      }
     },
     async fetchUserApi(user) {
+      const vm = this
       try {
-        const res = await authRequest(user)
-        if (res.success) {
+        const res = await apiPostUser(user)
+        if (!res.isAxiosError) {
+          const token = res.data.key
+          localStorage.setItem('token', token)
+          vm.$router.push('/')
         }
       } catch (error) {}
+    },
+    validateEmail(email) {
+      const reg =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return reg.test(String(email).toLowerCase())
+    },
+    validatePassword(password) {
+      const reg = /^(?=.*\d)(?=.*[a-zA-Z]).{6,30}$/
+      return reg.test(String(password))
     },
   },
 }
@@ -41,15 +86,50 @@ export default {
 <style lang="scss">
 form {
   max-width: $xs;
-  margin: 0 auto;
+  margin: 2rem auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 10px;
+  gap: 1.5rem;
+  padding: 10px 15px;
+  border: 1px solid #217842;
+  border-radius: 0.5rem;
+  background-color: #e0fff3;
 }
 
-input,
-button {
+.form-input,
+.btn-submit {
   font-size: 2rem;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  outline-color: #217842;
+  border: 1px solid #217842;
+}
+
+.form-label {
+  font-size: 1.5rem;
+}
+
+.btn-submit {
+  margin: 2rem 0;
+  background-color: #217842;
+  color: #e0fff3;
+  &:hover {
+    background-color: #1a5f34;
+  }
+}
+
+.error-msg {
+  color: red;
+  font-size: 1.2rem;
+}
+
+.form-title {
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.error {
+  outline-color: red;
+  border-color: red;
 }
 </style>

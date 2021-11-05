@@ -1,5 +1,8 @@
+import router from '@/router'
 export function getRequestSuccess(axios) {
-  return (req) => req
+  return (req) => {
+    return req
+  }
 }
 
 export function getRequestError(axios) {
@@ -11,9 +14,17 @@ export function getResponseSuccess(axios) {
 }
 
 export function getResponseError(axios) {
-  return (error) => error
+  return (error) => {
+    const status = error?.response.status
+    if (status === 401 || status === 403) {
+      router.replace('/login')
+    }
+    return error
+  }
 }
 
 export function getAuthRequestSuccess(axios) {
-  return (req) => req
+  return (req) => {
+    return req
+  }
 }
