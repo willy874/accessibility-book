@@ -1,8 +1,10 @@
 <template>
   <div>
-    <div v-if="route.name === routerName.Chapter">
-      <Chapter :route="route" />
-    </div>
+    <template v-if="route">
+      <div v-if="route.name === routerName.Chapter">
+        <Chapter :route="route" />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -23,8 +25,10 @@ export default {
   },
   created() {
     const { 'liff.state': path } = this.$route.query
-    const locationData = this.$router.resolve(path)
-    this.route = locationData.route
+    if (path) {
+      const locationData = this.$router.resolve(path)
+      this.route = locationData.route
+    }
   },
   methods: {},
 }

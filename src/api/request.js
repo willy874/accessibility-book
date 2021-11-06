@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import config from '@/config'
+import Config from '@/config'
 import {
   getRequestSuccess,
   getRequestError,
@@ -8,10 +8,12 @@ import {
   getAuthRequestSuccess,
 } from './interceptors'
 
+const config = Config.value
+
 /**
  * api
  */
-export const instance = function () {
+export const instance = function (options) {
   const axios = Axios.create({
     baseURL: `${config.api.baseUrl}`,
     headers: {
@@ -20,11 +22,8 @@ export const instance = function () {
       ...config.api.headers,
     },
   })
-  const token = localStorage.getItem('token')
-  axios.defaults.headers.Authorization = `Token ${config.key || token}`
-
-  axios.interceptors.request.use(getRequestSuccess(axios), getRequestError(axios))
-  axios.interceptors.response.use(getResponseSuccess(axios), getResponseError(axios))
+  axios.interceptors.request.use(getRequestSuccess(options), getRequestError(options))
+  axios.interceptors.response.use(getResponseSuccess(options), getResponseError(options))
 
   return axios
 }
@@ -34,7 +33,7 @@ export const request = instance()
 /**
  * auth
  */
-export const authInstance = function () {
+export const authInstance = function (options) {
   const axios = Axios.create({
     baseURL: `${config.auth.baseUrl}`,
     headers: {
@@ -44,8 +43,8 @@ export const authInstance = function () {
     },
   })
 
-  axios.interceptors.request.use(getAuthRequestSuccess(axios), getRequestError(axios))
-  axios.interceptors.response.use(getResponseSuccess(axios), getResponseError(axios))
+  axios.interceptors.request.use(getAuthRequestSuccess(options), getRequestError(options))
+  axios.interceptors.response.use(getResponseSuccess(options), getResponseError(options))
 
   return axios
 }

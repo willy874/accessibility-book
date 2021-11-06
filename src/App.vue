@@ -1,11 +1,12 @@
 <template>
   <div id="app">
-    <h1>Markdown Viewer</h1>
+    <router-view name="header" />
     <router-view />
   </div>
 </template>
 <script>
 import 'markdown-it-latex/dist/index.css'
+
 export default {
   name: 'App',
 }

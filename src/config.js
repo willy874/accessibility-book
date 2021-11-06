@@ -1,8 +1,6 @@
-console.log('process.env', process.env)
-
-export default {
+const config = {
+  env: process.env,
   version: '0.0.1',
-  key: '8cbf85baafa13a8062883bbd5412c7e85a90c7a8',
   api: {
     baseUrl: location.protocol + '//' + location.host + '/api',
     headers: {},
@@ -12,3 +10,21 @@ export default {
     headers: {},
   },
 }
+
+let app = null
+
+class VueConfig {
+  static get value() {
+    return config
+  }
+
+  static setApp(vm) {
+    app = vm
+  }
+
+  static useApp() {
+    return app
+  }
+}
+
+export default VueConfig
