@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="mode.contentl">
+    <div>
       <div v-html="transformMarkdownToHtml(model.content)"></div>
     </div>
   </div>
