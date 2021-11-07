@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div v-html="transformMarkdownToHtml(model.content)"></div>
+    <div v-if="mode.contentl">
+      <div v-html="transformMarkdownToHtml(model.content)"></div>
+    </div>
   </div>
 </template>
 
@@ -28,7 +30,9 @@ export default {
       this.effectPage()
     },
   },
-  created() {
+  async created() {
+    console.log('passLogin')
+    await this.passLogin()
     this.effectPage()
   },
   methods: {
@@ -36,8 +40,7 @@ export default {
       const res = await apiPostUser({ username: 'ryan', password: '123456' })
       localStorage.setItem('token', res.data.key)
     },
-    async effectPage() {
-      await this.passLogin()
+    effectPage() {
       const id = this.baseRoute.params.id
       if (id) {
         this.fetchChapterById(id)
