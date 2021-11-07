@@ -6,7 +6,7 @@
 
 <script>
 import BasePage from '@/extends/base-page'
-import { apiGetChapterById } from '@/api/index'
+import { apiGetChapterById, apiPostUser } from '@/api/index'
 
 export default {
   name: 'Chapter',
@@ -32,7 +32,12 @@ export default {
     this.effectPage()
   },
   methods: {
-    effectPage() {
+    async passLogin() {
+      const res = await apiPostUser({ username: 'ryan', password: '123456' })
+      localStorage.setItem('token', res.data.key)
+    },
+    async effectPage() {
+      await this.passLogin()
       const id = this.baseRoute.params.id
       if (id) {
         this.fetchChapterById(id)

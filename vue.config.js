@@ -6,11 +6,21 @@ module.exports = {
     proxy: {
       '/auth': {
         target: 'https://library.pastwind.org/',
-        pathRewrite: { '^/auth': '/dj-rest-auth' },
+        pathRewrite: {
+          '^/auth': '/dj-rest-auth',
+        },
+        onProxyReq(proxyReq, req, res) {
+          const cookie = req.headers.cookie
+          if (cookie) {
+            proxyReq.setHeader('cookie', '')
+          }
+        },
       },
       '/api': {
         target: 'https://library.pastwind.org/',
-        pathRewrite: { '^/api': '/api/v1' },
+        pathRewrite: {
+          '^/api': '/api/v1',
+        },
       },
     },
   },
