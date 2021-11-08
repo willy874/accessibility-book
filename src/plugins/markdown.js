@@ -26,6 +26,10 @@ markdown.use(markdownItTexmath)
 // markdown.use(markdownItSup)
 // markdown.use(markdownItSub)
 
-export default function (vm) {
+export function installMarkdown(vm) {
   vm.prototype.$markdown = markdown
+}
+
+export function useMarkdown() {
+  return markdown
 }

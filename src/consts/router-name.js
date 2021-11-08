@@ -1,5 +1,5 @@
 export default {
-  Home: 'Home',
-  Chapter: 'Chapter',
-  Login: 'Login',
+  HOME: 'Home',
+  CHAPTER: 'Chapter',
+  LOGIN: 'Login',
 }

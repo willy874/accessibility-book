@@ -1,5 +1,5 @@
 export default {
-  beforeRouteEnter: 'beforeRouteEnter',
-  beforeRouteUpdate: 'beforeRouteUpdate',
-  beforeRouteLeave: 'beforeRouteLeave',
+  BEFORE_ROUTE_ENTER: 'beforeRouteEnter',
+  BEFORE_ROUTE_UPDATE: 'beforeRouteUpdate',
+  BEFORE_ROUTE_LEAVE: 'beforeRouteLeave',
 }

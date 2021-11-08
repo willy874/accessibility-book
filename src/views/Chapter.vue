@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="model">
       <div v-html="transformMarkdownToHtml(model.content)"></div>
     </div>
   </div>
@@ -8,8 +8,13 @@
 
 <script>
 import BasePage from '@/extends/base-page'
-import { apiGetChapterById } from '@/api/index'
+import { transformMarkdownToHtml } from '@/utils'
+import { apiGetChapterById, apiPostUser } from '@/api/index'
 
+/**
+ * @type {ComponentOptions}
+ * @extends {BasePage}
+ */
 export default {
   name: 'Chapter',
   extends: BasePage,
@@ -27,29 +32,28 @@ export default {
   },
   watch: {
     $route() {
-      this.effectPage()
+      this.effectComponentPage()
     },
   },
   async created() {
     // await this.passLogin()
-    this.effectPage()
+    this.effectComponentPage()
   },
   methods: {
-    // async passLogin() {
-    //   const res = await apiPostUser({ username: 'ryan', password: '123456' })
-    //   localStorage.setItem('token', res.data.key)
-    // },
-    effectPage() {
-      const id = this.baseRoute.params.id
-      if (id) {
-        this.fetchChapterById(id)
-      }
+    transformMarkdownToHtml,
+    async passLogin() {
+      const res = await apiPostUser({ username: 'ryan', password: '123456' })
+      localStorage.setItem('token', res.data.key)
     },
-    async fetchChapterById(id) {
-      try {
+    async effectComponentPage() {
+      /** @type {Router} */
+      const route = this._$route
+
+      const id = route.params.id
+      if (id) {
         const res = await apiGetChapterById(id)
         this.model = res.data
-      } catch (error) {}
+      }
     },
   },
 }

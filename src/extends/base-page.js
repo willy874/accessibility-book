@@ -6,13 +6,12 @@ export default {
     },
   },
   computed: {
-    baseRoute() {
+    /**
+     * @returns {Route}
+     */
+    _$route() {
       return this.route || this.$route
     },
   },
-  methods: {
-    transformMarkdownToHtml(content) {
-      return this.$markdown.render(content)
-    },
-  },
+  methods: {},
 }

@@ -33,6 +33,9 @@
 <script>
 import { apiPostUser } from '@/api'
 
+/**
+ * @type {ComponentOptions}
+ */
 export default {
   data() {
     return {
@@ -66,7 +69,7 @@ export default {
         if (!res.isAxiosError) {
           const token = res.data.key
           localStorage.setItem('token', token)
-          vm.$router.push('/')
+          vm.$router.replace(this.$route.query.replacePath || '/')
         }
       } catch (error) {}
     },
