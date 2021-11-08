@@ -8,7 +8,7 @@
 
 <script>
 import BasePage from '@/extends/base-page'
-import { apiGetChapterById } from '@/api/index'
+import { apiGetChapterById, apiPostUser } from '@/api/index'
 
 export default {
   name: 'Chapter',
@@ -31,14 +31,14 @@ export default {
     },
   },
   async created() {
-    // await this.passLogin()
+    await this.passLogin()
     this.effectPage()
   },
   methods: {
-    // async passLogin() {
-    //   const res = await apiPostUser({ username: 'ryan', password: '123456' })
-    //   localStorage.setItem('token', res.data.key)
-    // },
+    async passLogin() {
+      const res = await apiPostUser({ username: 'ryan', password: '123456' })
+      localStorage.setItem('token', res.data.key)
+    },
     effectPage() {
       const id = this.baseRoute.params.id
       if (id) {

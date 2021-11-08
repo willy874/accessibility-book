@@ -13,7 +13,7 @@
 <script>
 import { routerName } from '@/consts'
 import Chapter from './Chapter'
-// import liff from '@line/liff'
+import liff from '@line/liff'
 
 export default {
   name: 'Home',
@@ -29,7 +29,7 @@ export default {
     }
   },
   async created() {
-    // await liff.init({ liffId: '1656538444-L3wP67PM' })
+    await liff.init({ liffId: '1656538444-L3wP67PM' })
     const { 'liff.state': path } = this.$route.query
     this.path = path
     this.href = location.href
