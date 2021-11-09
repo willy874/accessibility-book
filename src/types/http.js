@@ -15,7 +15,8 @@
  * @typedef {import('axios').AxiosRequestConfig} AxiosRequestConfig
  */
 /**
- * @typedef {import('axios').AxiosResponse} AxiosResponse
+ * @template T
+ * @typedef {import('axios').AxiosResponse<T>} AxiosResponse
  */
 /**
  * @typedef {import('axios').AxiosError} AxiosError

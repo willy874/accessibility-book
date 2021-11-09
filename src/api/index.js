@@ -1,13 +1,13 @@
 import { request, authRequest } from './request'
 
-const apiGetChapterById = (id) => request.get(`chapter/${id}/`)
+/**
+ * @param {number} id
+ * @returns {Promise<AxiosResponse<ChapterModel>>  }
+ */
+export const apiGetChapterById = (id) => request.get(`chapter/${id}/`)
 
 /**
  * @param {LoginRequestParam} data
- * @returns {Promise<AxiosResponse<LoginResponseData>>  }
+ * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
-function apiPostUser(data) {
-  return authRequest.post(`login/`, data)
-}
-
-export { apiPostUser, apiGetChapterById }
+export const apiPostUser = (data) => authRequest.post(`login/`, data)
