@@ -1,14 +1,18 @@
 <template>
   <div id="app">
-    <router-view name="header" />
+    <Header />
     <router-view />
   </div>
 </template>
 <script>
 import 'markdown-it-latex/dist/index.css'
+import Header from './layouts/Header.vue'
 
 export default {
   name: 'App',
+  components: {
+    Header,
+  },
 }
 </script>
 <style lang="scss">

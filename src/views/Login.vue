@@ -33,13 +33,13 @@
 <script>
 import { apiPostUser } from '@/api'
 
+/**
+ * @type {ComponentOptions}
+ */
 export default {
   data() {
     return {
-      user: {
-        username: '',
-        password: '',
-      },
+      user: { username: 'user', password: 'zY7bSBgk' },
       emailError: false,
       passwordError: false,
     }
@@ -66,7 +66,7 @@ export default {
         if (!res.isAxiosError) {
           const token = res.data.key
           localStorage.setItem('token', token)
-          vm.$router.push('/')
+          vm.$router.replace(this.$route.query.replacePath || '/')
         }
       } catch (error) {}
     },

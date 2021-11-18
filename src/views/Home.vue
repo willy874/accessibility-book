@@ -3,7 +3,7 @@
     <div>liff: {{ path || 'not path' }}</div>
     <div>href: {{ href || 'not href' }}</div>
     <template v-if="route">
-      <div v-if="route.name === routerName.Chapter">
+      <div v-if="route.name === RouterName.CHAPTER">
         <Chapter :route="route" />
       </div>
     </template>
@@ -11,10 +11,19 @@
 </template>
 
 <script>
-import { routerName } from '@/consts'
+import consts from '@/consts'
 import Chapter from './Chapter'
 import liff from '@line/liff'
 
+/**
+ * @enum {number}
+ * @readonly
+ */
+const RouterName = consts.routerName
+
+/**
+ * @type {ComponentOptions}
+ */
 export default {
   name: 'Home',
   components: {
@@ -23,7 +32,7 @@ export default {
   data() {
     return {
       route: null,
-      routerName,
+      RouterName,
       path: '',
       href: '',
     }
