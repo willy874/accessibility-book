@@ -11,7 +11,7 @@
 <script>
 import consts from '@/consts'
 import Chapter from './Chapter'
-import liff from '@line/liff'
+// import liff from '@line/liff'
 
 /**
  * @enum {number}
@@ -41,7 +41,7 @@ export default {
     },
   },
   async created() {
-    await liff.init({ liffId: '1656538444-L3wP67PM' })
+    // await liff.init({ liffId: '1656538444-L3wP67PM' })
     this.effectComponentPage()
   },
   methods: {

@@ -14,7 +14,8 @@ import { useMarkdown } from '@/plugins/markdown'
  */
 export function transformMarkdownToHtml(content) {
   const markdown = useMarkdown()
-  // const html = markdown.render(content.replace(/\\n/g, '\n\n'))
-  // return html.replace(/<hr>/g, '<br><hr><br>')
-  return markdown.render(content)
+  const contentText = content.replace(/\r\n/g, '\r\n\r\n')
+  const html = markdown.render(contentText)
+  const htmlText = html.replace(/<hr>/g, '<br><hr><br>')
+  return htmlText
 }
