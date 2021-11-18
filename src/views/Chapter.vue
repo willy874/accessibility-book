@@ -36,7 +36,7 @@ export default {
     },
   },
   watch: {
-    $route() {
+    $route(to) {
       this.effectComponentPage()
     },
   },
@@ -62,7 +62,6 @@ export default {
       const modelList = this.modelList
       /** @type {number} */
       const id = Number(route.params.id)
-
       if (id) {
         this.active = id
         const target = targetModel
