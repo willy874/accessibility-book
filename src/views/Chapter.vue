@@ -12,7 +12,7 @@
 <script>
 import BasePage from '@/extends/base-page'
 import { transformMarkdownToHtml } from '@/utils'
-import { apiGetChapterById, apiPostUser } from '@/api/index'
+import { apiGetChapterById } from '@/api/index'
 
 /**
  * @type {ComponentOptions}
@@ -41,15 +41,10 @@ export default {
     },
   },
   async created() {
-    // await this.passLogin()
     this.effectComponentPage()
   },
   methods: {
     transformMarkdownToHtml,
-    async passLogin() {
-      const res = await apiPostUser({ username: 'ryan', password: '123456' })
-      localStorage.setItem('token', res.data.key)
-    },
     /**
      * @depend
      * @this {ComponentOptions}
@@ -66,7 +61,7 @@ export default {
       /** @type {ChapterModel[]} */
       const modelList = this.modelList
       /** @type {number} */
-      const id = route.params.id
+      const id = Number(route.params.id)
 
       if (id) {
         this.active = id
