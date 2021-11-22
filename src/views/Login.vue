@@ -2,28 +2,36 @@
   <main>
     <form title="帳號登入的表單" @submit="signIn">
       <h2 class="form-title" title="這裡是登入頁面">登入</h2>
-      <label class="form-label" for="user-email" title="帳號信箱">帳號信箱</label>
-      <input
-        id="user-email"
-        v-model="user.username"
-        class="form-input"
-        :class="[{ error: emailError }]"
-        type="text"
-        name="email"
-        title="這裡輸入帳號信箱"
-      />
-      <strong v-if="emailError" class="error-msg" title="帳號信箱格式錯誤">帳號信箱格式錯誤</strong>
-      <label class="form-label" for="user-password" title="密碼">密碼</label>
-      <input
-        id="user-password"
-        v-model="user.password"
-        class="form-input"
-        :class="[{ error: passwordError }]"
-        type="password"
-        name="password"
-        title="這裡輸入帳號密碼"
-      />
-      <strong v-if="passwordError" class="error-msg" title="帳號密碼格式錯誤">帳號密碼格式錯誤</strong>
+      <div>
+        <label class="form-label" for="user-email" title="帳號信箱">帳號信箱</label>
+        <input
+          id="user-email"
+          v-model="user.username"
+          class="form-input"
+          :class="[{ error: emailError }]"
+          type="text"
+          name="email"
+          title="這裡輸入帳號信箱"
+        />
+        <div class="msg">
+          <strong v-if="emailError" class="error-msg" title="帳號信箱格式錯誤">帳號信箱格式錯誤</strong>
+        </div>
+      </div>
+      <div>
+        <label class="form-label" for="user-password" title="密碼">密碼</label>
+        <input
+          id="user-password"
+          v-model="user.password"
+          class="form-input"
+          :class="[{ error: passwordError }]"
+          type="password"
+          name="password"
+          title="這裡輸入帳號密碼"
+        />
+        <div class="msg">
+          <strong v-if="passwordError" class="error-msg" title="帳號密碼格式錯誤">帳號密碼格式錯誤</strong>
+        </div>
+      </div>
       <!-- <p>{{ emailError }}</p> -->
       <button type="submit" title="點擊登入" class="btn-submit">登入</button>
     </form>
@@ -32,6 +40,9 @@
 
 <script>
 import { apiPostUser } from '@/api'
+// import { validate } from '@/utils'
+
+// console.log(validate('email', 123))
 
 /**
  * @type {ComponentOptions}
@@ -53,8 +64,8 @@ export default {
       const vm = this
       const user = vm.user
       const error = false
-      // vm.validateEmail(user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
-      // vm.validatePassword(user.password) === false
+      // validate('email', user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
+      // validate('password', user.password) === false
       //   ? (vm.passwordError = error = true)
       //   : (vm.passwordError = error = false)
 
@@ -69,7 +80,8 @@ export default {
         if (!res.isAxiosError) {
           const token = res.data.key
           localStorage.setItem('token', token)
-          vm.$router.replace(this.$route.query.replacePath || '/')
+          const fromPath = localStorage.getItem('fromPath')
+          vm.$router.replace(fromPath || '/')
         }
       } catch (error) {}
     },
@@ -99,6 +111,10 @@ form {
   background-color: #e0fff3;
 }
 
+input {
+  box-sizing: border-box;
+}
+
 .form-input,
 .btn-submit {
   font-size: 2rem;
@@ -106,6 +122,10 @@ form {
   padding: 1rem;
   outline-color: #217842;
   border: 1px solid #217842;
+}
+
+.form-input {
+  width: 100%;
 }
 
 .form-label {
@@ -119,6 +139,11 @@ form {
   &:hover {
     background-color: #1a5f34;
   }
+}
+
+.msg {
+  padding-top: 0.5rem;
+  height: 1rem;
 }
 
 .error-msg {
