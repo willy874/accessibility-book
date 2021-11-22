@@ -50,10 +50,7 @@ import { apiPostUser } from '@/api'
 export default {
   data() {
     return {
-      user: {
-        username: '',
-        password: '',
-      },
+      user: { username: 'user', password: 'zY7bSBgk' },
       emailError: false,
       passwordError: false,
     }
