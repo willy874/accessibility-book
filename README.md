@@ -24,3 +24,4 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 > ssh kent@kentnas.myds.me -p 22022
+https://tpwlliff.3anology.info
