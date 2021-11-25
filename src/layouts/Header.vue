@@ -6,7 +6,10 @@
           <RouterLink to="/">首頁</RouterLink>
         </li>
         <li>
-          <RouterLink to="/book/">書本頁</RouterLink>
+          <RouterLink to="/book/">書籍</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/tag/">標籤</RouterLink>
         </li>
       </ul>
     </nav>

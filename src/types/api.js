@@ -55,3 +55,8 @@
  * @property {Author} author
  * @property {Tag[]} tag
  */
+/**
+ * @typedef {Object} TagModel
+ * @property {string} id
+ * @property {string} name
+ */

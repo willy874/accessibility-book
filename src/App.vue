@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     changeRoute() {
+      console.log('onRouteChange', this.route)
       const { query } = this.$route
       if (query && query['liff.state']) {
         const { 'liff.state': path } = query

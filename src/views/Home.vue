@@ -5,6 +5,9 @@
       <div v-if="route.name === RouterName.CHAPTER">
         <Chapter :route="route" />
       </div>
+      <div v-if="route.name === RouterName.TAG">
+        <Chapter :route="route" />
+      </div>
     </template>
   </div>
 </template>
