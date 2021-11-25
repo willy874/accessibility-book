@@ -2,7 +2,7 @@ import { useMarkdown } from '@/plugins/markdown'
 
 /**
  * @param {string} content
- * @returns {string}
+ * @returns {string} htmlText
  * @description
  * ```markdown
  * # 規則:
