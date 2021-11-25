@@ -12,7 +12,7 @@
 import 'markdown-it-latex/dist/index.css'
 import Header from './layouts/Header.vue'
 import consts from '@/consts'
-// import liff from '@line/liff'
+import liff from '@line/liff'
 
 /**
  * @enum {number}
@@ -39,7 +39,7 @@ export default {
     },
   },
   async created() {
-    // await liff.init({ liffId: '1656538444-L3wP67PM' })
+    await liff.init({ liffId: '1656538444-L3wP67PM' })
     this.changeRoute()
   },
   methods: {
