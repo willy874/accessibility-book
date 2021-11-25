@@ -1,15 +1,25 @@
 <template>
   <div>
-    <div v-if="modelList">
-      <div v-if="modelList.length">
-        <div v-for="model in modelList" :key="model.id">
-          {{ model }}
+    <h2>書籍列表</h2>
+    <template v-if="loading">
+      <div v-if="targetModel">
+        <h3>{{ targetModel.name }}</h3>
+        <div v-for="model in targetModel.chapter_set" :key="model.id">
+          <RouterLink :to="`/chapter/${model.id}`">{{ model.name }}</RouterLink>
         </div>
       </div>
-    </div>
-    <div v-else>
-      <div></div>
-    </div>
+      <div v-else-if="listModel.length">
+        <div v-for="model in listModel" :key="model.id">
+          <RouterLink :to="`/book/${model.id}`">{{ model.name }}</RouterLink>
+        </div>
+      </div>
+      <div v-else>
+        <div>沒有資料</div>
+      </div>
+    </template>
+    <template v-else>
+      <div>讀取中</div>
+    </template>
   </div>
 </template>
 
@@ -26,20 +36,17 @@ export default {
   extends: BasePage,
   data() {
     return {
-      modelList: [],
-      active: -1,
+      /** @type {BookModel[]} */
+      listModel: null,
+      /** @type {BookModel} */
+      targetModel: null,
+      active: '',
+      loading: false,
     }
   },
-  computed: {
-    /**
-     * @returns {BookModel}
-     */
-    targetModel() {
-      return this.modelList.find((p) => p.id === this.active)
-    },
-  },
+  computed: {},
   watch: {
-    $route() {
+    route() {
       this.effectComponentPage()
     },
   },
@@ -51,32 +58,27 @@ export default {
     /**
      * @depend
      * @this {ComponentOptions}
-     * @param {Route} this._$route
      * @param {BookModel} this.targetModel
-     * @param {BookModel[]} this.modelList
+     * @param {BookModel[]} this.listModel
      * @param {number} this.active
      */
     async effectComponentPage() {
-      /** @type {Route} */
-      const route = this._$route
-      /** @type {BookModel} */
-      const targetModel = this.targetModel
-      /** @type {BookModel[]} */
-      const modelList = this.modelList
       /** @type {number} */
-      const id = route.params.id
+      const id = this.route?.params.id
 
       if (id) {
         this.active = id
-        const target = targetModel
-        if (!target) {
-          const res = await apiGetBookById(id)
-          modelList.push(res.data)
-        }
+        this.loading = false
+        const res = await apiGetBookById(id)
+        this.targetModel = res.data
+        this.loading = true
       } else {
-        this.active = -1
+        this.active = ''
+        this.targetModel = null
+        this.loading = false
         const res = await apiGetBookList()
-        this.modelList = res.data
+        this.listModel = res.data
+        this.loading = true
       }
     },
   },

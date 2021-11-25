@@ -1,16 +1,11 @@
 export default {
   props: {
-    route: {
-      type: Object,
-      default: () => null,
-    },
-  },
-  computed: {
     /**
-     * @returns {Route}
+     * @type {Route}
      */
-    _$route() {
-      return this.route || this.$route
+    route: {
+      type: [Object, null],
+      default: () => null,
     },
   },
   methods: {},
