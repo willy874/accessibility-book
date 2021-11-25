@@ -2,6 +2,7 @@ import consts from '@/consts'
 import Home from '../views/Home.vue'
 import Chapter from '../views/Chapter.vue'
 import Book from '../views/Book.vue'
+import Tag from '../views/Tag.vue'
 import Login from '../views/Login.vue'
 
 /**
@@ -35,5 +36,15 @@ export default [
     path: '/chapter/:id',
     name: RouterName.CHAPTER,
     component: Chapter,
+  },
+  {
+    path: '/tag/',
+    name: RouterName.TAG,
+    component: Tag,
+  },
+  {
+    path: '/tag/:id',
+    name: RouterName.TAG,
+    component: Tag,
   },
 ]
