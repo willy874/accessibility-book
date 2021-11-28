@@ -6,6 +6,7 @@ import {
   getResponseSuccess,
   getResponseError,
   getAuthRequestSuccess,
+  getBaseRequestSuccess,
 } from './interceptors'
 
 const config = Config.value
@@ -50,3 +51,23 @@ export const authInstance = function (options) {
 }
 
 export const authRequest = authInstance()
+
+/**
+ * root
+ */
+export const baseInstance = function (options) {
+  const axios = Axios.create({
+    baseURL: `${config.base.baseUrl}`,
+    headers: {
+      'X-Client-Version': config.version,
+      accept: 'application/json',
+      ...config.base.headers,
+    },
+  })
+
+  axios.interceptors.request.use(getBaseRequestSuccess(options), getRequestError(options))
+  axios.interceptors.response.use(getResponseSuccess(options), getResponseError(options))
+
+  return axios
+}
+export const baseRequest = baseInstance()

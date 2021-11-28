@@ -4,6 +4,12 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     proxy: {
+      '/root': {
+        target: 'https://library.pastwind.org/',
+        pathRewrite: {
+          '^/root': '/',
+        },
+      },
       '/auth': {
         target: 'https://library.pastwind.org/',
         pathRewrite: {
