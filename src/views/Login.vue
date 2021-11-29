@@ -34,6 +34,7 @@
       </div>
       <!-- <p>{{ emailError }}</p> -->
       <button type="submit" title="點擊登入" class="btn-submit">登入</button>
+      <button type="button" title="點擊使用Line登入" class="btn-submit" @click="linkLineSignIn">Line登入</button>
     </form>
   </main>
 </template>
@@ -54,6 +55,19 @@ export default {
       emailError: false,
       passwordError: false,
     }
+  },
+  computed: {
+    lineUrl() {
+      const qs = new URLSearchParams({
+        response_type: 'code',
+        client_id: 'client_id',
+        redirect_uri: location.href,
+        state: '12345abcde',
+        scope: 'profile%20openid',
+        nonce: '09876xyz',
+      })
+      return 'https://access.line.me/oauth2/v2.1/authorize?' + qs.toString()
+    },
   },
   methods: {
     signIn(e) {
@@ -91,6 +105,7 @@ export default {
       const reg = /^(?=.*\d)(?=.*[a-zA-Z]).{6,30}$/
       return reg.test(String(password))
     },
+    linkLineSignIn() {},
   },
 }
 </script>
@@ -101,7 +116,6 @@ form {
   margin: 2rem auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   padding: 10px 15px;
   border: 1px solid #217842;
   border-radius: 0.5rem;

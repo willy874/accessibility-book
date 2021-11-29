@@ -6,22 +6,34 @@
           <RouterLink to="/">首頁</RouterLink>
         </li>
         <li>
-          <RouterLink to="/book/">書本頁</RouterLink>
+          <RouterLink to="/book/">書籍</RouterLink>
         </li>
         <li>
-          <RouterLink :to="{ path: '/', query: { 'liff.state': '/chapter/1' } }">章節1: 線性代數</RouterLink>
-        </li>
-        <li>
-          <RouterLink :to="{ path: '/', query: { 'liff.state': '/chapter/4' } }">章節4: 字音字形</RouterLink>
+          <RouterLink to="/tag/">標籤</RouterLink>
         </li>
       </ul>
+      <div>
+        <button type="button" @click="signOut">登出</button>
+      </div>
     </nav>
   </header>
 </template>
 
 <script>
+import { apiPostLogout } from '@/api'
+
 export default {
   name: 'Header',
+  methods: {
+    async signOut() {
+      try {
+        const res = await apiPostLogout()
+        if (!res.isAxiosError) {
+          throw res
+        }
+      } catch (error) {}
+    },
+  },
 }
 </script>
 

@@ -1,16 +1,15 @@
 <template>
   <div>
-    <h2>書籍列表</h2>
+    <h2>標籤列表</h2>
     <template v-if="loading">
-      <div v-if="targetModel">
-        <h3>{{ targetModel.name }}</h3>
-        <div v-for="model in targetModel.chapter_set" :key="model.id">
+      <div v-if="targetListModel && targetListModel.length">
+        <div v-for="model in targetListModel" :key="model.id">
           <RouterLink :to="`/chapter/${model.id}`">{{ model.name }}</RouterLink>
         </div>
       </div>
       <div v-else-if="listModel.length">
         <div v-for="model in listModel" :key="model.id">
-          <RouterLink :to="`/book/${model.id}`">{{ model.name }}</RouterLink>
+          <RouterLink :to="`/tag/${model.id}`">{{ model.name }}</RouterLink>
         </div>
       </div>
       <div v-else>
@@ -25,22 +24,21 @@
 
 <script>
 import BasePage from '@/extends/base-page'
-import { apiGetBookList, apiGetBookById } from '@/api/index'
+import { apiGetTagList, apiGetChapterByTag } from '@/api/index'
 
 /**
  * @type {ComponentOptions}
  * @extends {BasePage}
  */
 export default {
-  name: 'Book',
+  name: 'Tag',
   extends: BasePage,
   data() {
     return {
-      /** @type {BookModel[]} */
+      /** @type {TagModel[]} */
       listModel: null,
-      /** @type {BookModel} */
-      targetModel: null,
-      active: '',
+      /** @type {TagModel} */
+      targetListModel: null,
       loading: false,
     }
   },
@@ -58,8 +56,8 @@ export default {
     /**
      * @depend
      * @this {ComponentOptions}
-     * @param {BookModel} this.targetModel
-     * @param {BookModel[]} this.listModel
+     * @param {TagModel[]} this.targetListModel
+     * @param {TagModel[]} this.listModel
      * @param {number} this.active
      */
     async effectComponentPage() {
@@ -67,16 +65,14 @@ export default {
       const id = this.route?.params.id
 
       if (id) {
-        this.active = id
         this.loading = false
-        const res = await apiGetBookById(id)
-        this.targetModel = res.data
+        const res = await apiGetChapterByTag(id)
+        this.targetListModel = res.data
         this.loading = true
       } else {
-        this.active = ''
-        this.targetModel = null
+        this.targetListModel = null
         this.loading = false
-        const res = await apiGetBookList()
+        const res = await apiGetTagList()
         this.listModel = res.data
         this.loading = true
       }

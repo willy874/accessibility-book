@@ -2,7 +2,7 @@ import { useMarkdown } from '@/plugins/markdown'
 
 /**
  * @param {string} content
- * @returns {string}
+ * @returns {string} htmlText
  * @description
  * ```markdown
  * # 規則:
@@ -14,6 +14,11 @@ import { useMarkdown } from '@/plugins/markdown'
  */
 export function transformMarkdownToHtml(content) {
   const markdown = useMarkdown()
-  const html = markdown.render(content.replace(/\\n/g, '\n\n'))
-  return html.replace(/<hr>/g, '<br><hr><br>')
+  const contentText = content.replace(/\r\n/g, '\r\n\r\n')
+  const html = markdown.render(contentText)
+  const htmlText = html
+    .replace(/<hr>/g, '<br><hr><br>')
+    .replace(/&lt;br\/&gt;/g, '<br>')
+    .replace(/&amp;nbsp/g, '<br>')
+  return htmlText
 }

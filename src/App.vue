@@ -1,17 +1,65 @@
 <template>
   <div id="app">
-    <Header />
-    <router-view />
+    <template v-if="route">
+      <router-view :route="route" />
+      <div v-if="route.name !== RouterName.LOGIN">
+        <Header />
+      </div>
+    </template>
   </div>
 </template>
 <script>
 import 'markdown-it-latex/dist/index.css'
 import Header from './layouts/Header.vue'
+import consts from '@/consts'
+// import liff from '@line/liff'
+
+/**
+ * @enum {number}
+ * @readonly
+ */
+const RouterName = consts.routerName
 
 export default {
   name: 'App',
   components: {
     Header,
+  },
+  data() {
+    return {
+      route: null,
+      RouterName,
+      path: '',
+      href: '',
+    }
+  },
+  watch: {
+    $route() {
+      this.changeRoute()
+    },
+  },
+  async created() {
+    // await liff.init({ liffId: '1656538444-L3wP67PM' })
+    this.changeRoute()
+  },
+  methods: {
+    changeRoute() {
+      console.log('onRouteChange', this.route)
+      const { query } = this.$route
+      if (query && query['liff.state']) {
+        const { 'liff.state': path } = query
+        this.path = path
+        this.href = location.href
+        if (path) {
+          const locationData = this.$router.resolve(path)
+          this.route = locationData.route
+        } else {
+          this.route = null
+        }
+      } else {
+        this.route = this.$route
+      }
+    },
   },
 }
 </script>

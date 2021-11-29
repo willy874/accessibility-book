@@ -47,35 +47,39 @@ export function getResponseError(options) {
     const route = vm.$router.currentRoute
 
     const status = error?.response?.status
-    if (status === HttpCode.CLIENT_ERROR) {
-      console.error('Client Error')
-    }
-    if (status === HttpCode.UNAUTHORIZED) {
-      vm.$router.replace({ name: 'Login', query: { replacePath: route.path } })
-    }
-    if (status === HttpCode.FORBIDDEN) {
-      vm.$router.replace({ name: 'Login', query: { replacePath: route.path } })
-    }
-    if (status === HttpCode.NOT_FOUND) {
-      console.error('Not Found')
-    }
-    if (status === HttpCode.METHOD_NOT_ALLOWED) {
-      console.error('Method Not Allowed')
-    }
-    if (status === HttpCode.Not_ACCEPTABLE) {
-      console.error('Not Acceptable')
-    }
-    if (status === HttpCode.TIMEOUT) {
-      console.error('Timeout')
-    }
-    if (status === HttpCode.SERVER_ERROR) {
-      console.error('Server Error')
-    }
-    if (status === HttpCode.NOT_IMPLEMENTED) {
-      console.error('Not Implemented')
-    }
-    if (status === HttpCode.SERVICE_UNAVAILABLE) {
-      console.error('Service Unavailable')
+    switch (status) {
+      case HttpCode.CLIENT_ERROR:
+        console.error('Client Error')
+        break
+      case HttpCode.UNAUTHORIZED:
+        vm.$router.replace({ name: 'Login', query: { replacePath: route.path } })
+        break
+      case HttpCode.FORBIDDEN:
+        vm.$router.replace({ name: 'Login', query: { replacePath: route.path } })
+        break
+      case HttpCode.NOT_FOUND:
+        console.error('Not Found')
+        break
+      case HttpCode.METHOD_NOT_ALLOWED:
+        console.error('Method Not Allowed')
+        break
+      case HttpCode.Not_ACCEPTABLE:
+        console.error('Not Acceptable')
+        break
+      case HttpCode.TIMEOUT:
+        console.error('Timeout')
+        break
+      case HttpCode.SERVER_ERROR:
+        console.error('Server Error')
+        break
+      case HttpCode.NOT_IMPLEMENTED:
+        console.error('Not Implemented')
+        break
+      case HttpCode.SERVICE_UNAVAILABLE:
+        console.error('Service Unavailable')
+        break
+      default:
+        break
     }
     return error
   }
@@ -86,6 +90,20 @@ export function getResponseError(options) {
  * @return {InterceptorsClosure<AxiosRequestConfig>}
  */
 export function getAuthRequestSuccess(options) {
+  return (req) => {
+    if (req.url !== 'login/') {
+      const token = localStorage.getItem('token')
+      req.headers.Authorization = `Token ${token}`
+    }
+    return req
+  }
+}
+
+/**
+ * @param {InterceptorsOptions} options
+ * @return {InterceptorsClosure<AxiosRequestConfig>}
+ */
+export function getBaseRequestSuccess(options) {
   return (req) => {
     return req
   }

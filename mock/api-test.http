@@ -12,26 +12,41 @@ content-type: application/json
     "password": "123456"
 }
 
-
 ### 登出
-
 POST https://library.pastwind.org/dj-rest-auth/logout/
 {{auth}}
 
-### 取得書籍列表
+### LINE登入
+POST https://library.pastwind.org/dj-rest-auth/line/
+content-type: application/json
 
+{
+    "code": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+}
+### 登入連結LINE
+POST https://library.pastwind.org/dj-rest-auth/line/connect/
+content-type: application/json
+
+{
+    "code": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+}
+
+### 取得書籍列表
 GET https://library.pastwind.org/api/v1/book/
 content-type: application/json
 {{auth}}
 
 ### 取得書籍列表
-
 GET https://library.pastwind.org/api/v1/book/fe7ab8b3-692d-4653-8433-9e35146f048c/
 content-type: application/json
 {{auth}}
 
 ### 章節列表API
-
 GET https://library.pastwind.org/api/v1/chapter/1/
+content-type: application/json
+{{auth}}
+
+### 標籤列表API
+GET https://library.pastwind.org/api/v1/tag
 content-type: application/json
 {{auth}}

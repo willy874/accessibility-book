@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>章節列表</h2>
     <div v-if="targetModel">
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
     </div>
@@ -36,7 +37,7 @@ export default {
     },
   },
   watch: {
-    $route(to) {
+    route() {
       this.effectComponentPage()
     },
   },
@@ -48,20 +49,17 @@ export default {
     /**
      * @depend
      * @this {ComponentOptions}
-     * @param {Route} this._$route
      * @param {ChapterModel} this.targetModel
      * @param {ChapterModel[]} this.modelList
      * @param {number} this.active
      */
     async effectComponentPage() {
-      /** @type {Route} */
-      const route = this._$route
       /** @type {ChapterModel} */
       const targetModel = this.targetModel
       /** @type {ChapterModel[]} */
       const modelList = this.modelList
       /** @type {number} */
-      const id = Number(route.params.id)
+      const id = Number(this.route?.params.id)
       if (id) {
         this.active = id
         const target = targetModel
