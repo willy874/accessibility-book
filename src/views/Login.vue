@@ -49,13 +49,16 @@ export default {
     lineUrl() {
       const qs = new URLSearchParams({
         response_type: 'code',
-        client_id: 'client_id',
+        client_id: '1656649897',
         redirect_uri: location.href,
         state: '12345abcde',
         scope: 'profile%20openid',
         nonce: '09876xyz',
       })
       return 'https://access.line.me/oauth2/v2.1/authorize?' + qs.toString()
+      /**
+       * ?code=RZjGzUof042uqXErA5OL&state=12345abcde
+       */
     },
   },
   methods: {
