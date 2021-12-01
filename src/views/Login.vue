@@ -35,12 +35,13 @@
       <!-- <p>{{ emailError }}</p> -->
       <button type="submit" title="點擊登入" class="btn-submit">登入</button>
       <button type="button" title="點擊使用Line登入" class="btn-submit" @click="linkLineSignIn">Line登入</button>
+      <a :href="lineUrl">Line</a>
     </form>
   </main>
 </template>
 
 <script>
-import { apiPostUser } from '@/api'
+import { apiPostUser, apiPostLineLogin } from '@/api'
 // import { validate } from '@/utils'
 
 // console.log(validate('email', 123))
@@ -58,19 +59,23 @@ export default {
   },
   computed: {
     lineUrl() {
+      const url = 'redirect_uri=' + encodeURI('http://127.0.0.1:8000/login')
+      const scope = 'scope=profile%20openid%20email'
       const qs = new URLSearchParams({
         response_type: 'code',
         client_id: '1656649897',
-        redirect_uri: location.href,
-        state: '12345abcde',
-        scope: 'profile%20openid',
+        state: 'state=12345abcde',
         nonce: '09876xyz',
       })
-      return 'https://access.line.me/oauth2/v2.1/authorize?' + qs.toString()
-      /**
-       * ?code=RZjGzUof042uqXErA5OL&state=12345abcde
-       */
+
+      return `https://access.line.me/oauth2/v2.1/authorize?${qs.toString()}&${url}&${scope}`
     },
+  },
+  created() {
+    const vm = this
+    if (vm.$route.query.code) {
+      vm.fetchLoginApi(vm.$route.query.code)
+    }
   },
   methods: {
     signIn(e) {
@@ -91,6 +96,18 @@ export default {
       const vm = this
       try {
         const res = await apiPostUser(user)
+        if (!res.isAxiosError) {
+          const token = res.data.key
+          localStorage.setItem('token', token)
+          const fromPath = localStorage.getItem('fromPath')
+          vm.$router.replace(fromPath || '/')
+        }
+      } catch (error) {}
+    },
+    async fetchLineLoginApi(code) {
+      const vm = this
+      try {
+        const res = await apiPostLineLogin(code)
         if (!res.isAxiosError) {
           const token = res.data.key
           localStorage.setItem('token', token)

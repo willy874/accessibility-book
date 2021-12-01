@@ -42,7 +42,7 @@ export const apiPostLogout = () => authRequest.post(`logout/`)
 /**
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
-export const apiPostLineLogin = () => authRequest.post(`line/`)
+export const apiPostLineLogin = (data) => authRequest.post(`line/`, data)
 
 /**
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
