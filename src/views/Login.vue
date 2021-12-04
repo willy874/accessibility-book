@@ -44,8 +44,6 @@
 import { apiPostUser, apiPostLineLogin } from '@/api'
 // import { validate } from '@/utils'
 
-// console.log(validate('email', 123))
-
 /**
  * @type {ComponentOptions}
  */
