@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div>liff: {{ path || 'not path' }}</div>
-    <div>href: {{ href || 'not href' }}</div>
     <template v-if="route">
-      <div v-if="route.name === routerName.Chapter">
+      <h2 v-if="route.name === RouterName.HOME">首頁</h2>
+      <div v-if="route.name === RouterName.CHAPTER">
+        <Chapter :route="route" />
+      </div>
+      <div v-if="route.name === RouterName.TAG">
         <Chapter :route="route" />
       </div>
     </template>
@@ -11,31 +13,32 @@
 </template>
 
 <script>
-import { routerName } from '@/consts'
+import consts from '@/consts'
 import Chapter from './Chapter'
-// import liff from '@line/liff'
 
+/**
+ * @enum {number}
+ * @readonly
+ */
+const RouterName = consts.routerName
+
+/**
+ * @type {ComponentOptions}
+ */
 export default {
   name: 'Home',
   components: {
     Chapter,
   },
+  props: {
+    route: {
+      type: [Object, null],
+      default: () => null,
+    },
+  },
   data() {
     return {
-      route: null,
-      routerName,
-      path: '',
-      href: '',
-    }
-  },
-  async created() {
-    // await liff.init({ liffId: '1656538444-L3wP67PM' })
-    const { 'liff.state': path } = this.$route.query
-    this.path = path
-    this.href = location.href
-    if (path) {
-      const locationData = this.$router.resolve(path)
-      this.route = locationData.route
+      RouterName,
     }
   },
   methods: {},

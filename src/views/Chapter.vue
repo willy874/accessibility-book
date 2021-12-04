@@ -1,55 +1,76 @@
 <template>
   <div>
-    <div>
-      <div v-html="transformMarkdownToHtml(model.content)"></div>
+    <h2>章節列表</h2>
+    <div v-if="targetModel">
+      <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
+    </div>
+    <div v-else>
+      <div></div>
     </div>
   </div>
 </template>
 
 <script>
 import BasePage from '@/extends/base-page'
+import { transformMarkdownToHtml } from '@/utils'
 import { apiGetChapterById } from '@/api/index'
 
+/**
+ * @type {ComponentOptions}
+ * @extends {BasePage}
+ */
 export default {
   name: 'Chapter',
   extends: BasePage,
   data() {
     return {
-      model: {
-        book: '',
-        content: '',
-        created: '',
-        id: 0,
-        name: '',
-        no: 0,
-      },
+      modelList: [],
+      active: -1,
     }
   },
+  computed: {
+    /**
+     * @returns {ChapterModel}
+     */
+    targetModel() {
+      return this.modelList.find((p) => p.id === this.active)
+    },
+  },
   watch: {
-    $route() {
-      this.effectPage()
+    route() {
+      this.effectComponentPage()
     },
   },
   async created() {
-    // await this.passLogin()
-    this.effectPage()
+    this.effectComponentPage()
   },
   methods: {
-    // async passLogin() {
-    //   const res = await apiPostUser({ username: 'ryan', password: '123456' })
-    //   localStorage.setItem('token', res.data.key)
-    // },
-    effectPage() {
-      const id = this.baseRoute.params.id
+    transformMarkdownToHtml,
+    /**
+     * @depend
+     * @this {ComponentOptions}
+     * @param {ChapterModel} this.targetModel
+     * @param {ChapterModel[]} this.modelList
+     * @param {number} this.active
+     */
+    async effectComponentPage() {
+      /** @type {ChapterModel} */
+      const targetModel = this.targetModel
+      /** @type {ChapterModel[]} */
+      const modelList = this.modelList
+      /** @type {number} */
+      const id = Number(this.route?.params.id)
       if (id) {
-        this.fetchChapterById(id)
+        this.active = id
+        const target = targetModel
+        if (!target) {
+          const res = await apiGetChapterById(id)
+          modelList.push(res.data)
+        }
+      } else {
+        this.active = -1
+        this.$router.replace('/book')
       }
-    },
-    async fetchChapterById(id) {
-      try {
-        const res = await apiGetChapterById(id)
-        this.model = res.data
-      } catch (error) {}
     },
   },
 }

@@ -1,18 +1,12 @@
 export default {
   props: {
+    /**
+     * @type {Route}
+     */
     route: {
-      type: Object,
+      type: [Object, null],
       default: () => null,
     },
   },
-  computed: {
-    baseRoute() {
-      return this.route || this.$route
-    },
-  },
-  methods: {
-    transformMarkdownToHtml(content) {
-      return this.$markdown.render(content)
-    },
-  },
+  methods: {},
 }

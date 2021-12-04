@@ -1,5 +1,5 @@
-import markdown from './markdown'
+import { installMarkdown } from './markdown'
 
 export default function (vm) {
-  vm.use(markdown)
+  vm.use(installMarkdown)
 }

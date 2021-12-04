@@ -2,46 +2,79 @@
   <main>
     <form title="帳號登入的表單" @submit="signIn">
       <h2 class="form-title" title="這裡是登入頁面">登入</h2>
-      <label class="form-label" for="user-email" title="帳號信箱">帳號信箱</label>
-      <input
-        id="user-email"
-        v-model="user.username"
-        class="form-input"
-        :class="[{ error: emailError }]"
-        type="text"
-        name="email"
-        title="這裡輸入帳號信箱"
-      />
-      <strong v-if="emailError" class="error-msg" title="帳號信箱格式錯誤">帳號信箱格式錯誤</strong>
-      <label class="form-label" for="user-password" title="密碼">密碼</label>
-      <input
-        id="user-password"
-        v-model="user.password"
-        class="form-input"
-        :class="[{ error: passwordError }]"
-        type="password"
-        name="password"
-        title="這裡輸入帳號密碼"
-      />
-      <strong v-if="passwordError" class="error-msg" title="帳號密碼格式錯誤">帳號密碼格式錯誤</strong>
+      <div>
+        <label class="form-label" for="user-email" title="帳號信箱">帳號信箱</label>
+        <input
+          id="user-email"
+          v-model="user.username"
+          class="form-input"
+          :class="[{ error: emailError }]"
+          type="text"
+          name="email"
+          title="這裡輸入帳號信箱"
+        />
+        <div class="msg">
+          <strong v-if="emailError" class="error-msg" title="帳號信箱格式錯誤">帳號信箱格式錯誤</strong>
+        </div>
+      </div>
+      <div>
+        <label class="form-label" for="user-password" title="密碼">密碼</label>
+        <input
+          id="user-password"
+          v-model="user.password"
+          class="form-input"
+          :class="[{ error: passwordError }]"
+          type="password"
+          name="password"
+          title="這裡輸入帳號密碼"
+        />
+        <div class="msg">
+          <strong v-if="passwordError" class="error-msg" title="帳號密碼格式錯誤">帳號密碼格式錯誤</strong>
+        </div>
+      </div>
       <!-- <p>{{ emailError }}</p> -->
       <button type="submit" title="點擊登入" class="btn-submit">登入</button>
+      <button type="button" title="點擊使用Line登入" class="btn-submit" @click="linkLineSignIn">Line登入</button>
+      <a :href="lineUrl">Line</a>
     </form>
   </main>
 </template>
 
 <script>
-import { apiPostUser } from '@/api'
+import { apiPostUser, apiPostLineLogin } from '@/api'
+// import { validate } from '@/utils'
 
+// console.log(validate('email', 123))
+
+/**
+ * @type {ComponentOptions}
+ */
 export default {
   data() {
     return {
-      user: {
-        username: '',
-        password: '',
-      },
+      user: { username: 'user', password: 'zY7bSBgk' },
       emailError: false,
       passwordError: false,
+    }
+  },
+  computed: {
+    lineUrl() {
+      const url = 'redirect_uri=' + encodeURI('http://127.0.0.1:8000/login')
+      const scope = 'scope=profile%20openid%20email'
+      const qs = new URLSearchParams({
+        response_type: 'code',
+        client_id: '1656649897',
+        state: 'state=12345abcde',
+        nonce: '09876xyz',
+      })
+
+      return `https://access.line.me/oauth2/v2.1/authorize?${qs.toString()}&${url}&${scope}`
+    },
+  },
+  created() {
+    const vm = this
+    if (vm.$route.query.code) {
+      vm.fetchLoginApi(vm.$route.query.code)
     }
   },
   methods: {
@@ -50,8 +83,8 @@ export default {
       const vm = this
       const user = vm.user
       const error = false
-      // vm.validateEmail(user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
-      // vm.validatePassword(user.password) === false
+      // validate('email', user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
+      // validate('password', user.password) === false
       //   ? (vm.passwordError = error = true)
       //   : (vm.passwordError = error = false)
 
@@ -66,19 +99,24 @@ export default {
         if (!res.isAxiosError) {
           const token = res.data.key
           localStorage.setItem('token', token)
-          vm.$router.push('/')
+          const fromPath = localStorage.getItem('fromPath')
+          vm.$router.replace(fromPath || '/')
         }
       } catch (error) {}
     },
-    validateEmail(email) {
-      const reg =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return reg.test(String(email).toLowerCase())
+    async fetchLineLoginApi(code) {
+      const vm = this
+      try {
+        const res = await apiPostLineLogin(code)
+        if (!res.isAxiosError) {
+          const token = res.data.key
+          localStorage.setItem('token', token)
+          const fromPath = localStorage.getItem('fromPath')
+          vm.$router.replace(fromPath || '/')
+        }
+      } catch (error) {}
     },
-    validatePassword(password) {
-      const reg = /^(?=.*\d)(?=.*[a-zA-Z]).{6,30}$/
-      return reg.test(String(password))
-    },
+    linkLineSignIn() {},
   },
 }
 </script>
@@ -89,11 +127,14 @@ form {
   margin: 2rem auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   padding: 10px 15px;
   border: 1px solid #217842;
   border-radius: 0.5rem;
   background-color: #e0fff3;
+}
+
+input {
+  box-sizing: border-box;
 }
 
 .form-input,
@@ -103,6 +144,10 @@ form {
   padding: 1rem;
   outline-color: #217842;
   border: 1px solid #217842;
+}
+
+.form-input {
+  width: 100%;
 }
 
 .form-label {
@@ -116,6 +161,11 @@ form {
   &:hover {
     background-color: #1a5f34;
   }
+}
+
+.msg {
+  padding-top: 0.5rem;
+  height: 1rem;
 }
 
 .error-msg {
