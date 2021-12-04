@@ -13,9 +13,6 @@
           name="email"
           title="這裡輸入帳號信箱"
         />
-        <div class="msg">
-          <strong v-if="emailError" class="error-msg" title="帳號信箱格式錯誤">帳號信箱格式錯誤</strong>
-        </div>
       </div>
       <div>
         <label class="form-label" for="user-password" title="密碼">密碼</label>
@@ -29,13 +26,19 @@
           title="這裡輸入帳號密碼"
         />
         <div class="msg">
-          <strong v-if="passwordError" class="error-msg" title="帳號密碼格式錯誤">帳號密碼格式錯誤</strong>
+          <strong v-if="passwordError" class="error-msg" title="帳號信箱或者密碼格式錯誤"
+            >帳號信箱或者密碼格式錯誤</strong
+          >
         </div>
       </div>
-      <!-- <p>{{ emailError }}</p> -->
       <button type="submit" title="點擊登入" class="btn-submit">登入</button>
       <button type="button" title="點擊使用Line登入" class="btn-submit" @click="linkLineSignIn">Line登入</button>
-      <a :href="lineUrl">Line</a>
+      <div class="msg">
+        <strong v-if="passwordError" class="error-msg" title="帳號密碼格式錯誤">帳號密碼格式錯誤</strong>
+      </div>
+      <div class="msg">
+        <strong v-if="noPass" class="error-msg" title="登入錯誤，請重新登入">登入錯誤，請重新登入</strong>
+      </div>
     </form>
   </main>
 </template>
@@ -53,6 +56,7 @@ export default {
       user: { username: 'user', password: 'zY7bSBgk' },
       emailError: false,
       passwordError: false,
+      noPass: false,
     }
   },
   computed: {
@@ -99,6 +103,8 @@ export default {
           localStorage.setItem('token', token)
           const fromPath = localStorage.getItem('fromPath')
           vm.$router.replace(fromPath || '/')
+        } else {
+          vm.noPass = true
         }
       } catch (error) {}
     },
@@ -111,10 +117,15 @@ export default {
           localStorage.setItem('token', token)
           const fromPath = localStorage.getItem('fromPath')
           vm.$router.replace(fromPath || '/')
+        } else {
+          vm.noPass = true
         }
       } catch (error) {}
     },
-    linkLineSignIn() {},
+    linkLineSignIn() {
+      const vm = this
+      location.href = vm.lineUrl
+    },
   },
 }
 </script>
@@ -129,6 +140,7 @@ form {
   border: 1px solid #217842;
   border-radius: 0.5rem;
   background-color: #e0fff3;
+  gap: 1rem;
 }
 
 input {
