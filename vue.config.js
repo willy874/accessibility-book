@@ -3,6 +3,8 @@ const path = require('path')
 module.exports = {
   productionSourceMap: false,
   devServer: {
+    host: '127.0.0.1',
+    port: 8000,
     proxy: {
       '/root': {
         target: 'https://library.pastwind.org/',

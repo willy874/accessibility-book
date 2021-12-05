@@ -28,9 +28,10 @@ export default {
     async signOut() {
       try {
         const res = await apiPostLogout()
-        if (!res.isAxiosError) {
+        if (res.isAxiosError) {
           throw res
         }
+        this.$router.replace('/login')
       } catch (error) {}
     },
   },

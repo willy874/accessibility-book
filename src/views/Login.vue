@@ -74,9 +74,8 @@ export default {
     },
   },
   created() {
-    const vm = this
-    if (vm.$route.query.code) {
-      vm.fetchLoginApi(vm.$route.query.code)
+    if (this.$route.query.code) {
+      this.fetchLineLoginApi(this.$route.query.code)
     }
   },
   methods: {
@@ -111,7 +110,7 @@ export default {
     async fetchLineLoginApi(code) {
       const vm = this
       try {
-        const res = await apiPostLineLogin(code)
+        const res = await apiPostLineLogin({ code })
         if (!res.isAxiosError) {
           const token = res.data.key
           localStorage.setItem('token', token)
