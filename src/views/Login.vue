@@ -69,7 +69,7 @@ export default {
         state: 'state=12345abcde',
         nonce: '09876xyz',
         scope: 'profile openid email',
-        redirect_uri: 'http://127.0.0.1:8000/login',
+        redirect_uri: location.origin + '/login',
       })
       return `https://access.line.me/oauth2/v2.1/authorize?${qs.toString()}`
     },
@@ -125,7 +125,7 @@ export default {
     linkLineSignIn() {
       if (Config.value.liff) {
         if (!liff.isLoggedIn()) {
-          liff.login({ redirectUri: 'http://127.0.0.1:8000/login' })
+          liff.login({ redirectUri: location.origin + '/login' })
         }
       } else {
         location.href = this.lineUrl
