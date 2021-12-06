@@ -3,15 +3,15 @@ const config = {
   version: '0.0.1',
   liff: true,
   base: {
-    baseUrl: location.protocol + '//' + location.host + '/root',
+    baseUrl: 'https://library.pastwind.org/',
     headers: {},
   },
   api: {
-    baseUrl: location.protocol + '//' + location.host + '/api',
+    baseUrl: 'https://library.pastwind.org/api/v1',
     headers: {},
   },
   auth: {
-    baseUrl: location.protocol + '//' + location.host + '/auth',
+    baseUrl: 'https://library.pastwind.org/dj-rest-auth',
     headers: {},
   },
 }
