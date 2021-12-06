@@ -125,7 +125,14 @@ export default {
     linkLineSignIn() {
       if (Config.value.liff) {
         if (!liff.isLoggedIn()) {
-          liff.login({ redirectUri: location.origin + '/login' })
+          liff.login({
+            response_type: 'code',
+            client_id: '1656649897',
+            state: 'state=12345abcde',
+            nonce: '09876xyz',
+            scope: 'profile openid email',
+            redirectUri: location.origin + '/login',
+          })
         }
       } else {
         location.href = this.lineUrl
