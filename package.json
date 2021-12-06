@@ -3,7 +3,8 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --open",
+    "dev": "vue-cli-service serve --open",
+    "serve": "vue-cli-service serve --host tpwlliff.3anology.info --port 443",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },

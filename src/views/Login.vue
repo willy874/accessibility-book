@@ -45,8 +45,8 @@
 
 <script>
 import { apiPostUser, apiPostLineLogin } from '@/api'
-import Config from '@/config'
-import liff from '@line/liff'
+// import Config from '@/config'
+// import liff from '@line/liff'
 // import { validate } from '@/utils'
 
 /**
