@@ -12,6 +12,7 @@
 import 'markdown-it-latex/dist/index.css'
 import Header from './layouts/Header.vue'
 import consts from '@/consts'
+import Config from './config'
 import liff from '@line/liff'
 
 /**
@@ -39,13 +40,9 @@ export default {
     },
   },
   async created() {
-<<<<<<< HEAD
-    await liff.init({ liffId: '1656538444-L3wP67PM' })
-=======
     if (Config.value.liff) {
       await liff.init({ liffId: '1656538444-L3wP67PM' })
     }
->>>>>>> 53590423729fb1e232206db48d9d75051302f9fe
     this.changeRoute()
   },
   methods: {
