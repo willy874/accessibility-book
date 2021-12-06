@@ -31,6 +31,7 @@ export default {
         if (res.isAxiosError) {
           throw res
         }
+        localStorage.removeItem('token')
         this.$router.replace('/login')
       } catch (error) {}
     },
