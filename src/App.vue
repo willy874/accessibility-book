@@ -39,7 +39,13 @@ export default {
     },
   },
   async created() {
+<<<<<<< HEAD
     await liff.init({ liffId: '1656538444-L3wP67PM' })
+=======
+    if (Config.value.liff) {
+      await liff.init({ liffId: '1656538444-L3wP67PM' })
+    }
+>>>>>>> 53590423729fb1e232206db48d9d75051302f9fe
     this.changeRoute()
   },
   methods: {

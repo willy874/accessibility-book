@@ -91,6 +91,20 @@ export function getResponseError(options) {
  */
 export function getAuthRequestSuccess(options) {
   return (req) => {
+    if (req.url !== 'login/') {
+      const token = localStorage.getItem('token')
+      req.headers.Authorization = `Token ${token}`
+    }
+    return req
+  }
+}
+
+/**
+ * @param {InterceptorsOptions} options
+ * @return {InterceptorsClosure<AxiosRequestConfig>}
+ */
+export function getBaseRequestSuccess(options) {
+  return (req) => {
     return req
   }
 }

@@ -29,7 +29,7 @@ curl -X POST https://library.pastwind.org/dj-rest-auth/login/ -H 'Content-Type: 
 ```bash
 curl -X POST https://library.pastwind.org/dj-rest-auth/registration/ -H 'Content-Type: application/json' -d '{"username":"AAA","password1":"something", "password2":"something", "email":"example@example.com"}'
 ```
-帳號: 英文 長度不限， 密碼: 8位以上 英數
+
 ### 如果不需要驗證，則會立刻得到token
 ```json
 {"key":"3f40ed6dba682d59a81d4ca310fa4f864cdeee04"}

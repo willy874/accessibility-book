@@ -2,36 +2,52 @@
   <main>
     <form title="帳號登入的表單" @submit="signIn">
       <h2 class="form-title" title="這裡是登入頁面">登入</h2>
-      <label class="form-label" for="user-email" title="帳號信箱">帳號信箱</label>
-      <input
-        id="user-email"
-        v-model="user.username"
-        class="form-input"
-        :class="[{ error: emailError }]"
-        type="text"
-        name="email"
-        title="這裡輸入帳號信箱"
-      />
-      <strong v-if="emailError" class="error-msg" title="帳號信箱格式錯誤">帳號信箱格式錯誤</strong>
-      <label class="form-label" for="user-password" title="密碼">密碼</label>
-      <input
-        id="user-password"
-        v-model="user.password"
-        class="form-input"
-        :class="[{ error: passwordError }]"
-        type="password"
-        name="password"
-        title="這裡輸入帳號密碼"
-      />
-      <strong v-if="passwordError" class="error-msg" title="帳號密碼格式錯誤">帳號密碼格式錯誤</strong>
-      <!-- <p>{{ emailError }}</p> -->
+      <div>
+        <label class="form-label" for="user-email" title="帳號信箱">帳號信箱</label>
+        <input
+          id="user-email"
+          v-model="user.username"
+          class="form-input"
+          :class="[{ error: emailError }]"
+          type="text"
+          name="email"
+          title="這裡輸入帳號信箱"
+        />
+      </div>
+      <div>
+        <label class="form-label" for="user-password" title="密碼">密碼</label>
+        <input
+          id="user-password"
+          v-model="user.password"
+          class="form-input"
+          :class="[{ error: passwordError }]"
+          type="password"
+          name="password"
+          title="這裡輸入帳號密碼"
+        />
+        <div class="msg">
+          <strong v-if="passwordError" class="error-msg" title="帳號信箱或者密碼格式錯誤"
+            >帳號信箱或者密碼格式錯誤</strong
+          >
+        </div>
+      </div>
       <button type="submit" title="點擊登入" class="btn-submit">登入</button>
+      <button type="button" title="點擊使用Line登入" class="btn-submit" @click="linkLineSignIn">Line登入</button>
+      <div class="msg">
+        <strong v-if="passwordError" class="error-msg" title="帳號密碼格式錯誤">帳號密碼格式錯誤</strong>
+      </div>
+      <div class="msg">
+        <strong v-if="noPass" class="error-msg" title="登入錯誤，請重新登入">登入錯誤，請重新登入</strong>
+      </div>
     </form>
   </main>
 </template>
 
 <script>
-import { apiPostUser } from '@/api'
+import { apiPostUser, apiPostLineLogin } from '@/api'
+import Config from '@/config'
+import liff from '@line/liff'
+// import { validate } from '@/utils'
 
 /**
  * @type {ComponentOptions}
@@ -42,42 +58,78 @@ export default {
       user: { username: 'user', password: 'zY7bSBgk' },
       emailError: false,
       passwordError: false,
+      noPass: false,
+    }
+  },
+  computed: {
+    lineUrl() {
+      const qs = new URLSearchParams({
+        response_type: 'code',
+        client_id: '1656649897',
+        state: 'state=12345abcde',
+        nonce: '09876xyz',
+        scope: 'profile openid email',
+        redirect_uri: 'http://127.0.0.1:8000/login',
+      })
+      return `https://access.line.me/oauth2/v2.1/authorize?${qs.toString()}`
+    },
+  },
+  created() {
+    if (this.$route.query.code) {
+      this.fetchLineLoginApi(this.$route.query.code)
     }
   },
   methods: {
     signIn(e) {
       e.preventDefault()
-      const vm = this
-      const user = vm.user
+      const user = this.user
       const error = false
-      // vm.validateEmail(user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
-      // vm.validatePassword(user.password) === false
+      // validate('email', user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
+      // validate('password', user.password) === false
       //   ? (vm.passwordError = error = true)
       //   : (vm.passwordError = error = false)
 
       if (error === false) {
-        vm.fetchUserApi(user)
+        this.fetchUserApi(user)
       }
     },
     async fetchUserApi(user) {
-      const vm = this
       try {
         const res = await apiPostUser(user)
-        if (!res.isAxiosError) {
-          const token = res.data.key
-          localStorage.setItem('token', token)
-          vm.$router.replace(this.$route.query.replacePath || '/')
+        if (res.isAxiosError) {
+          throw new Error(res.data.detail)
+        } else {
+          this.loginHandler(res.data.key)
         }
-      } catch (error) {}
+      } catch (error) {
+        this.noPass = true
+      }
     },
-    validateEmail(email) {
-      const reg =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return reg.test(String(email).toLowerCase())
+    async fetchLineLoginApi(code) {
+      try {
+        const res = await apiPostLineLogin({ code })
+        if (res.isAxiosError) {
+          throw new Error(res.data.detail)
+        } else {
+          this.loginHandler(res.data.key)
+        }
+      } catch (error) {
+        this.noPass = true
+      }
     },
-    validatePassword(password) {
-      const reg = /^(?=.*\d)(?=.*[a-zA-Z]).{6,30}$/
-      return reg.test(String(password))
+    loginHandler(token) {
+      localStorage.setItem('token', token)
+      const fromPath = localStorage.getItem('fromPath')
+      this.$router.replace(fromPath || '/')
+    },
+    linkLineSignIn() {
+      if (Config.value.liff) {
+        if (!liff.isLoggedIn()) {
+          liff.login({ redirectUri: 'http://127.0.0.1:8000/login' })
+        }
+      } else {
+        location.href = this.lineUrl
+      }
     },
   },
 }
@@ -89,11 +141,15 @@ form {
   margin: 2rem auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   padding: 10px 15px;
   border: 1px solid #217842;
   border-radius: 0.5rem;
   background-color: #e0fff3;
+  gap: 1rem;
+}
+
+input {
+  box-sizing: border-box;
 }
 
 .form-input,
@@ -103,6 +159,10 @@ form {
   padding: 1rem;
   outline-color: #217842;
   border: 1px solid #217842;
+}
+
+.form-input {
+  width: 100%;
 }
 
 .form-label {
@@ -116,6 +176,11 @@ form {
   &:hover {
     background-color: #1a5f34;
   }
+}
+
+.msg {
+  padding-top: 0.5rem;
+  height: 1rem;
 }
 
 .error-msg {
