@@ -1,6 +1,7 @@
 const config = {
   env: process.env,
   version: '0.0.1',
+  liff: false,
   base: {
     baseUrl: location.protocol + '//' + location.host + '/root',
     headers: {},

@@ -45,6 +45,8 @@
 
 <script>
 import { apiPostUser, apiPostLineLogin } from '@/api'
+import Config from '@/config'
+import liff from '@line/liff'
 // import { validate } from '@/utils'
 
 /**
@@ -61,16 +63,15 @@ export default {
   },
   computed: {
     lineUrl() {
-      const url = 'redirect_uri=' + encodeURI('http://127.0.0.1:8000/login')
-      const scope = 'scope=profile%20openid%20email'
       const qs = new URLSearchParams({
         response_type: 'code',
         client_id: '1656649897',
         state: 'state=12345abcde',
         nonce: '09876xyz',
+        scope: 'profile openid email',
+        redirect_uri: 'http://127.0.0.1:8000/login',
       })
-
-      return `https://access.line.me/oauth2/v2.1/authorize?${qs.toString()}&${url}&${scope}`
+      return `https://access.line.me/oauth2/v2.1/authorize?${qs.toString()}`
     },
   },
   created() {
@@ -81,8 +82,7 @@ export default {
   methods: {
     signIn(e) {
       e.preventDefault()
-      const vm = this
-      const user = vm.user
+      const user = this.user
       const error = false
       // validate('email', user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
       // validate('password', user.password) === false
@@ -90,40 +90,46 @@ export default {
       //   : (vm.passwordError = error = false)
 
       if (error === false) {
-        vm.fetchUserApi(user)
+        this.fetchUserApi(user)
       }
     },
     async fetchUserApi(user) {
-      const vm = this
       try {
         const res = await apiPostUser(user)
-        if (!res.isAxiosError) {
-          const token = res.data.key
-          localStorage.setItem('token', token)
-          const fromPath = localStorage.getItem('fromPath')
-          vm.$router.replace(fromPath || '/')
+        if (res.isAxiosError) {
+          throw new Error(res.data.detail)
         } else {
-          vm.noPass = true
+          this.loginHandler(res.data.key)
         }
-      } catch (error) {}
+      } catch (error) {
+        this.noPass = true
+      }
     },
     async fetchLineLoginApi(code) {
-      const vm = this
       try {
         const res = await apiPostLineLogin({ code })
-        if (!res.isAxiosError) {
-          const token = res.data.key
-          localStorage.setItem('token', token)
-          const fromPath = localStorage.getItem('fromPath')
-          vm.$router.replace(fromPath || '/')
+        if (res.isAxiosError) {
+          throw new Error(res.data.detail)
         } else {
-          vm.noPass = true
+          this.loginHandler(res.data.key)
         }
-      } catch (error) {}
+      } catch (error) {
+        this.noPass = true
+      }
+    },
+    loginHandler(token) {
+      localStorage.setItem('token', token)
+      const fromPath = localStorage.getItem('fromPath')
+      this.$router.replace(fromPath || '/')
     },
     linkLineSignIn() {
-      const vm = this
-      location.href = vm.lineUrl
+      if (Config.value.liff) {
+        if (!liff.isLoggedIn()) {
+          liff.login({ redirectUri: 'http://127.0.0.1:8000/login' })
+        }
+      } else {
+        location.href = this.lineUrl
+      }
     },
   },
 }
