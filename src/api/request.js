@@ -18,8 +18,6 @@ export const instance = function (options) {
   const axios = Axios.create({
     baseURL: `${config.api.baseUrl}`,
     headers: {
-      'X-Client-Version': config.version,
-      accept: 'application/json',
       ...config.api.headers,
     },
   })
@@ -38,8 +36,6 @@ export const authInstance = function (options) {
   const axios = Axios.create({
     baseURL: `${config.auth.baseUrl}`,
     headers: {
-      'X-Client-Version': config.version,
-      accept: 'application/json',
       ...config.auth.headers,
     },
   })
@@ -59,8 +55,6 @@ export const baseInstance = function (options) {
   const axios = Axios.create({
     baseURL: `${config.base.baseUrl}`,
     headers: {
-      'X-Client-Version': config.version,
-      accept: 'application/json',
       ...config.base.headers,
     },
   })

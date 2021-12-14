@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { apiPostUser, apiPostLineLogin } from '@/api'
+import { apiPostUser, apiPostLineLogin } from '@/api' // apiPostLineLogin
 // import Config from '@/config'
 // import liff from '@line/liff'
 // import { validate } from '@/utils'
@@ -88,7 +88,6 @@ export default {
       // validate('password', user.password) === false
       //   ? (vm.passwordError = error = true)
       //   : (vm.passwordError = error = false)
-
       if (error === false) {
         this.fetchUserApi(user)
       }
@@ -107,7 +106,11 @@ export default {
     },
     async fetchLineLoginApi(code) {
       try {
-        const res = await apiPostLineLogin({ code })
+        const res = await apiPostLineLogin({
+          code,
+          return_url: location.origin + '/login',
+        })
+        console.log(res)
         if (res.isAxiosError) {
           throw new Error(res.data.detail)
         } else {

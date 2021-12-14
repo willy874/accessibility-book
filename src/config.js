@@ -1,17 +1,19 @@
+const base = 'https://api.pastwind.org'
+
 const config = {
   env: process.env,
   version: '0.0.1',
-  liff: true,
+  liff: location.host === 'tpwlweb.3anology.info',
   base: {
-    baseUrl: 'https://library.pastwind.org/',
+    baseUrl: base,
     headers: {},
   },
   api: {
-    baseUrl: 'https://library.pastwind.org/api/v1',
+    baseUrl: base + '/api/v1/',
     headers: {},
   },
   auth: {
-    baseUrl: 'https://library.pastwind.org/dj-rest-auth',
+    baseUrl: base + '/dj-rest-auth/',
     headers: {},
   },
 }

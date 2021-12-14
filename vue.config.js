@@ -5,32 +5,32 @@ module.exports = {
   devServer: {
     host: '127.0.0.1',
     port: 8000,
-    proxy: {
-      '/root': {
-        target: 'https://library.pastwind.org/',
-        pathRewrite: {
-          '^/root': '/',
-        },
-      },
-      '/auth': {
-        target: 'https://library.pastwind.org/',
-        pathRewrite: {
-          '^/auth': '/dj-rest-auth',
-        },
-        onProxyReq(proxyReq, req, res) {
-          const cookie = req.headers.cookie
-          if (cookie) {
-            proxyReq.setHeader('cookie', '')
-          }
-        },
-      },
-      '/api': {
-        target: 'https://library.pastwind.org/',
-        pathRewrite: {
-          '^/api': '/api/v1',
-        },
-      },
-    },
+    // proxy: {
+    //   '/root': {
+    //     target: 'https://library.pastwind.org/',
+    //     pathRewrite: {
+    //       '^/root': '/',
+    //     },
+    //   },
+    //   '/auth': {
+    //     target: 'https://library.pastwind.org/',
+    //     pathRewrite: {
+    //       '^/auth': '/dj-rest-auth',
+    //     },
+    //     onProxyReq(proxyReq, req, res) {
+    //       const cookie = req.headers.cookie
+    //       if (cookie) {
+    //         proxyReq.setHeader('cookie', '')
+    //       }
+    //     },
+    //   },
+    //   '/api': {
+    //     target: 'https://library.pastwind.org/',
+    //     pathRewrite: {
+    //       '^/api': '/api/v1',
+    //     },
+    //   },
+    // },
   },
   css: {
     sourceMap: true,
