@@ -10,21 +10,16 @@ const router = new VueRouter({
   routes,
 })
 
+/**
+ * 因為第一次導向是由 "/" 導到目標路由，所以可能會發生不必要的處理。
+ */
+let init = false
+
 router.beforeEach((to, from, next) => {
-  const isLogin = localStorage.getItem('token')
-  console.log('to:', to.path)
-  console.log('from:', from.path)
-  const fromPath = from.path
-  localStorage.setItem('fromPath', fromPath)
-  if (isLogin) {
-    next()
-  } else {
-    if (to.path !== '/login') {
-      next('/login')
-    } else {
-      next()
-    }
+  if (init) {
+    init = true
   }
+  next()
 })
 
 export default router

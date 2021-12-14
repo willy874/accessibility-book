@@ -14,6 +14,13 @@
 import BasePage from '@/extends/base-page'
 import { transformMarkdownToHtml } from '@/utils'
 import { apiGetChapterById } from '@/api/index'
+import consts from '@/consts'
+
+/**
+ * @enum {number}
+ * @readonly
+ */
+const RouterName = consts.routerName
 
 /**
  * @type {ComponentOptions}
@@ -69,7 +76,7 @@ export default {
         }
       } else {
         this.active = -1
-        this.$router.replace('/book')
+        this.$router.replace({ name: RouterName.HOME })
       }
     },
   },

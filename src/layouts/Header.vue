@@ -21,6 +21,13 @@
 
 <script>
 import { apiPostLogout } from '@/api'
+import consts from '@/consts'
+
+/**
+ * @enum {number}
+ * @readonly
+ */
+const RouterName = consts.routerName
 
 export default {
   name: 'Header',
@@ -32,7 +39,7 @@ export default {
           throw res
         }
         localStorage.removeItem('token')
-        this.$router.replace('/login')
+        this.$router.replace({ name: RouterName.LOGIN })
       } catch (error) {}
     },
   },

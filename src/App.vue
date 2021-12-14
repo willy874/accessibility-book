@@ -48,19 +48,11 @@ export default {
   methods: {
     changeRoute() {
       console.log('onRouteChange', this.route)
-      const { query } = this.$route
-      if (query && query['liff.state']) {
-        const { 'liff.state': path } = query
-        this.path = path
-        this.href = location.href
-        if (path) {
-          const locationData = this.$router.resolve(path)
-          this.route = locationData.route
-        } else {
-          this.route = null
-        }
-      } else {
-        this.route = this.$route
+      this.route = Config.getRoute(this)
+      const isLogin = Boolean(localStorage.getItem('token'))
+      if (!isLogin && this.route.path !== '/login') {
+        localStorage.setItem('replacePath', this.route.path)
+        this.$router.replace({ name: RouterName.LOGIN })
       }
     },
   },

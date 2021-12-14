@@ -32,6 +32,22 @@ class VueConfig {
   static useApp() {
     return app
   }
+
+  static getRoute(vm) {
+    const vue = vm || app
+    const { query } = vue.$route
+    if (query && query['liff.state']) {
+      const { 'liff.state': path } = query
+      if (path) {
+        const locationData = vue.$router.resolve(path)
+        return locationData.route
+      } else {
+        return null
+      }
+    } else {
+      return vue.$route
+    }
+  }
 }
 
 export default VueConfig

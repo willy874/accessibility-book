@@ -44,10 +44,17 @@
 </template>
 
 <script>
-import { apiPostUser, apiPostLineLogin } from '@/api' // apiPostLineLogin
-// import Config from '@/config'
+import { apiPostUser, apiPostLineLogin } from '@/api'
+import Config from '@/config'
 // import liff from '@line/liff'
 // import { validate } from '@/utils'
+import consts from '@/consts'
+
+/**
+ * @enum {number}
+ * @readonly
+ */
+const RouterName = consts.routerName
 
 /**
  * @type {ComponentOptions}
@@ -75,6 +82,10 @@ export default {
     },
   },
   created() {
+    const isLogin = Boolean(localStorage.getItem('token'))
+    if (isLogin) {
+      this.$router.replace({ name: RouterName.HOME })
+    }
     if (this.$route.query.code) {
       this.fetchLineLoginApi(this.$route.query.code)
     }
@@ -122,8 +133,13 @@ export default {
     },
     loginHandler(token) {
       localStorage.setItem('token', token)
-      const fromPath = localStorage.getItem('fromPath')
-      this.$router.replace(fromPath || '/')
+      const route = Config.getRoute()
+      const replacePath = localStorage.getItem('replacePath', route.path)
+      if (replacePath) {
+        this.$router.replace(replacePath)
+      } else {
+        this.$router.replace({ name: RouterName.HOME })
+      }
     },
     linkLineSignIn() {
       // if (Config.value.liff) {

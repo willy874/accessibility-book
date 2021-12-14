@@ -8,6 +8,12 @@ import consts from '@/consts'
 const HttpCode = consts.httpCode
 
 /**
+ * @enum {number}
+ * @readonly
+ */
+const RouterName = consts.routerName
+
+/**
  * @param {InterceptorsOptions} options
  * @return {InterceptorsClosure<AxiosRequestConfig>}
  */
@@ -44,7 +50,7 @@ export function getResponseError(options) {
     /** @type {Vue} */
     const vm = Config.useApp()
     /** @type {Route} */
-    const route = vm.$router.currentRoute
+    const route = Config.getRoute()
 
     const status = error?.response?.status
     switch (status) {
@@ -52,10 +58,12 @@ export function getResponseError(options) {
         console.error('Client Error')
         break
       case HttpCode.UNAUTHORIZED:
-        vm.$router.replace({ name: 'Login', query: { replacePath: route.path } })
+        localStorage.setItem('replacePath', route.path)
+        vm.$router.replace({ name: RouterName.LOGIN })
         break
       case HttpCode.FORBIDDEN:
-        vm.$router.replace({ name: 'Login', query: { replacePath: route.path } })
+        localStorage.setItem('replacePath', route.path)
+        vm.$router.replace({ name: RouterName.LOGIN })
         break
       case HttpCode.NOT_FOUND:
         console.error('Not Found')
