@@ -1,4 +1,12 @@
 /**
+ * @enum
+ */
+export const ValidateType = {
+  EMAIL: 'email',
+  PASSWORD: 'password',
+}
+
+/**
  * @param {string} type
  * @param {string} value
  * @returns {boolean}
@@ -11,13 +19,13 @@
  * ```
  */
 export function validate(type, value) {
-  if (type === 'email') {
+  if (type === ValidateType.EMAIL) {
     const reg =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return reg.test(String(value).toLowerCase())
   }
 
-  if (type === 'password') {
+  if (type === ValidateType.PASSWORD) {
     const reg = /^(?=.*\d)(?=.*[a-zA-Z]).{6,30}$/
     return reg.test(String(value))
   }

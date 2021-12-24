@@ -5,6 +5,7 @@ import Book from '../views/Book.vue'
 import Tag from '../views/Tag.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import NoAuthorized from '../views/NoAuthorized.vue'
 
 export default [
   {
@@ -21,6 +22,11 @@ export default [
     path: '/register',
     name: RouterName.REGISTER,
     component: Register,
+  },
+  {
+    path: '/no-authorized',
+    name: RouterName.NO_AUTHORIZED,
+    component: NoAuthorized,
   },
   {
     path: '/book/',

@@ -57,7 +57,6 @@ export default {
   methods: {
     /**
      * @depend
-     * @this {ComponentOptions}
      * @param {BookModel} this.targetModel
      * @param {BookModel[]} this.listModel
      * @param {number} this.active

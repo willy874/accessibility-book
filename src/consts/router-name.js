@@ -1,5 +1,5 @@
 /**
- * @enum
+ * @enum {string}
  */
 export const RouterName = {
   HOME: 'Home',
@@ -10,4 +10,5 @@ export const RouterName = {
   TAG_DETAIL: 'TagDetail',
   LOGIN: 'Login',
   REGISTER: 'Register',
+  NO_AUTHORIZED: 'noAuthorized',
 }

@@ -47,7 +47,7 @@
 import { apiPostUser, apiPostLineLogin } from '@/api'
 import Config from '@/config'
 // import liff from '@line/liff'
-// import { validate } from '@/utils'
+// import { validate, ValidateType } from '@/utils'
 import { RouterName, LocalStorageKey, Actions } from '@/consts'
 
 /**
@@ -86,8 +86,8 @@ export default {
       e.preventDefault()
       const user = this.user
       const error = false
-      // validate('email', user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
-      // validate('password', user.password) === false
+      // validate(ValidateType.email, user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
+      // validate(ValidateType.password, user.password) === false
       //   ? (vm.passwordError = error = true)
       //   : (vm.passwordError = error = false)
       if (error === false) {
@@ -121,6 +121,10 @@ export default {
         this.noPass = true
       }
     },
+    /**
+     * @param {string} token
+     * @return {Promise<Route>}
+     */
     async loginHandler(token) {
       localStorage.setItem(LocalStorageKey.TOKEN, token)
       /** @type {UserModel}**/
@@ -129,19 +133,16 @@ export default {
         /** @type {Route}**/
         const route = Config.getRoute()
         if (!userInfo.is_password_set) {
-          this.$router.replace({ name: RouterName.REGISTER })
-          return
+          return await this.$router.replace({ name: RouterName.REGISTER })
         }
         if (!userInfo.is_authorized) {
-          // this.$router.replace({ name: RouterName.HOME })
-          return
+          return await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
         }
         const replacePath = localStorage.getItem(LocalStorageKey.REPLACE_PATH, route.path)
         if (replacePath) {
-          this.$router.replace(replacePath)
-        } else {
-          this.$router.replace({ name: RouterName.HOME })
+          return await this.$router.replace(replacePath)
         }
+        return await this.$router.replace({ name: RouterName.HOME })
       }
     },
     linkLineSignIn() {

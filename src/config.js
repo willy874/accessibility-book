@@ -1,3 +1,5 @@
+import { RouterName } from '@/consts'
+
 const base = 'https://api.pastwind.org'
 
 const config = {
@@ -24,6 +26,10 @@ const config = {
     baseUrl: base + '/dj-rest-auth/',
     headers: {},
   },
+  /**
+   * @type {RouterName[]}
+   */
+  loginRoutes: [RouterName.LOGIN, RouterName.REGISTER],
 }
 
 let app = null

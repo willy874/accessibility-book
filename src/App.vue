@@ -2,7 +2,7 @@
   <div id="app">
     <template v-if="route">
       <router-view :route="route" />
-      <div v-if="route.name !== RouterName.LOGIN">
+      <div v-if="isShowHeader">
         <Header />
       </div>
     </template>
@@ -23,10 +23,14 @@ export default {
   data() {
     return {
       route: null,
-      RouterName,
       path: '',
       href: '',
     }
+  },
+  computed: {
+    isShowHeader() {
+      return !Config.value.loginRoutes.includes(this.route.name)
+    },
   },
   watch: {
     $route() {
@@ -44,7 +48,7 @@ export default {
       this.route = Config.getRoute(this)
       console.log('onRouteChange', this.route)
       const isLogin = Boolean(localStorage.getItem(LocalStorageKey.TOKEN))
-      const loginRoutes = [RouterName.LOGIN, RouterName.REGISTER]
+      const loginRoutes = Config.value.loginRoutes
       if (!isLogin && !loginRoutes.includes(this.route.name)) {
         localStorage.setItem(LocalStorageKey.REPLACE_PATH, this.route.path)
         this.$router.replace({ name: RouterName.LOGIN })

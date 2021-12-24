@@ -1,7 +1,9 @@
 <template>
   <div>
     <template v-if="route">
-      <h2 v-if="route.name === RouterName.HOME">首頁</h2>
+      <div v-if="route.name === RouterName.HOME">
+        <h2>首頁</h2>
+      </div>
       <div v-if="route.name === RouterName.CHAPTER">
         <Chapter :route="route" />
       </div>

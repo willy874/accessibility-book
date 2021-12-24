@@ -49,7 +49,6 @@ export default {
     transformMarkdownToHtml,
     /**
      * @depend
-     * @this {ComponentOptions}
      * @param {ChapterModel} this.targetModel
      * @param {ChapterModel[]} this.modelList
      * @param {number} this.active

@@ -55,7 +55,6 @@ export default {
   methods: {
     /**
      * @depend
-     * @this {ComponentOptions}
      * @param {TagModel[]} this.targetListModel
      * @param {TagModel[]} this.listModel
      * @param {number} this.active
