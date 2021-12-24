@@ -13,7 +13,7 @@
 <script>
 import BasePage from '@/extends/base-page'
 import { transformMarkdownToHtml } from '@/utils'
-import { apiGetChapterById } from '@/api/index'
+import { apiGetChapterById, apiPostHistory } from '@/api/index'
 import consts from '@/consts'
 
 /**
@@ -67,11 +67,13 @@ export default {
       const modelList = this.modelList
       /** @type {number} */
       const id = Number(this.route?.params.id)
+
       if (id) {
         this.active = id
         const target = targetModel
         if (!target) {
           const res = await apiGetChapterById(id)
+          apiPostHistory({ chapter: id })
           modelList.push(res.data)
         }
       } else {

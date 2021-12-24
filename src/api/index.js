@@ -6,6 +6,11 @@ import { request, authRequest, baseRequest } from './request'
 export const apiGetBookList = () => request.get(`book/`)
 
 /**
+ * @returns {Promise<AxiosResponse<UserModel>>  }
+ */
+export const apiGetUserInfo = () => request.get(`user/`)
+
+/**
  * @param {number} id
  * @returns {Promise<AxiosResponse<BookModel>>  }
  */
@@ -40,6 +45,7 @@ export const apiPostUser = (data) => authRequest.post(`login/`, data)
 export const apiPostLogout = () => authRequest.post(`logout/`)
 
 /**
+ * @param {LineLoginRequestParam} data
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
 export const apiPostLineLogin = (data) => authRequest.post(`line/`, data)
@@ -59,3 +65,9 @@ export const apiPostSocialAccounts = () => baseRequest.get(`socialaccounts/`)
  * @returns {Promise<AxiosResponse<null>>}
  */
 export const apiPostSocialAccountsDisconnectedById = (id) => baseRequest.post(`socialaccounts/${id}/disconnect/`)
+
+/**
+ * @param {HistoryRequestParam} data
+ * @returns {Promise<AxiosResponse<HistoryCreateResponse>>}
+ */
+export const apiPostHistory = (data) => request.post(`history/`, data)

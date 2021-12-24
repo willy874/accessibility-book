@@ -13,6 +13,11 @@
  * @property {string} password
  */
 /**
+ * @typedef {Object} LineLoginRequestParam
+ * @property {string} code
+ * @property {string} return_url
+ */
+/**
  * @typedef {Object} LoginResponseData
  * @property {string} key
  */
@@ -59,4 +64,29 @@
  * @typedef {Object} TagModel
  * @property {string} id
  * @property {string} name
+ */
+/**
+ * @typedef {Object} UserModel
+ * @property {string} email
+ * @property {string} first_name
+ * @property {boolean} is_authorized
+ * @property {boolean} is_password_set
+ * @property {string} last_name
+ * @property {number} pk
+ * @property {string} username
+ */
+/**
+ * @typedef {Object} HistoryRequestParam
+ * @property {JSON} payload
+ * @property {number} chapter
+ */
+/**
+ * @typedef {Object} HistoryCreateResponse
+ * @property {number} id
+ * @property {JSON} payload
+ * @property {number} user
+ * @property {number} chapter
+ */
+/**
+ * @typedef {Object} HistoryModel
  */

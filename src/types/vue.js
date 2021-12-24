@@ -8,7 +8,7 @@
  * @typedef {import('vue').VNodeData} VNodeData
  */
 /**
- * @typedef {import('vue-router')} VueRouter
+ * @typedef {import('vue-router').default} VueRouter
  */
 /**
  * @typedef {import('vue-router').Route} Route
@@ -25,4 +25,8 @@
  * @template S
  * @template R
  * @typedef {import('vuex').ActionContext<S,R>} ActionContext
+ */
+
+/**
+ * @typedef {Object} RootState
  */

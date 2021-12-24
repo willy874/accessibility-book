@@ -121,7 +121,6 @@ export default {
           code,
           return_url: location.origin + '/login',
         })
-        console.log(res)
         if (res.isAxiosError) {
           throw new Error(res.data.detail)
         } else {
@@ -131,14 +130,27 @@ export default {
         this.noPass = true
       }
     },
-    loginHandler(token) {
+    async loginHandler(token) {
       localStorage.setItem('token', token)
-      const route = Config.getRoute()
-      const replacePath = localStorage.getItem('replacePath', route.path)
-      if (replacePath) {
-        this.$router.replace(replacePath)
-      } else {
-        this.$router.replace({ name: RouterName.HOME })
+      /** @type {UserModel}**/
+      const userInfo = await this.$store.dispatch('fetchUserInfo')
+      if (userInfo) {
+        /** @type {Route}**/
+        const route = Config.getRoute()
+        if (!userInfo.is_password_set) {
+          // this.$router.replace({ name: RouterName.HOME })
+          return
+        }
+        if (!userInfo.is_authorized) {
+          // this.$router.replace({ name: RouterName.HOME })
+          return
+        }
+        const replacePath = localStorage.getItem('replacePath', route.path)
+        if (replacePath) {
+          this.$router.replace(replacePath)
+        } else {
+          this.$router.replace({ name: RouterName.HOME })
+        }
       }
     },
     linkLineSignIn() {
