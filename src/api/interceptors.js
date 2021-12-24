@@ -1,17 +1,5 @@
 import Config from '@/config'
-import consts from '@/consts'
-
-/**
- * @enum {number}
- * @readonly
- */
-const HttpCode = consts.httpCode
-
-/**
- * @enum {number}
- * @readonly
- */
-const RouterName = consts.routerName
+import { RouterName, HttpCode, LocalStorageKey } from '@/consts'
 
 /**
  * @param {InterceptorsOptions} options
@@ -100,7 +88,7 @@ export function getResponseError(options) {
 export function getAuthRequestSuccess(options) {
   return (req) => {
     if (req.url === 'logout/') {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem(LocalStorageKey.TOKEN)
       if (token) {
         req.headers.Authorization = `Token ${token}`
       }
@@ -118,31 +106,3 @@ export function getBaseRequestSuccess(options) {
     return req
   }
 }
-
-// :authority: api.pastwind.org
-// :method: POST
-// :path: /dj-rest-auth/login/
-// :scheme: https
-// accept: */*
-// accept-encoding: gzip, deflate, br
-// accept-language: zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7
-// content-length: 41
-// content-type: application/json; charset=utf-8
-// origin: http://127.0.0.1:8000
-// referer: http://127.0.0.1:8000/
-// sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="96", "Google Chrome";v="96"
-// sec-ch-ua-mobile: ?0
-// sec-ch-ua-platform: "Windows"
-// user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36
-// sec-fetch-dest: empty
-// sec-fetch-mode: cors
-// sec-fetch-site: cross-site
-
-// Accept: application/json
-// Content-Type: application/json
-// Referer: http://127.0.0.1:8000/
-// sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="96", "Google Chrome";v="96"
-// sec-ch-ua-mobile: ?0
-// sec-ch-ua-platform: "Windows"
-// User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36
-// X-Client-Version: 0.0.1

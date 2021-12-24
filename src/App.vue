@@ -11,15 +11,9 @@
 <script>
 import 'markdown-it-latex/dist/index.css'
 import Header from './layouts/Header.vue'
-import consts from '@/consts'
+import { RouterName, LocalStorageKey } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
-
-/**
- * @enum {number}
- * @readonly
- */
-const RouterName = consts.routerName
 
 export default {
   name: 'App',
@@ -41,17 +35,18 @@ export default {
   },
   async created() {
     if (Config.value.liff) {
-      await liff.init({ liffId: '1656538444-L3wP67PM' })
+      await liff.init({ liffId: Config.value.liffId })
     }
     this.changeRoute()
   },
   methods: {
     changeRoute() {
-      console.log('onRouteChange', this.route)
       this.route = Config.getRoute(this)
-      const isLogin = Boolean(localStorage.getItem('token'))
-      if (!isLogin && this.route.path !== '/login') {
-        localStorage.setItem('replacePath', this.route.path)
+      console.log('onRouteChange', this.route)
+      const isLogin = Boolean(localStorage.getItem(LocalStorageKey.TOKEN))
+      const loginRoutes = [RouterName.LOGIN, RouterName.REGISTER]
+      if (!isLogin && !loginRoutes.includes(this.route.name)) {
+        localStorage.setItem(LocalStorageKey.REPLACE_PATH, this.route.path)
         this.$router.replace({ name: RouterName.LOGIN })
       }
     },

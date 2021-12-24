@@ -5,7 +5,9 @@ import user from './user/index'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    init: false,
+  },
   mutations: {},
   actions: {},
   getter: {},

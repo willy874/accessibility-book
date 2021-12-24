@@ -26,7 +26,7 @@
  * @template R
  * @typedef {import('vuex').ActionContext<S,R>} ActionContext
  */
-
 /**
  * @typedef {Object} RootState
+ * @property {boolean} init
  */

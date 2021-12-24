@@ -14,13 +14,7 @@
 import BasePage from '@/extends/base-page'
 import { transformMarkdownToHtml } from '@/utils'
 import { apiGetChapterById, apiPostHistory } from '@/api/index'
-import consts from '@/consts'
-
-/**
- * @enum {number}
- * @readonly
- */
-const RouterName = consts.routerName
+import { RouterName } from '@/consts'
 
 /**
  * @type {ComponentOptions}

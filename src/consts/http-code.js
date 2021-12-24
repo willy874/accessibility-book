@@ -1,4 +1,7 @@
-export default {
+/**
+ * @enum
+ */
+export const HttpCode = {
   CLIENT_ERROR: 400,
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,

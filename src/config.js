@@ -2,7 +2,15 @@ const base = 'https://api.pastwind.org'
 
 const config = {
   env: process.env,
+  lineLoginRequestParam: {
+    response_type: 'code',
+    client_id: '1656649897',
+    nonce: '09876xyz',
+    scope: 'profile openid email',
+    redirect_uri: location.origin + '/login',
+  },
   version: '0.0.1',
+  liffId: '1656538444-L3wP67PM',
   liff: location.host === 'tpwlweb.3anology.info',
   base: {
     baseUrl: base,
@@ -35,15 +43,9 @@ class VueConfig {
 
   static getRoute(vm) {
     const vue = vm || app
-    const { query } = vue.$route
-    if (query && query['liff.state']) {
-      const { 'liff.state': path } = query
-      if (path) {
-        const locationData = vue.$router.resolve(path)
-        return locationData.route
-      } else {
-        return null
-      }
+    const LiifQuery = vue.$route?.query['liff.state']
+    if (LiifQuery) {
+      return vue.$router.resolve(LiifQuery)
     } else {
       return vue.$route
     }

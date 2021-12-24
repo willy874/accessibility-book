@@ -1,4 +1,7 @@
-export default {
+/**
+ * @enum
+ */
+export const LifecycleHook = {
   CREATED: 'created',
   BEFORE_MOUNT: 'beforeMount',
   MOUNTED: 'mounted',

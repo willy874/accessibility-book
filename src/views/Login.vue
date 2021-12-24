@@ -48,13 +48,7 @@ import { apiPostUser, apiPostLineLogin } from '@/api'
 import Config from '@/config'
 // import liff from '@line/liff'
 // import { validate } from '@/utils'
-import consts from '@/consts'
-
-/**
- * @enum {number}
- * @readonly
- */
-const RouterName = consts.routerName
+import { RouterName, LocalStorageKey, Actions } from '@/consts'
 
 /**
  * @type {ComponentOptions}
@@ -71,23 +65,20 @@ export default {
   computed: {
     lineUrl() {
       const qs = new URLSearchParams({
-        response_type: 'code',
-        client_id: '1656649897',
+        ...Config.value.lineLoginRequestParam,
         state: 'state=12345abcde',
-        nonce: '09876xyz',
-        scope: 'profile openid email',
-        redirect_uri: location.origin + '/login',
       })
       return `https://access.line.me/oauth2/v2.1/authorize?${qs.toString()}`
     },
   },
   created() {
-    const isLogin = Boolean(localStorage.getItem('token'))
+    const isLogin = Boolean(localStorage.getItem(LocalStorageKey.TOKEN))
+    const responseType = Config.value.lineLoginRequestParam.response_type
     if (isLogin) {
       this.$router.replace({ name: RouterName.HOME })
     }
-    if (this.$route.query.code) {
-      this.fetchLineLoginApi(this.$route.query.code)
+    if (this.$route.query[responseType]) {
+      this.fetchLineLoginApi(this.$route.query[responseType])
     }
   },
   methods: {
@@ -119,7 +110,7 @@ export default {
       try {
         const res = await apiPostLineLogin({
           code,
-          return_url: location.origin + '/login',
+          return_url: Config.value.lineLoginRequestParam.redirect_uri,
         })
         if (res.isAxiosError) {
           throw new Error(res.data.detail)
@@ -131,21 +122,21 @@ export default {
       }
     },
     async loginHandler(token) {
-      localStorage.setItem('token', token)
+      localStorage.setItem(LocalStorageKey.TOKEN, token)
       /** @type {UserModel}**/
-      const userInfo = await this.$store.dispatch('fetchUserInfo')
+      const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
       if (userInfo) {
         /** @type {Route}**/
         const route = Config.getRoute()
         if (!userInfo.is_password_set) {
-          // this.$router.replace({ name: RouterName.HOME })
+          this.$router.replace({ name: RouterName.REGISTER })
           return
         }
         if (!userInfo.is_authorized) {
           // this.$router.replace({ name: RouterName.HOME })
           return
         }
-        const replacePath = localStorage.getItem('replacePath', route.path)
+        const replacePath = localStorage.getItem(LocalStorageKey.REPLACE_PATH, route.path)
         if (replacePath) {
           this.$router.replace(replacePath)
         } else {
@@ -154,13 +145,7 @@ export default {
       }
     },
     linkLineSignIn() {
-      // if (Config.value.liff) {
-      //   if (!liff.isLoggedIn()) {
-      //     liff.login({ redirectUri: location.origin + '/login' })
-      //   }
-      // } else {
       location.href = this.lineUrl
-      // }
     },
   },
 }

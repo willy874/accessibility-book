@@ -6,21 +6,20 @@
         <Chapter :route="route" />
       </div>
       <div v-if="route.name === RouterName.TAG">
-        <Chapter :route="route" />
+        <Tag :route="route" />
+      </div>
+      <div v-if="route.name === RouterName.BOOK">
+        <Book :route="route" />
       </div>
     </template>
   </div>
 </template>
 
 <script>
-import consts from '@/consts'
-import Chapter from './Chapter'
-
-/**
- * @enum {number}
- * @readonly
- */
-const RouterName = consts.routerName
+import { RouterName } from '@/consts'
+import Chapter from './Chapter.vue'
+import Tag from './Tag.vue'
+import Book from './Book.vue'
 
 /**
  * @type {ComponentOptions}
@@ -29,6 +28,8 @@ export default {
   name: 'Home',
   components: {
     Chapter,
+    Tag,
+    Book,
   },
   props: {
     route: {

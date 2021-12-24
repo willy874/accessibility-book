@@ -1,15 +1,10 @@
-import consts from '@/consts'
+import { RouterName } from '@/consts'
 import Home from '../views/Home.vue'
 import Chapter from '../views/Chapter.vue'
 import Book from '../views/Book.vue'
 import Tag from '../views/Tag.vue'
 import Login from '../views/Login.vue'
-
-/**
- * @enum {number}
- * @readonly
- */
-const RouterName = consts.routerName
+import Register from '../views/Register.vue'
 
 export default [
   {
@@ -23,13 +18,18 @@ export default [
     component: Login,
   },
   {
+    path: '/register',
+    name: RouterName.REGISTER,
+    component: Register,
+  },
+  {
     path: '/book/',
     name: RouterName.BOOK,
     component: Book,
   },
   {
     path: '/book/:id',
-    name: RouterName.BOOK,
+    name: RouterName.BOOK_DETAIL,
     component: Book,
   },
   {
@@ -44,7 +44,7 @@ export default [
   },
   {
     path: '/tag/:id',
-    name: RouterName.TAG,
+    name: RouterName.TAG_DETAIL,
     component: Tag,
   },
 ]

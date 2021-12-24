@@ -21,13 +21,7 @@
 
 <script>
 import { apiPostLogout } from '@/api'
-import consts from '@/consts'
-
-/**
- * @enum {number}
- * @readonly
- */
-const RouterName = consts.routerName
+import { RouterName, LocalStorageKey } from '@/consts'
 
 export default {
   name: 'Header',
@@ -38,7 +32,7 @@ export default {
         if (res.isAxiosError) {
           throw res
         }
-        localStorage.removeItem('token')
+        localStorage.removeItem(LocalStorageKey.TOKEN)
         this.$router.replace({ name: RouterName.LOGIN })
       } catch (error) {}
     },
