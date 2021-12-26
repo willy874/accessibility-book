@@ -11,18 +11,13 @@
 </template>
 
 <script>
-import BasePage from '@/extends/base-page'
 import { transformMarkdownToHtml } from '@/utils'
 import { apiGetChapterById, apiPostHistory } from '@/api/index'
 import { RouterName } from '@/consts'
+import Config from '@/config'
 
-/**
- * @type {ComponentOptions}
- * @extends {BasePage}
- */
 export default {
   name: 'Chapter',
-  extends: BasePage,
   data() {
     return {
       modelList: [],
@@ -58,8 +53,10 @@ export default {
       const targetModel = this.targetModel
       /** @type {ChapterModel[]} */
       const modelList = this.modelList
+      /** @type {Route}**/
+      const route = Config.getRoute()
       /** @type {number} */
-      const id = Number(this.route?.params.id)
+      const id = Number(route.params.id)
 
       if (id) {
         this.active = id

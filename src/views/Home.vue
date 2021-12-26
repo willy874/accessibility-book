@@ -23,9 +23,6 @@ import Chapter from './Chapter.vue'
 import Tag from './Tag.vue'
 import Book from './Book.vue'
 
-/**
- * @type {ComponentOptions}
- */
 export default {
   name: 'Home',
   components: {

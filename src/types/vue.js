@@ -11,6 +11,9 @@
  * @typedef {import('vue-router').default} VueRouter
  */
 /**
+ * @typedef {import('vue-router').Location} VueRouteLocation
+ */
+/**
  * @typedef {import('vue-router').Route} Route
  */
 /**
