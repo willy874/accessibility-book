@@ -49,11 +49,13 @@ class VueConfig {
 
   static getRoute(vm) {
     const instance = vm || app
-    const LiifQuery = instance.$route?.query['liff.state']
+    const LiifQuery = instance?.$route?.query?.['liff.state']
     if (LiifQuery) {
       return instance.$router.resolve(LiifQuery)
-    } else {
+    } else if (instance?.$route) {
       return instance.$route
+    } else {
+      return null
     }
   }
 }

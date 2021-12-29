@@ -49,12 +49,13 @@ export default {
      * @param {number} this.active
      */
     async effectComponentPage() {
+      /** @type {Route}**/
+      const route = Config.getRoute()
+      if (!route) return
       /** @type {ChapterModel} */
       const targetModel = this.targetModel
       /** @type {ChapterModel[]} */
       const modelList = this.modelList
-      /** @type {Route}**/
-      const route = Config.getRoute()
       /** @type {number} */
       const id = Number(route.params.id)
 

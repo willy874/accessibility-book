@@ -42,7 +42,7 @@ export default {
   },
   computed: {},
   watch: {
-    route() {
+    $route() {
       this.effectComponentPage()
     },
   },
@@ -80,9 +80,9 @@ export default {
     async effectComponentPage() {
       /** @type {Route}**/
       const route = Config.getRoute()
+      if (!route) return
       /** @type {number} */
       const id = route.params.id
-
       if (id) {
         this.active = id
         this.loading = false

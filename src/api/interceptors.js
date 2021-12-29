@@ -46,10 +46,12 @@ export function getResponseError(options) {
         console.error('Client Error')
         break
       case HttpCode.UNAUTHORIZED:
+        if (!route) return
         localStorage.setItem('replacePath', route.path)
         vm.$router.replace({ name: RouterName.LOGIN })
         break
       case HttpCode.FORBIDDEN:
+        if (!route) return
         localStorage.setItem('replacePath', route.path)
         vm.$router.replace({ name: RouterName.LOGIN })
         break
