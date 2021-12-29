@@ -39,7 +39,7 @@ export default {
     }
   },
   watch: {
-    route() {
+    $route() {
       this.effectComponentPage()
     },
   },
