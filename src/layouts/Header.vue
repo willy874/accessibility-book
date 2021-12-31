@@ -11,6 +11,9 @@
         <li>
           <RouterLink to="/tag/">標籤</RouterLink>
         </li>
+        <li>
+          <RouterLink to="/bookmark/">書籤</RouterLink>
+        </li>
       </ul>
       <div>
         <button type="button" @click="signOut">登出</button>
