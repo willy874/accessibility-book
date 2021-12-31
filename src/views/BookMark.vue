@@ -2,14 +2,9 @@
   <div>
     <h2>書籤列表</h2>
     <template v-if="loading">
-      <div v-if="targetListModel && targetListModel.length">
-        <div v-for="model in targetListModel" :key="model.id">
-          <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
-        </div>
-      </div>
-      <div v-else-if="listModel.length">
+      <div v-if="listModel.length">
         <div v-for="model in listModel" :key="model.id">
-          <RouterLink :to="getBookMarkRoute(model.id)">{{ model.name }}</RouterLink>
+          <RouterLink :to="getChapterRoute(model.id)">{{ model.chapter_name }}</RouterLink>
         </div>
       </div>
       <div v-else>
@@ -23,7 +18,7 @@
 </template>
 
 <script>
-import { apiGetBookMark, apiGetChapterByBookMark } from '@/api/index'
+import { apiGetBookMark } from '@/api/index'
 import { RouterName } from '@/consts'
 import Config from '@/config'
 
@@ -58,16 +53,6 @@ export default {
       }
     },
     /**
-     * @param {number} id
-     * @return {VueRouteLocation}
-     */
-    getBookMarkRoute(id) {
-      return {
-        name: RouterName.BOOKMARK_DETAIL,
-        params: { id },
-      }
-    },
-    /**
      * @depend
      * @param {BookMarkModel[]} this.targetListModel
      * @param {BookMarkModel[]} this.listModel
@@ -78,20 +63,13 @@ export default {
       const route = Config.getRoute()
       if (!route) return
       /** @type {number} */
-      const id = route.params.id
+      // const id = route.params.id
 
-      if (id) {
-        this.loading = false
-        const res = await apiGetChapterByBookMark(id)
-        this.targetListModel = res.data
-        this.loading = true
-      } else {
-        this.targetListModel = null
-        this.loading = false
-        const res = await apiGetBookMark()
-        this.listModel = res.data
-        this.loading = true
-      }
+      this.targetListModel = null
+      this.loading = false
+      const res = await apiGetBookMark()
+      this.listModel = res.data
+      this.loading = true
     },
   },
 }
