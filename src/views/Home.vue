@@ -13,6 +13,9 @@
       <div v-if="route.name === RouterName.BOOK">
         <Book :route="route" />
       </div>
+      <div v-if="route.name === RouterName.BOOKMARK">
+        <BookMark :route="route" />
+      </div>
     </template>
   </div>
 </template>
@@ -22,16 +25,15 @@ import { RouterName } from '@/consts'
 import Chapter from './Chapter.vue'
 import Tag from './Tag.vue'
 import Book from './Book.vue'
+import BookMark from './BookMark.vue'
 
-/**
- * @type {ComponentOptions}
- */
 export default {
   name: 'Home',
   components: {
     Chapter,
     Tag,
     Book,
+    BookMark,
   },
   props: {
     route: {

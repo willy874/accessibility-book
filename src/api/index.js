@@ -37,7 +37,7 @@ export const apiGetChapterByTag = (id) => request.get(`chapter/?tag=${id}`)
  * @param {LoginRequestParam} data
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
-export const apiPostUser = (data) => authRequest.post(`login/`, data)
+export const apiPostUserLogin = (data) => authRequest.post(`login/`, data)
 
 /**
  * @returns {Promise<AxiosResponse<null>>}
@@ -56,6 +56,12 @@ export const apiPostLineLogin = (data) => authRequest.post(`line/`, data)
 export const apiPostLineConnect = () => authRequest.post(`line/connect/`)
 
 /**
+ * @param {RegisterRequestParam} data
+ * @returns {Promise<AxiosResponse<LoginResponseData>>}
+ */
+export const apiPostRegister = (data) => authRequest.get(`registration/`, data)
+
+/**
  * @returns {Promise<AxiosResponse<null>>}
  */
 export const apiPostSocialAccounts = () => baseRequest.get(`socialaccounts/`)
@@ -71,3 +77,20 @@ export const apiPostSocialAccountsDisconnectedById = (id) => baseRequest.post(`s
  * @returns {Promise<AxiosResponse<HistoryCreateResponse>>}
  */
 export const apiPostHistory = (data) => request.post(`history/`, data)
+
+/**
+ * @returns {Promise<AxiosResponse<BookMarkModel[]>>}
+ */
+export const apiGetBookMark = () => request.get(`bookmark/`)
+
+/**
+ * @param {BookMarkRequestParam} data
+ * @returns {Promise<AxiosResponse<BookMarkModel>>}
+ */
+export const apiPostBookMark = (data) => request.post(`bookmark/`, data)
+
+/**
+ * @param {number} id
+ * @returns {Promise<AxiosResponse<ChapterModel>>  }
+ */
+export const apiGetChapterByBookMark = (id) => request.get(`chapter/?bookmark=${id}`)

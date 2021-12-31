@@ -26,9 +26,9 @@
           title="這裡輸入帳號密碼"
         />
         <div class="msg">
-          <strong v-if="passwordError" class="error-msg" title="帳號信箱或者密碼格式錯誤"
-            >帳號信箱或者密碼格式錯誤</strong
-          >
+          <strong v-if="passwordError" class="error-msg" title="帳號信箱或者密碼格式錯誤">
+            帳號信箱或者密碼格式錯誤
+          </strong>
         </div>
       </div>
       <button type="submit" title="點擊登入" class="btn-submit">登入</button>
@@ -44,16 +44,14 @@
 </template>
 
 <script>
-import { apiPostUser, apiPostLineLogin } from '@/api'
+import { apiPostUserLogin, apiPostLineLogin } from '@/api'
 import Config from '@/config'
 // import liff from '@line/liff'
 // import { validate, ValidateType } from '@/utils'
 import { RouterName, LocalStorageKey, Actions } from '@/consts'
 
-/**
- * @type {ComponentOptions}
- */
 export default {
+  name: 'Login',
   data() {
     return {
       user: { username: 'user', password: 'zY7bSBgk' },
@@ -96,7 +94,7 @@ export default {
     },
     async fetchUserApi(user) {
       try {
-        const res = await apiPostUser(user)
+        const res = await apiPostUserLogin(user)
         if (res.isAxiosError) {
           throw new Error(res.data.detail)
         } else {

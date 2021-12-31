@@ -90,3 +90,22 @@
 /**
  * @typedef {Object} HistoryModel
  */
+/**
+ * @typedef {Object} RegisterRequestParam
+ * @property {string} username
+ * @property {string} password1
+ * @property {string} password2
+ * @property {string} email
+ */
+/**
+ * @typedef {Object} BookMarkRequestParam
+ * @property {JSON} payload
+ * @property {number} chapter
+ */
+/**
+ * @typedef {Object} BookMarkModel
+ * @property {number} id
+ * @property {JSON} payload
+ * @property {number} user
+ * @property {number} chapter
+ */

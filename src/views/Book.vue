@@ -5,12 +5,12 @@
       <div v-if="targetModel">
         <h3>{{ targetModel.name }}</h3>
         <div v-for="model in targetModel.chapter_set" :key="model.id">
-          <RouterLink :to="`/chapter/${model.id}`">{{ model.name }}</RouterLink>
+          <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
       <div v-else-if="listModel.length">
         <div v-for="model in listModel" :key="model.id">
-          <RouterLink :to="`/book/${model.id}`">{{ model.name }}</RouterLink>
+          <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
       <div v-else>
@@ -24,16 +24,12 @@
 </template>
 
 <script>
-import BasePage from '@/extends/base-page'
 import { apiGetBookList, apiGetBookById } from '@/api/index'
+import { RouterName } from '@/consts'
+import Config from '@/config'
 
-/**
- * @type {ComponentOptions}
- * @extends {BasePage}
- */
 export default {
   name: 'Book',
-  extends: BasePage,
   data() {
     return {
       /** @type {BookModel[]} */
@@ -46,7 +42,7 @@ export default {
   },
   computed: {},
   watch: {
-    route() {
+    $route() {
       this.effectComponentPage()
     },
   },
@@ -56,15 +52,37 @@ export default {
   },
   methods: {
     /**
+     * @param {number} id
+     * @return {VueRouteLocation}
+     */
+    getChapterRoute(id) {
+      return {
+        name: RouterName.CHAPTER,
+        params: { id },
+      }
+    },
+    /**
+     * @param {number} id
+     * @return {VueRouteLocation}
+     */
+    getBookRoute(id) {
+      return {
+        name: RouterName.BOOK_DETAIL,
+        params: { id },
+      }
+    },
+    /**
      * @depend
      * @param {BookModel} this.targetModel
      * @param {BookModel[]} this.listModel
      * @param {number} this.active
      */
     async effectComponentPage() {
+      /** @type {Route}**/
+      const route = Config.getRoute()
+      if (!route) return
       /** @type {number} */
-      const id = this.route?.params.id
-
+      const id = route.params.id
       if (id) {
         this.active = id
         this.loading = false

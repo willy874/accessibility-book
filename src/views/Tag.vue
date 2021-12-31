@@ -4,12 +4,12 @@
     <template v-if="loading">
       <div v-if="targetListModel && targetListModel.length">
         <div v-for="model in targetListModel" :key="model.id">
-          <RouterLink :to="`/chapter/${model.id}`">{{ model.name }}</RouterLink>
+          <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
       <div v-else-if="listModel.length">
         <div v-for="model in listModel" :key="model.id">
-          <RouterLink :to="`/tag/${model.id}`">{{ model.name }}</RouterLink>
+          <RouterLink :to="getTagRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
       <div v-else>
@@ -23,16 +23,12 @@
 </template>
 
 <script>
-import BasePage from '@/extends/base-page'
 import { apiGetTagList, apiGetChapterByTag } from '@/api/index'
+import { RouterName } from '@/consts'
+import Config from '@/config'
 
-/**
- * @type {ComponentOptions}
- * @extends {BasePage}
- */
 export default {
   name: 'Tag',
-  extends: BasePage,
   data() {
     return {
       /** @type {TagModel[]} */
@@ -42,17 +38,35 @@ export default {
       loading: false,
     }
   },
-  computed: {},
   watch: {
-    route() {
+    $route() {
       this.effectComponentPage()
     },
   },
   async created() {
-    // await this.passLogin()
     this.effectComponentPage()
   },
   methods: {
+    /**
+     * @param {number} id
+     * @return {VueRouteLocation}
+     */
+    getChapterRoute(id) {
+      return {
+        name: RouterName.CHAPTER,
+        params: { id },
+      }
+    },
+    /**
+     * @param {number} id
+     * @return {VueRouteLocation}
+     */
+    getTagRoute(id) {
+      return {
+        name: RouterName.TAG_DETAIL,
+        params: { id },
+      }
+    },
     /**
      * @depend
      * @param {TagModel[]} this.targetListModel
@@ -60,8 +74,11 @@ export default {
      * @param {number} this.active
      */
     async effectComponentPage() {
+      /** @type {Route}**/
+      const route = Config.getRoute()
+      if (!route) return
       /** @type {number} */
-      const id = this.route?.params.id
+      const id = route.params.id
 
       if (id) {
         this.loading = false
