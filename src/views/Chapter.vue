@@ -2,7 +2,8 @@
   <div>
     <h2>章節列表</h2>
     <div v-if="targetModel">
-      <button @click="addBookMark">建立書籤</button><span v-if="isBookMark">已加入書籤</span>
+      <span v-if="isBookMark">已加入書籤</span>
+      <button v-else @click="addBookMark">建立書籤</button>
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
     </div>
     <div v-else>
@@ -13,7 +14,7 @@
 
 <script>
 import { transformMarkdownToHtml } from '@/utils'
-import { apiGetChapterById, apiPostBookMark, apiPostHistory } from '@/api/index'
+import { apiGetChapterById, apiPostBookMark, apiPostHistory, apiGetBookMark } from '@/api/index'
 import { RouterName } from '@/consts'
 import Config from '@/config'
 
@@ -64,6 +65,9 @@ export default {
       if (id) {
         this.active = id
         const target = targetModel
+        const bookmarkRes = await apiGetBookMark()
+        const bookmarkList = bookmarkRes.data
+        this.isBookMark = bookmarkList.some((item) => item.id === this.active)
         if (!target) {
           const res = await apiGetChapterById(id)
           apiPostHistory({ chapter: id })
