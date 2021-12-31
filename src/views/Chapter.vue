@@ -2,6 +2,7 @@
   <div>
     <h2>章節列表</h2>
     <div v-if="targetModel">
+      <button @click="addBookMark">建立書籤</button><span v-if="isBookMark">已加入書籤</span>
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
     </div>
     <div v-else>
@@ -12,7 +13,7 @@
 
 <script>
 import { transformMarkdownToHtml } from '@/utils'
-import { apiGetChapterById, apiPostHistory } from '@/api/index'
+import { apiGetChapterById, apiPostBookMark, apiPostHistory } from '@/api/index'
 import { RouterName } from '@/consts'
 import Config from '@/config'
 
@@ -22,6 +23,7 @@ export default {
     return {
       modelList: [],
       active: -1,
+      isBookMark: false,
     }
   },
   computed: {
@@ -70,6 +72,20 @@ export default {
       } else {
         this.active = -1
         this.$router.replace({ name: RouterName.HOME })
+      }
+    },
+    async addBookMark(e) {
+      e.preventDefault()
+      const chapterObj = { chapter: this.active }
+      try {
+        const res = await apiPostBookMark(chapterObj)
+        if (res.isAxiosError) {
+          throw new Error(res.data.detail)
+        } else {
+          this.isBookMark = true
+        }
+      } catch (error) {
+        throw new Error(error)
       }
     },
   },

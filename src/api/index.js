@@ -88,3 +88,9 @@ export const apiGetBookMark = () => request.get(`bookmark/`)
  * @returns {Promise<AxiosResponse<BookMarkModel>>}
  */
 export const apiPostBookMark = (data) => request.post(`bookmark/`, data)
+
+/**
+ * @param {number} id
+ * @returns {Promise<AxiosResponse<ChapterModel>>  }
+ */
+export const apiGetChapterByBookMark = (id) => request.get(`chapter/?bookmark=${id}`)
