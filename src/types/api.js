@@ -89,6 +89,13 @@
  */
 /**
  * @typedef {Object} HistoryModel
+ * @property {number} id
+ * @property {JSON} payload
+ * @property {number} user
+ * @property {number} chapter
+ * @property {string} chapter_name
+ * @property {array} tag
+ * @property {string} last_modified
  */
 /**
  * @typedef {Object} RegisterRequestParam

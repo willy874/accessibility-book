@@ -79,6 +79,11 @@ export const apiPostSocialAccountsDisconnectedById = (id) => baseRequest.post(`s
 export const apiPostHistory = (data) => request.post(`history/`, data)
 
 /**
+ * @returns {Promise<AxiosResponse<HistoryModel[]>>}
+ */
+export const apiGetHistory = () => request.get(`history/`)
+
+/**
  * @returns {Promise<AxiosResponse<BookMarkModel[]>>}
  */
 export const apiGetBookMark = () => request.get(`bookmark/`)
@@ -91,6 +96,5 @@ export const apiPostBookMark = (data) => request.post(`bookmark/`, data)
 
 /**
  * @param {number} id
- * @returns {Promise<AxiosResponse<ChapterModel>>  }
  */
-export const apiGetChapterByBookMark = (id) => request.get(`chapter/?bookmark=${id}`)
+export const apiDeleteBookMark = (id) => request.delete(`bookmark/${id}`)
