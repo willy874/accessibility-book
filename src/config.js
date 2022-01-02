@@ -14,6 +14,7 @@ const config = {
   version: '0.0.1',
   liffId: '1656538444-L3wP67PM',
   liff: location.host === 'tpwlweb.3anology.info',
+  authorizationHeaderPrefix: 'Token',
   base: {
     baseUrl: base,
     headers: {},

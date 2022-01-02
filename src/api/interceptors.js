@@ -7,8 +7,8 @@ import { RouterName, HttpCode, LocalStorageKey } from '@/consts'
  */
 export function getRequestSuccess(options) {
   return (req) => {
-    const token = localStorage.getItem('token')
-    req.headers.Authorization = `Token ${token}`
+    const token = localStorage.getItem(LocalStorageKey.TOKEN)
+    req.headers.Authorization = Config.value.authorizationHeaderPrefix + ' ' + token
     return req
   }
 }
@@ -39,20 +39,22 @@ export function getResponseError(options) {
     const vm = Config.useApp()
     /** @type {Route} */
     const route = Config.getRoute()
-
-    const status = error?.response?.status
+    /** @type {XMLHttpRequest} */
+    const request = error.request
+    /** @type {number} */
+    const status = request.status
     switch (status) {
       case HttpCode.CLIENT_ERROR:
         console.error('Client Error')
         break
       case HttpCode.UNAUTHORIZED:
         if (!route) return
-        localStorage.setItem('replacePath', route.path)
+        localStorage.setItem(LocalStorageKey.REPLACE_PATH, route.path)
         vm.$router.replace({ name: RouterName.LOGIN })
         break
       case HttpCode.FORBIDDEN:
         if (!route) return
-        localStorage.setItem('replacePath', route.path)
+        localStorage.setItem(LocalStorageKey.REPLACE_PATH, route.path)
         vm.$router.replace({ name: RouterName.LOGIN })
         break
       case HttpCode.NOT_FOUND:
@@ -92,7 +94,7 @@ export function getAuthRequestSuccess(options) {
     if (req.url === 'logout/') {
       const token = localStorage.getItem(LocalStorageKey.TOKEN)
       if (token) {
-        req.headers.Authorization = `Token ${token}`
+        req.headers.Authorization = Config.value.authorizationHeaderPrefix + ' ' + token
       }
     }
     return req
