@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { transformMarkdownToHtml } from '@/utils'
+import { transformMarkdownToHtml, HttpError, handleHttpErrorLog } from '@/utils'
 import { apiGetChapterById, apiPostBookMark, apiPostHistory, apiGetBookMark } from '@/api/index'
 import { RouterName } from '@/consts'
 import Config from '@/config'
@@ -80,16 +80,22 @@ export default {
     },
     async addBookMark(e) {
       e.preventDefault()
-      const chapterObj = { chapter: this.active }
+      /** @type {BookMarkRequestParam} **/
+      const requestParam = { chapter: this.active }
       try {
-        const res = await apiPostBookMark(chapterObj)
+        const res = await apiPostBookMark(requestParam)
         if (res.isAxiosError) {
-          throw new Error(res.data.detail)
+          throw new HttpError({
+            name: apiPostBookMark.name,
+            message: res.data?.detail,
+            status: res.status || res.request.status,
+            url: res.config.url,
+          })
         } else {
           this.isBookMark = true
         }
       } catch (error) {
-        throw new Error(error)
+        handleHttpErrorLog(error)
       }
     },
   },
