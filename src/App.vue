@@ -1,9 +1,12 @@
 <template>
   <div id="app">
     <template v-if="route">
-      <router-view :route="route" />
-      <div v-if="isShowHeader">
+      <div v-if="isShow">
         <Header />
+      </div>
+      <router-view class="main" :route="route" />
+      <div v-if="isShow">
+        <Footer />
       </div>
     </template>
   </div>
@@ -11,6 +14,7 @@
 <script>
 import 'markdown-it-latex/dist/index.css'
 import Header from './layouts/Header.vue'
+import Footer from './layouts/Footer.vue'
 import { RouterName, LocalStorageKey } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
@@ -19,6 +23,7 @@ export default {
   name: 'App',
   components: {
     Header,
+    Footer,
   },
   data() {
     return {
@@ -28,7 +33,7 @@ export default {
     }
   },
   computed: {
-    isShowHeader() {
+    isShow() {
       return !Config.value.loginRoutes.includes(this.route.name)
     },
   },
@@ -58,23 +63,17 @@ export default {
 }
 </script>
 <style lang="scss">
+@import './style/main.scss';
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  min-height: 100vh;
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.main {
+  padding: 1rem;
+  margin: 8rem auto 10rem auto;
 }
 </style>

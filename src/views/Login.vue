@@ -1,6 +1,6 @@
 <template>
   <main>
-    <form title="帳號登入的表單" @submit="signIn">
+    <form class="form" title="帳號登入的表單" @submit="signIn">
       <h2 class="form-title" title="這裡是登入頁面">登入</h2>
       <div>
         <label class="form-label" for="user-email" title="帳號信箱">帳號信箱</label>
@@ -151,7 +151,7 @@ export default {
 </script>
 
 <style lang="scss">
-form {
+.form {
   max-width: $xs;
   margin: 2rem auto;
   display: flex;
@@ -161,10 +161,6 @@ form {
   border-radius: 0.5rem;
   background-color: #e0fff3;
   gap: 1rem;
-}
-
-input {
-  box-sizing: border-box;
 }
 
 .form-input,

@@ -5,6 +5,7 @@
       <div v-if="listModel.length">
         <div v-for="model in listModel" :key="model.id">
           <RouterLink :to="getChapterRoute(model.id)">{{ model.chapter_name }}</RouterLink>
+          <button @click="deleteBookMark(model.id)">刪除</button>
         </div>
       </div>
       <div v-else>
@@ -18,9 +19,8 @@
 </template>
 
 <script>
-import { apiGetBookMark } from '@/api/index'
+import { apiGetBookMark, apiDeleteBookMark } from '@/api/index'
 import { RouterName } from '@/consts'
-import Config from '@/config'
 
 export default {
   name: 'BookMark',
@@ -52,6 +52,18 @@ export default {
         params: { id },
       }
     },
+    async deleteBookMark(id) {
+      try {
+        const res = await apiDeleteBookMark(id)
+        if (res.isAxiosError) {
+          throw new Error(res.data.detail)
+        } else {
+          this.effectComponentPage()
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    },
     /**
      * @depend
      * @param {BookMarkModel[]} this.targetListModel
@@ -59,12 +71,6 @@ export default {
      * @param {number} this.active
      */
     async effectComponentPage() {
-      /** @type {Route}**/
-      const route = Config.getRoute()
-      if (!route) return
-      /** @type {number} */
-      // const id = route.params.id
-
       this.targetListModel = null
       this.loading = false
       const res = await apiGetBookMark()

@@ -7,6 +7,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import NoAuthorized from '../views/NoAuthorized.vue'
 import BookMark from '../views/BookMark.vue'
+import History from '../views/History.vue'
 
 export default [
   {
@@ -55,13 +56,13 @@ export default [
     component: Tag,
   },
   {
-    path: '/bookmark/',
+    path: '/bookmark',
     name: RouterName.BOOKMARK,
     component: BookMark,
   },
   {
-    path: '/bookmark/:id',
-    name: RouterName.BOOKMARK_DETAIL,
-    component: BookMark,
+    path: '/history',
+    name: RouterName.HISTORY,
+    component: History,
   },
 ]
