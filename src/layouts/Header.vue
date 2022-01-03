@@ -24,31 +24,30 @@ export default {
 <style lang="scss" scoped>
 nav {
   display: flex;
-  flex-wrap: nowrap;
   align-items: center;
   font-size: 1.25rem;
   font-weight: 500;
   box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.4);
-  li {
-    text-align: center;
-    color: black;
-    &:hover {
-      background: #42b983;
-      color: white;
-    }
-  }
-  a {
-    display: block;
-    padding: 1rem;
-    height: 100%;
-    width: 100%;
-  }
   ul {
     display: flex;
     list-style: none;
-    flex: 1;
+    flex-wrap: wrap;
     li {
-      flex: 1;
+      padding: 4px 8px;
+      text-align: center;
+      flex-shrink: 0;
+      color: black;
+      &:hover {
+        cursor: pointer;
+        background: #42b983;
+        color: white;
+      }
+      a {
+        display: block;
+        padding: 1rem;
+        height: 100%;
+        width: 100%;
+      }
     }
   }
 }
