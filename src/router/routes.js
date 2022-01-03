@@ -69,7 +69,7 @@ export default [
   },
   {
     path: '/bookmark',
-    name: RouterName.BOOKMARK,
+    name: RouterName.BOOK_MARK,
     component: BookMark,
   },
   {

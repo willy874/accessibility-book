@@ -59,12 +59,12 @@ export const apiPostLineConnect = () => authRequest.post(`line/connect/`)
  * @param {RegisterRequestParam} data
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
-export const apiPostRegister = (data) => authRequest.get(`registration/`, data)
+export const apiPostRegister = (data) => authRequest.post(`registration/`, data)
 
 /**
  * @returns {Promise<AxiosResponse<null>>}
  */
-export const apiPostSocialAccounts = () => baseRequest.get(`socialaccounts/`)
+export const apiGetSocialAccounts = () => baseRequest.get(`socialaccounts/`)
 
 /**
  * @param {number} id
@@ -98,3 +98,8 @@ export const apiPostBookMark = (data) => request.post(`bookmark/`, data)
  * @param {number} id
  */
 export const apiDeleteBookMark = (id) => request.delete(`bookmark/${id}`)
+
+/**
+ * @returns {Promise<AxiosResponse<unknown>>}
+ */
+export const apiGetMenuJson = () => request.get(`test/`)

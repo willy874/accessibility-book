@@ -7,8 +7,10 @@
     <template v-else>
       <div v-if="listModel.length">
         <div v-for="model in listModel" :key="model.id">
-          <RouterLink :to="getChapterRoute(model.id)">{{ model.chapter_name }}</RouterLink>
-          <button @click="deleteBookMark(model.id)">刪除</button>
+          <div class="bookmark__list-item">
+            <RouterLink :to="getChapterRoute(model.chapter)">{{ model.chapter_name }}</RouterLink>
+            <button @click="deleteBookMark(model.id)">刪除</button>
+          </div>
         </div>
       </div>
       <div v-else>
@@ -77,3 +79,14 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+h2 {
+  margin-bottom: 8px;
+}
+.bookmark__list-item {
+  padding: 8px;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+}
+</style>

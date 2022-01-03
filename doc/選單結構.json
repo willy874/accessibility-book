@@ -1,0 +1,663 @@
+{
+    "menu": [
+        {
+            "label": "國一",
+            "sort": 1,
+            "targetUrl": "",
+            "targetTag": [
+                "國一"
+            ],
+            "type": "menu",
+            "is_filter": true,
+            "child": [
+                {
+                    "label": "國文",
+                    "sort": 1,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "國文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "數學",
+                    "sort": 2,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "數學"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "英文",
+                    "sort": 3,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "英文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "地理",
+                    "sort": 4,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "地理"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "歷史",
+                    "sort": 5,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "歷史"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "公民",
+                    "sort": 6,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "公民"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "自然",
+                    "sort": 7,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "自然"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                }
+            ]
+        },
+        {
+            "label": "國二",
+            "sort": 2,
+            "targetUrl": "",
+            "targetTag": [
+                "國二"
+            ],
+            "type": "menu",
+            "is_filter": true,
+            "child": [
+                {
+                    "label": "國文",
+                    "sort": 1,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "國文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "數學",
+                    "sort": 2,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "數學"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "英文",
+                    "sort": 3,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "英文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "地理",
+                    "sort": 4,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "地理"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "歷史",
+                    "sort": 5,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "歷史"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "公民",
+                    "sort": 6,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "公民"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "自然",
+                    "sort": 7,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "自然"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                }
+            ]
+        }, {
+            "label": "國三",
+            "sort": 3,
+            "targetUrl": "",
+            "targetTag": [
+                "國三"
+            ],
+            "type": "menu",
+            "is_filter": true,
+            "child": [
+                {
+                    "label": "國文",
+                    "sort": 1,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "國文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "數學",
+                    "sort": 2,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "數學"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "英文",
+                    "sort": 3,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "英文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "地理",
+                    "sort": 4,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "地理"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "歷史",
+                    "sort": 5,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "歷史"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "公民",
+                    "sort": 6,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "公民"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "自然",
+                    "sort": 7,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "自然"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                }
+            ]
+        }, {
+            "label": "國中總複習",
+            "sort": 4,
+            "targetUrl": "",
+            "targetTag": [
+                "國中總複習"
+            ],
+            "type": "menu",
+            "is_filter": true,
+            "child": [
+                {
+                    "label": "國文",
+                    "sort": 1,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "國文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "數學",
+                    "sort": 2,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "數學"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "英文",
+                    "sort": 3,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "英文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "地理",
+                    "sort": 4,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "地理"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "歷史",
+                    "sort": 5,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "歷史"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "公民",
+                    "sort": 6,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "公民"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "自然",
+                    "sort": 7,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "自然"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                }
+            ]
+        },{
+            "label": "高一",
+            "sort": 5,
+            "targetUrl": "",
+            "targetTag": [
+                "高一"
+            ],
+            "type": "menu",
+            "is_filter": true,
+            "child": [
+                {
+                    "label": "國文",
+                    "sort": 1,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "國文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "數學",
+                    "sort": 2,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "數學"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "英文",
+                    "sort": 3,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "英文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "地理",
+                    "sort": 4,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "地理"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "歷史",
+                    "sort": 5,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "歷史"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "公民",
+                    "sort": 6,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "公民"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "自然",
+                    "sort": 7,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "自然"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                }
+            ]
+        },
+        {
+            "label": "高二",
+            "sort": 6,
+            "targetUrl": "",
+            "targetTag": [
+                "高二"
+            ],
+            "type": "menu",
+            "is_filter": true,
+            "child": [
+                {
+                    "label": "國文",
+                    "sort": 1,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "國文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "數學",
+                    "sort": 2,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "數學"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "英文",
+                    "sort": 3,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "英文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "地理",
+                    "sort": 4,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "地理"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "歷史",
+                    "sort": 5,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "歷史"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "公民",
+                    "sort": 6,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "公民"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "自然",
+                    "sort": 7,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "自然"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                }
+            ]
+        }, {
+            "label": "高三",
+            "sort": 7,
+            "targetUrl": "",
+            "targetTag": [
+                "高三"
+            ],
+            "type": "menu",
+            "is_filter": true,
+            "child": [
+                {
+                    "label": "國文",
+                    "sort": 1,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "國文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "數學",
+                    "sort": 2,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "數學"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "英文",
+                    "sort": 3,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "英文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "地理",
+                    "sort": 4,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "地理"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "歷史",
+                    "sort": 5,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "歷史"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "公民",
+                    "sort": 6,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "公民"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "自然",
+                    "sort": 7,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "自然"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                }
+            ]
+        }, {
+            "label": "高中總複習",
+            "sort": 8,
+            "targetUrl": "",
+            "targetTag": [
+                "高中總複習"
+            ],
+            "type": "menu",
+            "is_filter": true,
+            "child": [
+                {
+                    "label": "國文",
+                    "sort": 1,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "國文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "數學",
+                    "sort": 2,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "數學"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "英文",
+                    "sort": 3,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "英文"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "地理",
+                    "sort": 4,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "地理"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "歷史",
+                    "sort": 5,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "歷史"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "公民",
+                    "sort": 6,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "公民"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                },{
+                    "label": "自然",
+                    "sort": 7,
+                    "targetUrl": "",
+                    "targetTag": [
+                        "自然"
+                    ],
+                    "type": "list",
+                    "is_filter": true,
+                    "child": []
+                }
+            ]
+        }
+    ]
+}

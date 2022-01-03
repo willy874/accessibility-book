@@ -7,7 +7,7 @@ export const RouterName = {
   CHAPTER: 'Chapter',
   BOOK: 'Book',
   BOOK_DETAIL: 'BookDetail',
-  BOOKMARK: 'BookMark',
+  BOOK_MARK: 'BookMark',
   TAG: 'Tag',
   TAG_DETAIL: 'TagDetail',
   LOGIN: 'Login',

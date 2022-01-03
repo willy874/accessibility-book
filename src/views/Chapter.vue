@@ -1,9 +1,13 @@
 <template>
   <div>
-    <h2>章節列表</h2>
     <div v-if="targetModel">
-      <span v-if="isBookMark">已加入書籤</span>
-      <button v-else @click="addBookMark">建立書籤</button>
+      <div>
+        <h2>章節列表</h2>
+        <div>
+          <span v-if="isBookMark">已加入書籤</span>
+          <button v-else @click="addBookMark">建立書籤</button>
+        </div>
+      </div>
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
     </div>
     <div v-else>

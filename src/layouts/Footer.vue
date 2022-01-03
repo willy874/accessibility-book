@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer>
     <nav>
       <ul class="footer-nav">
         <li>
@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss">
-.footer {
+footer {
   width: 100%;
   font-weight: 500;
   font-size: 1rem;

@@ -11,7 +11,7 @@
         <RouterLink :to="{ name: RouterName.TAG }">標籤</RouterLink>
       </li>
       <li>
-        <RouterLink :to="{ name: RouterName.BOOKMARK }">書籤</RouterLink>
+        <RouterLink :to="{ name: RouterName.BOOK_MARK }">書籤</RouterLink>
       </li>
       <li>
         <RouterLink :to="{ name: RouterName.HISTORY }">歷史觀看列表</RouterLink>
@@ -32,4 +32,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+nav {
+  ul {
+    li {
+      padding: 16px;
+      font-size: 20px;
+    }
+  }
+}
+</style>

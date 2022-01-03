@@ -22,11 +22,14 @@
       <div v-if="route.name === RouterName.BOOK">
         <Book />
       </div>
-      <div v-if="route.name === RouterName.BOOKMARK">
+      <div v-if="route.name === RouterName.BOOK_MARK">
         <BookMark />
       </div>
       <div v-if="route.name === RouterName.NAVIGATION">
         <Navigation />
+      </div>
+      <div v-if="route.name === RouterName.LOGIN">
+        <Login />
       </div>
       <div v-if="route.name === RouterName.LOGIN">
         <Login />
@@ -44,7 +47,6 @@ import Book from './Book.vue'
 import BookMark from './BookMark.vue'
 import Navigation from './Navigation.vue'
 import Login from './Login.vue'
-
 export default {
   name: 'Home',
   components: {

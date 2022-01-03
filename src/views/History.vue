@@ -6,15 +6,16 @@
     </template>
     <template v-else>
       <div v-if="listModel.length" class="history-list">
-        <div v-for="model in listModel" :key="model.id">
+        <div v-for="(model, index) in listModel" :key="model.id">
           <li class="history-item">
-            <RouterLink :to="getChapterRoute(model.id)">
+            <RouterLink :to="getChapterRoute(model.chapter)">
               <h4>
-                {{ model.chapter_name }}
+                <span>{{ index + 1 }}.</span>
+                <span>{{ model.chapter_name }}</span>
               </h4>
               <p>{{ getDate(model.last_modified) }}</p>
               <ul>
-                標籤:
+                <span>標籤:</span>
                 <li v-for="item in model.tag" :key="item.id">{{ item.name }}</li>
               </ul>
             </RouterLink>

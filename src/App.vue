@@ -2,8 +2,10 @@
   <div id="app">
     <template v-if="route">
       <Header v-if="isShow" class="header" />
-      <article class="main">
-        <router-view />
+      <article>
+        <div class="main">
+          <router-view />
+        </div>
       </article>
       <Footer v-if="isShow" class="footer" />
     </template>
@@ -82,10 +84,18 @@ export default {
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
 }
-.main {
+article {
   flex-grow: 1;
   height: 0;
-  overflow: auto;
-  padding: 1rem;
+  position: relative;
+  .main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1rem;
+    overflow: auto;
+  }
 }
 </style>

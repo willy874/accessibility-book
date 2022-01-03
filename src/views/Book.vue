@@ -7,12 +7,12 @@
     <template v-else>
       <div v-if="targetModel">
         <h3>{{ targetModel.name }}</h3>
-        <div v-for="model in targetModel.chapter_set" :key="model.id">
+        <div v-for="model in targetModel.chapter_set" :key="model.id" class="book__list-item">
           <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
       <div v-else-if="listModel.length">
-        <div v-for="model in listModel" :key="model.id">
+        <div v-for="model in listModel" :key="model.id" class="book__list-item">
           <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
@@ -101,3 +101,15 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+h2 {
+  margin-bottom: 8px;
+}
+h3 {
+  margin-bottom: 8px;
+}
+.book__list-item {
+  padding: 8px;
+  font-size: 20px;
+}
+</style>
