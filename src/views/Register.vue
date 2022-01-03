@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="form-title" title="這裡是註冊頁面">註冊</h2>
-    <form>
+    <form @submit="submit">
       <div>
         <label>使用者名稱</label>
         <input
