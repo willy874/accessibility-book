@@ -45,6 +45,7 @@
 
 <script>
 import { apiPostUserLogin, apiPostLineLogin } from '@/api'
+import { HttpError, handleHttpErrorLog } from '@/utils'
 import Config from '@/config'
 // import liff from '@line/liff'
 // import { validate, ValidateType } from '@/utils'
@@ -96,11 +97,12 @@ export default {
       try {
         const res = await apiPostUserLogin(user)
         if (res.isAxiosError) {
-          throw new Error(res.data.detail)
+          throw new HttpError(res)
         } else {
           this.loginHandler(res.data.key)
         }
       } catch (error) {
+        handleHttpErrorLog(error)
         this.noPass = true
       }
     },
@@ -111,11 +113,12 @@ export default {
           return_url: Config.value.lineLoginRequestParam.redirect_uri,
         })
         if (res.isAxiosError) {
-          throw new Error(res.data.detail)
+          throw new HttpError(res)
         } else {
           this.loginHandler(res.data.key)
         }
       } catch (error) {
+        handleHttpErrorLog(error)
         this.noPass = true
       }
     },

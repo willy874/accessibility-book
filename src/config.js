@@ -1,7 +1,11 @@
 import { RouterName } from '@/consts'
+import { isApp } from '@/utils'
 
 const base = 'https://api.pastwind.org'
 
+/**
+ * @property {string[]} loginRoutes
+ */
 const config = {
   env: process.env,
   lineLoginRequestParam: {
@@ -11,6 +15,7 @@ const config = {
     scope: 'profile openid email',
     redirect_uri: location.origin + '/login',
   },
+  isApp: isApp(),
   version: '0.0.1',
   liffId: '1656538444-L3wP67PM',
   liff: location.host === 'tpwlweb.3anology.info',
@@ -27,9 +32,6 @@ const config = {
     baseUrl: base + '/dj-rest-auth/',
     headers: {},
   },
-  /**
-   * @type {RouterName[]}
-   */
   loginRoutes: [RouterName.LOGIN, RouterName.REGISTER],
 }
 

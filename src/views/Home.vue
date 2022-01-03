@@ -28,6 +28,9 @@
       <div v-if="route.name === RouterName.NAVIGATION">
         <Navigation />
       </div>
+      <div v-if="route.name === RouterName.LOGIN">
+        <Login />
+      </div>
     </template>
   </div>
 </template>
@@ -40,6 +43,7 @@ import Tag from './Tag.vue'
 import Book from './Book.vue'
 import BookMark from './BookMark.vue'
 import Navigation from './Navigation.vue'
+import Login from './Login.vue'
 
 export default {
   name: 'Home',
@@ -49,6 +53,7 @@ export default {
     Book,
     BookMark,
     Navigation,
+    Login,
   },
   data() {
     return {
