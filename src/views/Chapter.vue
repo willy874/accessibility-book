@@ -3,7 +3,7 @@
     <div v-if="targetModel">
       <div>
         <h2>章節列表</h2>
-        <div>
+        <div class="chapter__bookmark">
           <span v-if="isBookMark">已加入書籤</span>
           <button v-else @click="addBookMark">建立書籤</button>
         </div>
@@ -57,7 +57,7 @@ export default {
      */
     async effectComponentPage() {
       /** @type {Route}**/
-      const route = Config.getRoute()
+      const route = Config.getRoute(this)
       if (!route) return
       /** @type {ChapterModel} */
       const targetModel = this.targetModel
@@ -100,3 +100,8 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+.chapter__bookmark {
+  padding: 16px;
+}
+</style>

@@ -103,6 +103,7 @@
  * @property {string} password1
  * @property {string} password2
  * @property {string} email
+ * @property {Blob} photo
  */
 /**
  * @typedef {Object} BookMarkRequestParam

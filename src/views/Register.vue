@@ -30,6 +30,9 @@
         <label>電子信箱</label>
         <input v-model="form.email" type="email" name="email" title="請輸入電子信箱" placeholder="請輸入電子信箱" />
       </div>
+      <div class="submit-btn-container">
+        <button type="submit">送出</button>
+      </div>
     </form>
   </div>
 </template>
@@ -84,3 +87,35 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+form > div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  margin: 8px 0;
+  label {
+    flex-shrink: 0;
+    width: 120px;
+  }
+  input {
+    flex-grow: 1;
+    border: 1px solid #217842;
+    border-radius: 4px;
+    padding: 4px;
+    height: 34px;
+  }
+}
+.submit-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 0;
+  button {
+    border: 1px solid #000;
+    background-color: transparent;
+    padding: 4px 16px;
+    font-size: 20px;
+    border-radius: 4px;
+  }
+}
+</style>
