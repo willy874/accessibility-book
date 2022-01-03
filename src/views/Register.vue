@@ -55,7 +55,8 @@ export default {
     }
   },
   methods: {
-    async submit() {
+    async submit(e) {
+      e.preventDefault()
       try {
         const res = await apiPostRegister(this.form)
         if (res.isAxiosError) {
