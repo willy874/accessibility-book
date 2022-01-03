@@ -50,11 +50,13 @@ export function getResponseError(options) {
       case HttpCode.UNAUTHORIZED:
         if (!route) return
         localStorage.setItem(LocalStorageKey.REPLACE_PATH, route.path)
+        localStorage.removeItem(LocalStorageKey.TOKEN)
         vm.$router.replace({ name: RouterName.LOGIN })
         break
       case HttpCode.FORBIDDEN:
         if (!route) return
         localStorage.setItem(LocalStorageKey.REPLACE_PATH, route.path)
+        localStorage.removeItem(LocalStorageKey.TOKEN)
         vm.$router.replace({ name: RouterName.LOGIN })
         break
       case HttpCode.NOT_FOUND:

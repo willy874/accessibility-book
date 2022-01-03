@@ -1,3 +1,4 @@
+import { HttpError, handleHttpErrorLog } from '@/utils'
 import { apiGetUserInfo } from '@/api'
 import { Mutations, Actions } from '@/consts'
 
@@ -11,10 +12,12 @@ export default {
     try {
       const res = await apiGetUserInfo()
       if (res.isAxiosError) {
-        throw new Error(res.data.detail)
+        throw new HttpError(res)
       }
       store.commit(Mutations.SET_USER_INFO, res.data)
       return store.state.info
-    } catch (error) {}
+    } catch (error) {
+      handleHttpErrorLog(error)
+    }
   },
 }
