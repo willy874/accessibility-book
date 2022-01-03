@@ -43,7 +43,8 @@ export default {
     },
   },
   async created() {
-    if (Config.value.liff) {
+    const liff = this.$route.query && this.$route.query['liff.state']
+    if (Config.value.liff || liff) {
       await liff.init({ liffId: Config.value.liffId })
     }
     this.changeRoute()
