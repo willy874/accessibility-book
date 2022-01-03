@@ -1,59 +1,28 @@
 <template>
   <header>
-    <nav class="header">
+    <nav>
       <ul>
-        <li>
-          <RouterLink to="/">首頁</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/book/">書籍</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/tag/">標籤</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/bookmark">書籤</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/history">歷史觀看列表</RouterLink>
-        </li>
+        <li>國一</li>
+        <li>國二</li>
+        <li>國三</li>
+        <li>國中總複習</li>
+        <li>高一</li>
+        <li>高二</li>
+        <li>高三</li>
+        <li>高中總複習</li>
       </ul>
-
-      <button class="signout-button" type="button" @click="signOut">登出</button>
     </nav>
   </header>
 </template>
 
 <script>
-import { apiPostLogout } from '@/api'
-import { RouterName, LocalStorageKey } from '@/consts'
-
 export default {
   name: 'Header',
-  methods: {
-    async signOut() {
-      try {
-        const res = await apiPostLogout()
-        if (res.isAxiosError) {
-          throw res
-        }
-        localStorage.removeItem(LocalStorageKey.TOKEN)
-        this.$router.replace({ name: RouterName.LOGIN })
-      } catch (error) {}
-    },
-  },
 }
 </script>
 
 <style lang="scss" scoped>
-header {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100%;
-  background: white;
-}
-.header {
+nav {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -81,11 +50,6 @@ header {
     li {
       flex: 1;
     }
-  }
-  .signout-button {
-    padding: 1rem;
-    background: gray;
-    color: white;
   }
 }
 </style>

@@ -2,6 +2,9 @@
   <div>
     <h2>書籤列表</h2>
     <template v-if="loading">
+      <div>讀取中</div>
+    </template>
+    <template v-else>
       <div v-if="listModel.length">
         <div v-for="model in listModel" :key="model.id">
           <RouterLink :to="getChapterRoute(model.id)">{{ model.chapter_name }}</RouterLink>
@@ -12,13 +15,11 @@
         <div>沒有資料</div>
       </div>
     </template>
-    <template v-else>
-      <div>讀取中</div>
-    </template>
   </div>
 </template>
 
 <script>
+import { HttpError, handleHttpErrorLog } from '@/utils'
 import { apiGetBookMark, apiDeleteBookMark } from '@/api/index'
 import { RouterName } from '@/consts'
 
@@ -28,8 +29,6 @@ export default {
     return {
       /** @type {BookMarkModel[]} */
       listModel: null,
-      /** @type {BookMarkModel} */
-      targetListModel: null,
       loading: false,
     }
   },
@@ -56,26 +55,24 @@ export default {
       try {
         const res = await apiDeleteBookMark(id)
         if (res.isAxiosError) {
-          throw new Error(res.data.detail)
+          throw new HttpError(res)
         } else {
           this.effectComponentPage()
         }
       } catch (error) {
-        throw new Error(error)
+        handleHttpErrorLog(error)
       }
     },
     /**
      * @depend
-     * @param {BookMarkModel[]} this.targetListModel
      * @param {BookMarkModel[]} this.listModel
      * @param {number} this.active
      */
     async effectComponentPage() {
-      this.targetListModel = null
-      this.loading = false
+      this.loading = true
       const res = await apiGetBookMark()
       this.listModel = res.data
-      this.loading = true
+      this.loading = false
     },
   },
 }

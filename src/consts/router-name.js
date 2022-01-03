@@ -3,6 +3,7 @@
  */
 export const RouterName = {
   HOME: 'Home',
+  USER: 'User',
   CHAPTER: 'Chapter',
   BOOK: 'Book',
   BOOK_DETAIL: 'BookDetail',
@@ -12,5 +13,6 @@ export const RouterName = {
   LOGIN: 'Login',
   REGISTER: 'Register',
   NO_AUTHORIZED: 'noAuthorized',
-  HISTORY: 'history',
+  HISTORY: 'History',
+  NAVIGATION: 'Navigation',
 }

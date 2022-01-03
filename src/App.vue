@@ -1,13 +1,11 @@
 <template>
   <div id="app">
     <template v-if="route">
-      <div v-if="isShow">
-        <Header />
-      </div>
-      <router-view class="main" :route="route" />
-      <div v-if="isShow">
-        <Footer />
-      </div>
+      <Header v-if="isShow" class="header" />
+      <article class="main">
+        <router-view />
+      </article>
+      <Footer v-if="isShow" class="footer" />
     </template>
   </div>
 </template>
@@ -65,15 +63,29 @@ export default {
 <style lang="scss">
 @import './style/main.scss';
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
-
+.header {
+  flex-shrink: 0;
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+}
+.footer {
+  flex-shrink: 0;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
 .main {
+  flex-grow: 1;
+  height: 0;
+  overflow: auto;
   padding: 1rem;
-  margin: 8rem auto 10rem auto;
 }
 </style>

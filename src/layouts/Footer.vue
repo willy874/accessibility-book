@@ -2,38 +2,58 @@
   <footer class="footer">
     <nav>
       <ul class="footer-nav">
-        <li><RouterLink to="/">回首頁</RouterLink></li>
-        <li>返回</li>
-        <li>前進</li>
-        <li>目錄</li>
+        <li>
+          <RouterLink :to="{ name: RouterName.USER }">使用者</RouterLink>
+        </li>
+        <li>
+          <a href="javascript:;" @click="routerBack">返回</a>
+        </li>
+        <li>
+          <a href="javascript:;">下一章</a>
+        </li>
+        <li>
+          <RouterLink :to="{ name: RouterName.NAVIGATION }">目錄</RouterLink>
+        </li>
       </ul>
     </nav>
   </footer>
 </template>
 
 <script>
+import { RouterName } from '@/consts'
 export default {
   name: 'Footer',
+  data() {
+    return {
+      RouterName,
+    }
+  },
+  methods: {
+    routerBack() {
+      this.$router.back()
+    },
+  },
 }
 </script>
 
 <style lang="scss">
 .footer {
-  position: fixed;
-  right: 0;
-  bottom: 0;
   width: 100%;
   font-weight: 500;
-  font-size: 1.2rem;
-  background: white;
+  font-size: 1rem;
   .footer-nav {
     display: flex;
     flex-wrap: nowrap;
     li {
       flex: 1;
+      width: 0;
+      height: 80px;
       text-align: center;
       border: 1px solid gray;
-      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include stretched-link;
     }
   }
 }

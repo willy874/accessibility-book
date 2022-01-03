@@ -19,7 +19,8 @@
  * @typedef {import('axios').AxiosResponse<T>} AxiosResponse
  */
 /**
- * @typedef {import('axios').AxiosError} AxiosError
+ * @template T
+ * @typedef {import('axios').AxiosError<T>} AxiosError
  */
 /**
  * @typedef {import('axios').AxiosInstance} AxiosInstance

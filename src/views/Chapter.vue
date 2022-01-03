@@ -85,12 +85,7 @@ export default {
       try {
         const res = await apiPostBookMark(requestParam)
         if (res.isAxiosError) {
-          throw new HttpError({
-            name: apiPostBookMark.name,
-            message: res.data?.detail,
-            status: res.status || res.request.status,
-            url: res.config.url,
-          })
+          throw new HttpError(res)
         } else {
           this.isBookMark = true
         }

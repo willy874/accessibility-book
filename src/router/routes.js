@@ -8,6 +8,8 @@ import Register from '../views/Register.vue'
 import NoAuthorized from '../views/NoAuthorized.vue'
 import BookMark from '../views/BookMark.vue'
 import History from '../views/History.vue'
+import Navigation from '../views/Navigation.vue'
+import User from '../views/User.vue'
 
 export default [
   {
@@ -29,6 +31,16 @@ export default [
     path: '/no-authorized',
     name: RouterName.NO_AUTHORIZED,
     component: NoAuthorized,
+  },
+  {
+    path: '/navigation',
+    name: RouterName.NAVIGATION,
+    component: Navigation,
+  },
+  {
+    path: '/user',
+    name: RouterName.USER,
+    component: User,
   },
   {
     path: '/book/',

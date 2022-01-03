@@ -13,25 +13,23 @@ function messageFormat(message, data = {}) {
 }
 
 /**
- * @typedef {Object} HttpErrorInit
+ * @typedef {Object} HttpErrorResponse
  * @property {number} status
  * @property {string} message
- * @property {string} [url]
- * @property {string} [name]
- * @property {string} [stack]
+ * @property {string} detail
  */
 
 export class HttpError extends Error {
   /**
    * @constructor
-   * @param {HttpErrorInit} args
+   * @param {AxiosError<HttpErrorResponse>} res
    */
-  constructor(args = {}) {
-    super(args.message || '')
-    this.status = args.status || 0
-    this.url = args.url || ''
-    if (args.name) this.name = args.name
-    if (args.stack) this.stack = args.stack
+  constructor(res = {}) {
+    const message = res.response.message || res.response.detail || ''
+    super(message)
+    this.status = res.response?.status || res.code || 0
+    this.methods = res.config.methods.toUpperCase() || 'GET'
+    this.url = res.response.url || ''
   }
 }
 
@@ -58,8 +56,8 @@ export function handleHttpErrorLog(error) {
     if (error instanceof HttpError) {
       console.error(
         `%s[%s] %s\n%s\n%s`,
-        error.name || 'Error',
-        error.status,
+        error.methods || 'GET',
+        error.status || 0,
         error.url || '',
         error.message,
         error.stack || ''

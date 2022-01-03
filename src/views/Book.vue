@@ -2,6 +2,9 @@
   <div>
     <h2>書籍列表</h2>
     <template v-if="loading">
+      <div>讀取中</div>
+    </template>
+    <template v-else>
       <div v-if="targetModel">
         <h3>{{ targetModel.name }}</h3>
         <div v-for="model in targetModel.chapter_set" :key="model.id">
@@ -16,9 +19,6 @@
       <div v-else>
         <div>沒有資料</div>
       </div>
-    </template>
-    <template v-else>
-      <div>讀取中</div>
     </template>
   </div>
 </template>
@@ -79,23 +79,23 @@ export default {
      */
     async effectComponentPage() {
       /** @type {Route}**/
-      const route = Config.getRoute()
+      const route = Config.getRoute(this)
       if (!route) return
       /** @type {number} */
       const id = route.params.id
       if (id) {
         this.active = id
-        this.loading = false
+        this.loading = true
         const res = await apiGetBookById(id)
         this.targetModel = res.data
-        this.loading = true
+        this.loading = false
       } else {
         this.active = ''
         this.targetModel = null
-        this.loading = false
+        this.loading = true
         const res = await apiGetBookList()
         this.listModel = res.data
-        this.loading = true
+        this.loading = false
       }
     },
   },

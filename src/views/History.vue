@@ -2,6 +2,9 @@
   <div>
     <h2>歷史觀看列表</h2>
     <template v-if="loading">
+      <div>讀取中</div>
+    </template>
+    <template v-else>
       <div v-if="listModel.length" class="history-list">
         <div v-for="model in listModel" :key="model.id">
           <li class="history-item">
@@ -22,9 +25,6 @@
         <div>沒有資料</div>
       </div>
     </template>
-    <template v-else>
-      <div>讀取中</div>
-    </template>
   </div>
 </template>
 
@@ -38,8 +38,6 @@ export default {
     return {
       /** @type {HistoryModel[]} */
       listModel: null,
-      /** @type {HistoryModel} */
-      targetListModel: null,
       tagList: null,
       loading: false,
     }
@@ -77,18 +75,16 @@ export default {
     },
     /**
      * @depend
-     * @param {HistoryModel[]} this.targetListModel
      * @param {HistoryModel[]} this.listModel
      * @param {number} this.active
      */
     async effectComponentPage() {
-      this.targetListModel = null
-      this.loading = false
+      this.loading = true
       const res = await apiGetHistory()
       this.listModel = res.data.sort((a, b) => {
         return b.last_modified - a.last_modified
       })
-      this.loading = true
+      this.loading = false
     },
   },
 }
