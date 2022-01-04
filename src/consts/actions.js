@@ -5,12 +5,12 @@ const storage = {
 }
 const user = {
   FETCH_USER_INFO: 'fetchUserInfo',
+  CHECK_LOGIN_REPLACE: 'checkLoginReplace',
+  LOGIN: 'login',
+  LOGOUT: 'logout',
 }
-
+const root = {}
 /**
  * @enum
  */
-export const Actions = {
-  ...user,
-  ...storage,
-}
+export const Actions = Object.assign(root, user, storage)

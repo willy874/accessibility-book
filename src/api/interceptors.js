@@ -1,5 +1,5 @@
 import Config from '@/config'
-import { RouterName, HttpCode, StorageKey } from '@/consts'
+import { Actions, HttpCode, StorageKey } from '@/consts'
 
 /**
  * @param {InterceptorsOptions} options
@@ -37,8 +37,6 @@ export function getResponseError(options) {
   return (error) => {
     /** @type {Vue} */
     const vm = Config.useApp()
-    /** @type {Route} */
-    const route = Config.getRoute()
     /** @type {XMLHttpRequest} */
     const request = error.request
     /** @type {number} */
@@ -48,16 +46,10 @@ export function getResponseError(options) {
         console.error('Client Error')
         break
       case HttpCode.UNAUTHORIZED:
-        if (!route) return
-        localStorage.setItem(StorageKey.REPLACE_PATH, route.path)
-        localStorage.removeItem(StorageKey.TOKEN)
-        vm.$router.replace({ name: RouterName.LOGIN })
+        vm.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
         break
       case HttpCode.FORBIDDEN:
-        if (!route) return
-        localStorage.setItem(StorageKey.REPLACE_PATH, route.path)
-        localStorage.removeItem(StorageKey.TOKEN)
-        vm.$router.replace({ name: RouterName.LOGIN })
+        vm.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
         break
       case HttpCode.NOT_FOUND:
         console.error('Not Found')

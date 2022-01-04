@@ -13,7 +13,7 @@ const Mutations = {
 /**
  * @enum
  */
-const Getter = {
+const Getters = {
   TEST: 'test',
 }
 
@@ -38,12 +38,12 @@ export default {
       return data
     },
   },
-  getter: {
+  getters: {
     /**
      * @name test
      * @param {object} state
      * @param {object} data
      */
-    [Getter.TEST]: function (state, data) {},
+    [Getters.TEST]: function (state, data) {},
   },
 }

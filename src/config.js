@@ -33,7 +33,7 @@ const config = {
     headers: {},
   },
   storage: localStorage,
-  loginRoutes: [RouterName.LOGIN, RouterName.REGISTER],
+  loginRoutes: [RouterName.LOGIN, RouterName.REGISTER, RouterName.NO_AUTHORIZED],
 }
 
 let app = null

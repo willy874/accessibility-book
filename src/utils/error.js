@@ -25,11 +25,13 @@ export class HttpError extends Error {
    * @param {AxiosError<HttpErrorResponse>} res
    */
   constructor(res = {}) {
-    const message = res.response.message || res.response.detail || ''
+    const message = res.response.data?.message || res.response.data?.detail || ''
     super(message)
-    this.status = res.response?.status || res.code || 0
-    this.methods = res.config.methods.toUpperCase() || 'GET'
-    this.url = res.response.url || ''
+    this.status = res.response?.status || 0
+    this.methods = res.config.method.toUpperCase() || 'GET'
+    const baseURL = res.config.baseURL || ''
+    const url = res.config.url || ''
+    this.url = baseURL + url
   }
 }
 
@@ -54,14 +56,7 @@ export function handleErrorLog(error, data = {}) {
 export function handleHttpErrorLog(error) {
   if (process.env.NODE_ENV === 'development') {
     if (error instanceof HttpError) {
-      console.error(
-        `%s[%s] %s\n%s\n%s`,
-        error.methods || 'GET',
-        error.status || 0,
-        error.url || '',
-        error.message,
-        error.stack || ''
-      )
+      console.error(`%s [%s] %s\n%s`, error.methods || 'GET', error.status || 0, error.url || '', error.message)
       return
     }
     if (error instanceof Error) {

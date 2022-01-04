@@ -6,12 +6,14 @@ const storage = {
 
 const user = {
   SET_USER_INFO: 'setUserInfo',
+  REMOVE_USER_INFO: 'removeUserInfo',
+}
+
+const root = {
+  SET_INIT: 'setInit',
 }
 
 /**
  * @enum
  */
-export const Mutations = {
-  ...user,
-  ...storage,
-}
+export const Mutations = Object.assign(root, user, storage)

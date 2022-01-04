@@ -31,9 +31,6 @@
       <div v-if="route.name === RouterName.LOGIN">
         <Login />
       </div>
-      <div v-if="route.name === RouterName.LOGIN">
-        <Login />
-      </div>
     </template>
   </div>
 </template>

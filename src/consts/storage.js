@@ -3,5 +3,5 @@
  */
 export const StorageKey = {
   TOKEN: 'token',
-  REPLACE_PATH: 'replacePath',
+  REPLACE_ROUTE: 'replaceRoute',
 }

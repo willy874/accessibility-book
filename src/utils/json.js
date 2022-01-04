@@ -9,13 +9,14 @@ export function cloneJson(obj) {
 
 /**
  * @template T
- * @param {T} storage
+ * @param {string[]} keys
+ * @param {Storage} storage
  * @returns {T}
  */
-export function storageInit(storage) {
-  const obj = cloneJson(storage)
-  for (const key in obj) {
-    obj[key] = null
+export function storageInit(keys, storage) {
+  const data = {}
+  for (const key of keys) {
+    data[key] = storage.getItem(key) || null
   }
-  return obj
+  return data
 }

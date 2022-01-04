@@ -5,24 +5,13 @@
 </template>
 
 <script>
-import { apiPostLogout } from '@/api'
-import { HttpError, handleHttpErrorLog } from '@/utils'
-import { RouterName, StorageKey } from '@/consts'
-
+import { Actions } from '@/consts'
 export default {
   name: 'User',
   methods: {
     async signOut() {
-      try {
-        const res = await apiPostLogout()
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        }
-        localStorage.removeItem(StorageKey.TOKEN)
-        this.$router.replace({ name: RouterName.LOGIN })
-      } catch (error) {
-        handleHttpErrorLog(error)
-      }
+      await this.$store.dispatch(Actions.LOGOUT)
+      await this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
     },
   },
 }

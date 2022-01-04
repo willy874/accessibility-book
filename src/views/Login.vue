@@ -71,11 +71,7 @@ export default {
     },
   },
   created() {
-    const isLogin = Boolean(localStorage.getItem(StorageKey.TOKEN))
     const responseType = Config.value.lineLoginRequestParam.response_type
-    if (isLogin) {
-      this.$router.replace({ name: RouterName.HOME })
-    }
     if (this.$route.query[responseType]) {
       this.fetchLineLoginApi(this.$route.query[responseType])
     }
@@ -127,23 +123,19 @@ export default {
      * @return {Promise<Route>}
      */
     async loginHandler(token) {
-      localStorage.setItem(StorageKey.TOKEN, token)
+      await this.$state.dispatch(Actions.SET_STORAGE, { key: StorageKey.TOKEN, value: token })
       /** @type {UserModel}**/
       const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
       if (userInfo) {
-        /** @type {Route}**/
-        const route = Config.getRoute()
         if (!userInfo.is_password_set) {
-          return await this.$router.replace({ name: RouterName.REGISTER })
+          await this.$router.replace({ name: RouterName.REGISTER })
+          return
         }
         if (!userInfo.is_authorized) {
-          return await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
+          await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
+          return
         }
-        const replacePath = localStorage.getItem(StorageKey.REPLACE_PATH, route.path)
-        if (replacePath) {
-          return await this.$router.replace(replacePath)
-        }
-        return await this.$router.replace({ name: RouterName.HOME })
+        this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
       }
     },
     linkLineSignIn() {

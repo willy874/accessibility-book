@@ -39,7 +39,6 @@
 
 <script>
 import { apiPostRegister } from '@/api'
-import Config from '@/config'
 import { RouterName, StorageKey, Actions } from '@/consts'
 
 export default {
@@ -69,20 +68,15 @@ export default {
       }
     },
     async loginHandler(token) {
-      localStorage.setItem(StorageKey.TOKEN, token)
+      await this.$state.dispatch(Actions.SET_STORAGE, { key: StorageKey.TOKEN, value: token })
       /** @type {UserModel}**/
       const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
-      /** @type {Route}**/
-      const route = Config.getRoute()
       if (userInfo) {
         if (!userInfo.is_authorized) {
-          return await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
+          await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
+          return
         }
-        const replacePath = localStorage.getItem(StorageKey.REPLACE_PATH, route.path)
-        if (replacePath) {
-          return await this.$router.replace(replacePath)
-        }
-        return await this.$router.replace({ name: RouterName.HOME })
+        this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
       }
     },
   },
