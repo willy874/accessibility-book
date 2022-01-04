@@ -21,9 +21,7 @@
 </template>
 
 <script>
-import { HttpError, handleHttpErrorLog } from '@/utils'
-import { apiGetBookMark, apiDeleteBookMark } from '@/api/index'
-import { RouterName } from '@/consts'
+import { RouterName, Actions } from '@/consts'
 
 export default {
   name: 'BookMark',
@@ -54,16 +52,7 @@ export default {
       }
     },
     async deleteBookMark(id) {
-      try {
-        const res = await apiDeleteBookMark(id)
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        } else {
-          this.effectComponentPage()
-        }
-      } catch (error) {
-        handleHttpErrorLog(error)
-      }
+      await this.$store.dispatch(Actions.DELETE_BOOKMARK, id)
     },
     /**
      * @depend
@@ -72,8 +61,7 @@ export default {
      */
     async effectComponentPage() {
       this.loading = true
-      const res = await apiGetBookMark()
-      this.listModel = res.data
+      this.listModel = await this.$store.dispatch(Actions.FETCH_BOOKMARK_LIST)
       this.loading = false
     },
   },

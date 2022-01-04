@@ -16,7 +16,11 @@
  */
 /**
  * @typedef {Object} ChapterState
- * @property {Record<number,ChapterModel>} chapterCollections
+ * @property {Record<number,ChapterModel>} chapterCollection
+ */
+/**
+ * @typedef {Object} BookMarkState
+ * @property {Record<number,BookMarkModel>} bookMarCollection
  */
 /**
  * @typedef {Object} RootState

@@ -17,7 +17,19 @@ const chapter = {
   FETCH_CHAPTER_BY_ID: 'fetchChapterById',
 }
 
+const bookmark = {
+  FETCH_BOOKMARK_LIST: 'fetchBookmarkList',
+  ADD_BOOKMARK: 'addBookmark',
+  DELETE_BOOKMARK: 'deleteBookmark',
+}
+
 /**
  * @enum
  */
-export const Actions = Object.assign(root, user, storage, chapter)
+export const Actions = {
+  ...root,
+  ...user,
+  ...storage,
+  ...chapter,
+  ...bookmark,
+}

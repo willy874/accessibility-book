@@ -17,7 +17,18 @@ const chapter = {
   SET_CHAPTER: 'setChapter',
 }
 
+const bookmark = {
+  SET_BOOKMARK: 'setBookmark',
+  REMOVE_BOOKMARK: 'removeBookmark',
+}
+
 /**
  * @enum
  */
-export const Mutations = Object.assign(root, user, storage, chapter)
+export const Mutations = {
+  ...root,
+  ...user,
+  ...storage,
+  ...chapter,
+  ...bookmark,
+}

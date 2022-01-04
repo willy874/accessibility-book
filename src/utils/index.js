@@ -1,5 +1,6 @@
 export * from './array'
 export * from './browser'
+export * from './common'
 export * from './condition'
 export * from './error'
 export * from './json'

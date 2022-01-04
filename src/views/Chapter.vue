@@ -5,7 +5,7 @@
         <h2>章節列表</h2>
         <div class="chapter__bookmark">
           <span v-if="isBookMark">已加入書籤</span>
-          <button v-else @click="addBookMark">建立書籤</button>
+          <button v-else type="button" @click="addBookMark">建立書籤</button>
         </div>
       </div>
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import { transformMarkdownToHtml, HttpError, handleHttpErrorLog } from '@/utils'
-import { apiGetChapterById, apiPostBookMark, apiPostHistory, apiGetBookMark } from '@/api/index'
-import { RouterName } from '@/consts'
+import { transformMarkdownToHtml } from '@/utils'
+import { apiPostHistory } from '@/api/index'
+import { RouterName, Getters, Actions } from '@/consts'
 import Config from '@/config'
 
 export default {
@@ -28,7 +28,6 @@ export default {
     return {
       modelList: [],
       active: -1,
-      isBookMark: false,
     }
   },
   computed: {
@@ -37,6 +36,18 @@ export default {
      */
     targetModel() {
       return this.modelList.find((p) => p.id === this.active)
+    },
+    /**
+     * @returns {BookMarkModel[]}
+     */
+    bookmarkList() {
+      return this.$store.getters[Getters.BOOKMARK_LIST]
+    },
+    /**
+     * @returns {boolean}
+     */
+    isBookMark() {
+      return this.bookmarkList.some((item) => item.chapter === this.active)
     },
   },
   watch: {
@@ -68,34 +79,20 @@ export default {
 
       if (id) {
         this.active = id
-        const target = targetModel
-        const bookmarkRes = await apiGetBookMark()
-        const bookmarkList = bookmarkRes.data
-        this.isBookMark = bookmarkList.some((item) => item.id === this.active)
-        if (!target) {
-          const res = await apiGetChapterById(id)
+        this.$store.dispatch(Actions.FETCH_BOOKMARK_LIST)
+        if (!targetModel) {
+          const chapter = await this.$store.dispatch(Actions.FETCH_CHAPTER_BY_ID, id)
           apiPostHistory({ chapter: id })
-          modelList.push(res.data)
+          modelList.push(chapter)
         }
       } else {
-        this.active = -1
         this.$router.replace({ name: RouterName.HOME })
       }
     },
-    async addBookMark(e) {
-      e.preventDefault()
+    async addBookMark() {
       /** @type {BookMarkRequestParam} **/
       const requestParam = { chapter: this.active }
-      try {
-        const res = await apiPostBookMark(requestParam)
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        } else {
-          this.isBookMark = true
-        }
-      } catch (error) {
-        handleHttpErrorLog(error)
-      }
+      await this.$store.dispatch(Actions.ADD_BOOKMARK, requestParam)
     },
   },
 }

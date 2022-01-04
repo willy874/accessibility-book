@@ -1,4 +1,5 @@
 import { apiGetChapterById } from '@/api/index'
+import { HttpError, handleHttpErrorLog } from '@/utils'
 import { Getters, Mutations, Actions } from '@/consts'
 
 export default {
@@ -6,34 +7,46 @@ export default {
     /**
      * @type {Record<number,ChapterModel>}
      */
-    ChapterCollection: {},
+    chapterCollection: {},
   },
   mutations: {
     /**
      * @name setChapter
      * @param {ChapterState} state
-     * @param {ChapterModel} data
+     * @param {ChapterModel} chapter
      */
-    [Mutations.SET_CHAPTER]: function (state, data) {
-      const collection = {
-        ...state.ChapterCollection,
-        [data.id]: data,
+    [Mutations.SET_CHAPTER]: function (state, chapter) {
+      if (Object.hasOwnProperty.call(state.chapterCollection, chapter)) {
+        state.chapterCollection[chapter.id] = chapter
+      } else {
+        const collection = {
+          ...state.chapterCollection,
+          [chapter.id]: chapter,
+        }
+        state.chapterCollection = collection
       }
-      state.ChapterCollection = collection
     },
   },
   actions: {
     /**
      * @name fetchChapterById
-     * @param {ActionContext<object,RootState>} store
+     * @param {ActionContext<ChapterState,RootState>} store
      * @param {number} id
      * @returns {Promise<ChapterModel>}
      */
     [Actions.FETCH_CHAPTER_BY_ID]: async function (store, id) {
       const { commit } = store
-      const res = await apiGetChapterById()
-      commit(Mutations.SET_CHAPTER, res.data)
-      return res.data
+      try {
+        const res = await apiGetChapterById(id)
+        if (res.isAxiosError) {
+          throw new HttpError(res)
+        } else {
+          commit(Mutations.SET_CHAPTER, res.data)
+          return res.data
+        }
+      } catch (error) {
+        return handleHttpErrorLog(error)
+      }
     },
   },
   getters: {
@@ -43,7 +56,7 @@ export default {
      * @returns {ChapterModel[]}
      */
     [Getters.CHAPTER_LIST]: function (state) {
-      return Object.values(state.ChapterCollection)
+      return Object.values(state.chapterCollection)
     },
   },
 }

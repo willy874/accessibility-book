@@ -48,6 +48,7 @@ export function handleErrorLog(error, data = {}) {
       console.error(messageFormat(error, data))
     }
   }
+  return error
 }
 
 /**
@@ -63,6 +64,7 @@ export function handleHttpErrorLog(error) {
       handleErrorLog(error)
     }
   }
+  return error
 }
 
 /**

@@ -96,6 +96,7 @@ export const apiPostBookMark = (data) => request.post(`bookmark/`, data)
 
 /**
  * @param {number} id
+ * @returns {Promise<AxiosResponse<null>>}
  */
 export const apiDeleteBookMark = (id) => request.delete(`bookmark/${id}`)
 

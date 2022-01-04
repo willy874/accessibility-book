@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import { Getters, Mutations } from '@/consts'
 import user from './user/index'
 import storage from './storage/index'
+import chapter from './chapter/index'
+import bookmark from './bookmark/index'
 
 Vue.use(Vuex)
 
@@ -33,5 +35,7 @@ export default new Vuex.Store({
   modules: {
     user,
     storage,
+    chapter,
+    bookmark,
   },
 })
