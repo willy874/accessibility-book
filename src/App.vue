@@ -2,7 +2,7 @@
   <div id="app">
     <template v-if="route">
       <Header v-if="isShow" class="header" />
-      <article>
+      <article class="article">
         <div class="main">
           <router-view />
         </div>
@@ -62,27 +62,28 @@ export default {
 </script>
 <style lang="scss">
 @import './style/main.scss';
+html,
+body {
+  height: 100%;
+}
 #app {
   font-family: sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
+</style>
+<style lang="scss" scoped>
 .header {
   flex-shrink: 0;
   padding-top: constant(safe-area-inset-top);
   padding-top: env(safe-area-inset-top);
 }
-.footer {
-  flex-shrink: 0;
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-article {
+.article {
   flex-grow: 1;
   height: 0;
   position: relative;
@@ -95,5 +96,10 @@ article {
     padding: 1rem;
     overflow: auto;
   }
+}
+.footer {
+  flex-shrink: 0;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 </style>

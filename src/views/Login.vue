@@ -120,7 +120,6 @@ export default {
     },
     /**
      * @param {string} token
-     * @return {Promise<Route>}
      */
     async loginHandler(token) {
       await this.$state.dispatch(Actions.SET_STORAGE, { key: StorageKey.TOKEN, value: token })

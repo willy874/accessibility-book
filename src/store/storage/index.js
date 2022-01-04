@@ -18,7 +18,6 @@ export default {
      * @param {{ key: string, value: string }} data
      */
     [Mutations.CREATE_STORAGE]: function (state, data) {
-      console.log(data)
       if (!Object.hasOwnProperty.call(state.local, data.key)) {
         const newData = cloneJson(data)
         storage.setItem(data.key, data.value)
