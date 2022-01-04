@@ -1,7 +1,7 @@
 /**
- * @enum
+ * @enum {string}
  */
-export const LocalStorageKey = {
+export const StorageKey = {
   TOKEN: 'token',
   REPLACE_PATH: 'replacePath',
 }

@@ -15,7 +15,7 @@
 import 'markdown-it-latex/dist/index.css'
 import Header from './layouts/Header.vue'
 import Footer from './layouts/Footer.vue'
-import { RouterName, LocalStorageKey } from '@/consts'
+import { RouterName, StorageKey } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
 
@@ -53,10 +53,10 @@ export default {
     changeRoute() {
       this.route = Config.getRoute(this)
       console.log('onRouteChange', this.route)
-      const isLogin = Boolean(localStorage.getItem(LocalStorageKey.TOKEN))
+      const isLogin = Boolean(localStorage.getItem(StorageKey.TOKEN))
       const loginRoutes = Config.value.loginRoutes
       if (!isLogin && !loginRoutes.includes(this.route.name)) {
-        localStorage.setItem(LocalStorageKey.REPLACE_PATH, this.route.path)
+        localStorage.setItem(StorageKey.REPLACE_PATH, this.route.path)
         this.$router.replace({ name: RouterName.LOGIN })
       }
     },

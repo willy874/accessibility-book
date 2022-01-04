@@ -40,7 +40,7 @@
 <script>
 import { apiPostRegister } from '@/api'
 import Config from '@/config'
-import { RouterName, LocalStorageKey, Actions } from '@/consts'
+import { RouterName, StorageKey, Actions } from '@/consts'
 
 export default {
   name: 'Register',
@@ -69,7 +69,7 @@ export default {
       }
     },
     async loginHandler(token) {
-      localStorage.setItem(LocalStorageKey.TOKEN, token)
+      localStorage.setItem(StorageKey.TOKEN, token)
       /** @type {UserModel}**/
       const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
       /** @type {Route}**/
@@ -78,7 +78,7 @@ export default {
         if (!userInfo.is_authorized) {
           return await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
         }
-        const replacePath = localStorage.getItem(LocalStorageKey.REPLACE_PATH, route.path)
+        const replacePath = localStorage.getItem(StorageKey.REPLACE_PATH, route.path)
         if (replacePath) {
           return await this.$router.replace(replacePath)
         }

@@ -1,5 +1,5 @@
 export * from './lifecycle-hook'
-export * from './local-storage'
+export * from './storage'
 export * from './router-hook'
 export * from './model-type'
 export * from './router-name'

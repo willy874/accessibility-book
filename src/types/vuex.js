@@ -3,8 +3,7 @@
  * @typedef {import('vuex').Store<S>} Store
  */
 /**
- * @template S
- * @template R
+ * @template S,R
  * @typedef {import('vuex').ActionContext<S,R>} ActionContext
  */
 /**
@@ -16,5 +15,6 @@
  * @property {UserModel} info
  */
 /**
- * @typedef {ActionContext<UserState,RootState>} UserActionContext
+ * @typedef {Object} StorageState
+ * @property {Record<StorageKey,string>} storage
  */

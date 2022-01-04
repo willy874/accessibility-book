@@ -5,7 +5,7 @@ import { Mutations, Actions } from '@/consts'
 export default {
   /**
    * @name fetchUserInfo
-   * @param {UserActionContext} store
+   * @param {ActionContext<UserState,RootState>} store
    * @returns {Promise<UserModel>}
    */
   [Actions.FETCH_USER_INFO]: async function (store) {

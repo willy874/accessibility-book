@@ -1,6 +1,6 @@
 /**
  * @param {string} message
- * @param {Record<string,string>} data
+ * @param {StringData} data
  * @returns {string}
  */
 function messageFormat(message, data = {}) {
@@ -72,7 +72,7 @@ export function handleHttpErrorLog(error) {
 
 /**
  * @param {string | string[]} message
- * @param {Record<string,string>} data
+ * @param {StringData} data
  */
 export function handleWarningLog(message, data = {}) {
   if (process.env.NODE_ENV === 'development') {

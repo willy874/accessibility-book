@@ -1,5 +1,5 @@
 import Config from '@/config'
-import { RouterName, HttpCode, LocalStorageKey } from '@/consts'
+import { RouterName, HttpCode, StorageKey } from '@/consts'
 
 /**
  * @param {InterceptorsOptions} options
@@ -7,7 +7,7 @@ import { RouterName, HttpCode, LocalStorageKey } from '@/consts'
  */
 export function getRequestSuccess(options) {
   return (req) => {
-    const token = localStorage.getItem(LocalStorageKey.TOKEN)
+    const token = localStorage.getItem(StorageKey.TOKEN)
     req.headers.Authorization = Config.value.authorizationHeaderPrefix + ' ' + token
     return req
   }
@@ -49,14 +49,14 @@ export function getResponseError(options) {
         break
       case HttpCode.UNAUTHORIZED:
         if (!route) return
-        localStorage.setItem(LocalStorageKey.REPLACE_PATH, route.path)
-        localStorage.removeItem(LocalStorageKey.TOKEN)
+        localStorage.setItem(StorageKey.REPLACE_PATH, route.path)
+        localStorage.removeItem(StorageKey.TOKEN)
         vm.$router.replace({ name: RouterName.LOGIN })
         break
       case HttpCode.FORBIDDEN:
         if (!route) return
-        localStorage.setItem(LocalStorageKey.REPLACE_PATH, route.path)
-        localStorage.removeItem(LocalStorageKey.TOKEN)
+        localStorage.setItem(StorageKey.REPLACE_PATH, route.path)
+        localStorage.removeItem(StorageKey.TOKEN)
         vm.$router.replace({ name: RouterName.LOGIN })
         break
       case HttpCode.NOT_FOUND:
@@ -94,7 +94,7 @@ export function getResponseError(options) {
 export function getAuthRequestSuccess(options) {
   return (req) => {
     if (req.url === 'logout/') {
-      const token = localStorage.getItem(LocalStorageKey.TOKEN)
+      const token = localStorage.getItem(StorageKey.TOKEN)
       if (token) {
         req.headers.Authorization = Config.value.authorizationHeaderPrefix + ' ' + token
       }

@@ -7,7 +7,7 @@
 <script>
 import { apiPostLogout } from '@/api'
 import { HttpError, handleHttpErrorLog } from '@/utils'
-import { RouterName, LocalStorageKey } from '@/consts'
+import { RouterName, StorageKey } from '@/consts'
 
 export default {
   name: 'User',
@@ -18,7 +18,7 @@ export default {
         if (res.isAxiosError) {
           throw new HttpError(res)
         }
-        localStorage.removeItem(LocalStorageKey.TOKEN)
+        localStorage.removeItem(StorageKey.TOKEN)
         this.$router.replace({ name: RouterName.LOGIN })
       } catch (error) {
         handleHttpErrorLog(error)
