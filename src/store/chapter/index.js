@@ -1,49 +1,49 @@
-/**
- * @enum
- */
-const Actions = {
-  TEST: 'test',
-}
-/**
- * @enum
- */
-const Mutations = {
-  TEST: 'test',
-}
-/**
- * @enum
- */
-const Getters = {
-  TEST: 'test',
-}
+import { apiGetChapterById } from '@/api/index'
+import { Getters, Mutations, Actions } from '@/consts'
 
 export default {
-  state: {},
+  state: {
+    /**
+     * @type {Record<number,ChapterModel>}
+     */
+    ChapterCollection: {},
+  },
   mutations: {
     /**
-     * @name test
-     * @param {object} state
-     * @param {object} data
+     * @name setChapter
+     * @param {ChapterState} state
+     * @param {ChapterModel} data
      */
-    [Mutations.TEST]: function (state, data) {},
+    [Mutations.SET_CHAPTER]: function (state, data) {
+      const collection = {
+        ...state.ChapterCollection,
+        [data.id]: data,
+      }
+      state.ChapterCollection = collection
+    },
   },
   actions: {
     /**
-     * @name test
+     * @name fetchChapterById
      * @param {ActionContext<object,RootState>} store
-     * @param {object} data
-     * @returns {Promise<object>}
+     * @param {number} id
+     * @returns {Promise<ChapterModel>}
      */
-    [Actions.TEST]: async function (store, data) {
-      return data
+    [Actions.FETCH_CHAPTER_BY_ID]: async function (store, id) {
+      const { commit } = store
+      const res = await apiGetChapterById()
+      commit(Mutations.SET_CHAPTER, res.data)
+      return res.data
     },
   },
   getters: {
     /**
-     * @name test
-     * @param {object} state
-     * @param {object} data
+     * @name chapterList
+     * @param {ChapterState} state
+     * @returns {ChapterModel[]}
      */
-    [Getters.TEST]: function (state, data) {},
+    [Getters.CHAPTER_LIST]: function (state) {
+      return Object.values(state.ChapterCollection)
+    },
   },
 }

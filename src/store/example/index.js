@@ -42,8 +42,8 @@ export default {
     /**
      * @name test
      * @param {object} state
-     * @param {object} data
+     * @param {object} getters
      */
-    [Getters.TEST]: function (state, data) {},
+    [Getters.TEST]: function (state, getters) {},
   },
 }

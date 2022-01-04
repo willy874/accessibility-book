@@ -5,10 +5,10 @@ import { storageInit, cloneJson } from '@/utils'
 const storage = Config.value.storage
 
 export default {
-  /**
-   * @type {StorageState}
-   */
   state: {
+    /**
+     * @type {Record<StorageKey, string>}
+     */
     local: storageInit(Object.values(StorageKey), storage),
   },
   mutations: {

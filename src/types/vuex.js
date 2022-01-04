@@ -15,6 +15,10 @@
  * @property {Record<StorageKey,string>} local
  */
 /**
+ * @typedef {Object} ChapterState
+ * @property {Record<number,ChapterModel>} chapterCollections
+ */
+/**
  * @typedef {Object} RootState
  * @property {boolean} init
  * @property {UserState} user
