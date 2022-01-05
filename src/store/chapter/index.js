@@ -1,4 +1,4 @@
-import { apiGetChapterById, apiGetChapterByTagId } from '@/api/index'
+import { apiGetChapterById, apiGetChapterListByTagId } from '@/api/index'
 import { HttpError, handleHttpErrorLog } from '@/utils'
 import { Getters, Mutations, Actions } from '@/consts'
 
@@ -49,20 +49,23 @@ export default {
       }
     },
     /**
-     * @name fetchChapterByTagId
+     * @name fetchChapterListByTagId
      * @param {ActionContext<ChapterState,RootState>} store
      * @param {number} id
      * @returns {Promise<ChapterModel>}
      */
-    [Actions.FETCH_CHAPTER_BY_TAG_ID]: async function (store, id) {
+    [Actions.FETCH_CHAPTER_LIST_BY_TAG_ID]: async function (store, id) {
       const { commit } = store
       try {
-        const res = await apiGetChapterByTagId(id)
+        const res = await apiGetChapterListByTagId(id)
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
-          commit(Mutations.SET_CHAPTER, res.data)
-          return res.data
+          const list = res.data.results
+          list.forEach((model) => {
+            commit(Mutations.SET_CHAPTER, model)
+          })
+          return list
         }
       } catch (error) {
         return handleHttpErrorLog(error)

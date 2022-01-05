@@ -37,18 +37,18 @@ export function getResponseError(options) {
   return (error) => {
     /** @type {Vue} */
     const vm = Config.useApp()
-    /** @type {XMLHttpRequest} */
-    const request = error.request
     /** @type {number} */
-    const status = request.status
+    const status = error.response?.status || error.request?.status
     switch (status) {
       case HttpCode.CLIENT_ERROR:
         console.error('Client Error')
         break
       case HttpCode.UNAUTHORIZED:
+        vm.$store.dispatch(Actions.REMOVE_STORAGE, StorageKey.TOKEN)
         vm.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
         break
       case HttpCode.FORBIDDEN:
+        vm.$store.dispatch(Actions.REMOVE_STORAGE, StorageKey.TOKEN)
         vm.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
         break
       case HttpCode.NOT_FOUND:

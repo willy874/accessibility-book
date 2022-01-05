@@ -56,8 +56,8 @@ export default {
      * @param {number} id
      * @return {Promise<ChapterModel>}
      */
-    fetchChapterByTagId(id) {
-      return this.$store.dispatch(Actions.FETCH_CHAPTER_BY_TAG_ID, id)
+    fetchChapterListByTagId(id) {
+      return this.$store.dispatch(Actions.FETCH_CHAPTER_LIST_BY_TAG_ID, id)
     },
     /**
      * @param {number} id
@@ -92,14 +92,12 @@ export default {
       const id = route.params.id
       if (id) {
         this.loading = false
-        const res = await this.fetchChapterByTagId(id)
-        this.targetListModel = res.data
+        this.targetListModel = await this.fetchChapterListByTagId(id)
         this.loading = true
       } else {
         this.targetListModel = null
         this.loading = false
-        const res = await this.fetchTagList()
-        this.listModel = res.data
+        this.listModel = await this.fetchTagList()
         this.loading = true
       }
     },

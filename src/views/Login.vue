@@ -47,8 +47,6 @@
 import { apiPostUserLogin, apiPostLineLogin } from '@/api'
 import { HttpError, handleHttpErrorLog } from '@/utils'
 import Config from '@/config'
-// import liff from '@line/liff'
-// import { validate, ValidateType } from '@/utils'
 import { RouterName, StorageKey, Actions } from '@/consts'
 
 export default {
@@ -81,10 +79,6 @@ export default {
       e.preventDefault()
       const user = this.user
       const error = false
-      // validate(ValidateType.email, user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
-      // validate(ValidateType.password, user.password) === false
-      //   ? (vm.passwordError = error = true)
-      //   : (vm.passwordError = error = false)
       if (error === false) {
         this.fetchUserApi(user)
       }

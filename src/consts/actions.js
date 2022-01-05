@@ -15,7 +15,7 @@ const user = {
 
 const chapter = {
   FETCH_CHAPTER_BY_ID: 'fetchChapterById',
-  FETCH_CHAPTER_BY_TAG_ID: 'fetchChapterByTagId',
+  FETCH_CHAPTER_LIST_BY_TAG_ID: 'fetchChapterListByTagId',
 }
 
 const bookmark = {

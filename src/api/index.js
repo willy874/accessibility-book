@@ -68,9 +68,9 @@ export const apiGetChapterById = (id) => request.get(`chapter/${id}/`)
 
 /**
  * @param {number} id
- * @returns {Promise<AxiosResponse<ChapterModel>>  }
+ * @returns {Promise<AxiosResponse<ResponseCollection<ChapterModel>>>  }
  */
-export const apiGetChapterByTagId = (id) => request.get(`chapter/?tag=${id}`)
+export const apiGetChapterListByTagId = (id) => request.get(`chapter/?tag=${id}`)
 
 /**
  * @returns {Promise<AxiosResponse<ResponseCollection<HistoryModel>>>}

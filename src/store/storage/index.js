@@ -19,9 +19,11 @@ export default {
      */
     [Mutations.CREATE_STORAGE]: function (state, data) {
       if (!Object.hasOwnProperty.call(state.local, data.key)) {
-        const newData = cloneJson(data)
+        const newState = cloneJson(state.local)
         storage.setItem(data.key, data.value)
-        state.local = newData
+        newState[data.key] = String(data.value)
+        console.log(newState)
+        state.local = newState
       }
     },
     /**
@@ -43,8 +45,9 @@ export default {
     [Mutations.DELETE_STORAGE]: function (state, key) {
       if (Object.hasOwnProperty.call(state.local, key)) {
         storage.removeItem(key)
-        state[key] = ''
-        delete state[key]
+        state.local[key] = ''
+        delete state.local[key]
+        console.log(key)
       }
     },
   },
@@ -56,6 +59,7 @@ export default {
      * @return {Promise<string>}
      */
     [Actions.GET_STORAGE]: async function (store, key) {
+      console.log('GET_STORAGE', store.state.local, store.state.local[key])
       if (Object.hasOwnProperty.call(store.state.local, key)) {
         return store.state.local[key]
       }
@@ -66,6 +70,7 @@ export default {
      * @param {{ key: string, value: string }} data
      */
     [Actions.SET_STORAGE]: async function (store, data) {
+      console.log('SET_STORAGE', data)
       const { state, commit } = store
       if (Object.hasOwnProperty.call(state.local, data.key)) {
         commit(Mutations.UPDATE_STORAGE, data)
