@@ -1,4 +1,4 @@
-import { apiGetBookMark, apiPostBookMark, apiDeleteBookMark } from '@/api/index'
+import { apiGetBookMarkList, apiPostBookMark, apiDeleteBookMark } from '@/api/index'
 import { HttpError, handleHttpErrorLog } from '@/utils'
 import { Getters, Mutations, Actions } from '@/consts'
 
@@ -7,23 +7,23 @@ export default {
     /**
      * @type {Record<number,BookMarkModel>}
      */
-    bookMarCollection: {},
+    collection: {},
   },
   mutations: {
     /**
      * @name setBookmark
      * @param {BookMarkState} state
-     * @param {BookMarkModel} bookmark
+     * @param {BookMarkModel} model
      */
-    [Mutations.SET_BOOKMARK]: function (state, bookmark) {
-      if (Object.hasOwnProperty.call(state.bookMarCollection, bookmark)) {
-        state.bookMarCollection[bookmark.id] = bookmark
+    [Mutations.SET_BOOKMARK]: function (state, model) {
+      if (Object.hasOwnProperty.call(state.collection, model)) {
+        state.collection[model.id] = model
       } else {
         const collection = {
-          ...state.bookMarCollection,
-          [bookmark.id]: bookmark,
+          ...state.collection,
+          [model.id]: model,
         }
-        state.bookMarCollection = collection
+        state.collection = collection
       }
     },
     /**
@@ -32,9 +32,9 @@ export default {
      * @param {number} id
      */
     [Mutations.REMOVE_BOOKMARK]: function (state, id) {
-      if (Object.hasOwnProperty.call(state.bookMarCollection, id)) {
-        state.bookMarCollection[id] = null
-        delete state.bookMarCollection[id]
+      if (Object.hasOwnProperty.call(state.collection, id)) {
+        state.collection[id] = null
+        delete state.collection[id]
       }
     },
   },
@@ -47,14 +47,15 @@ export default {
     [Actions.FETCH_BOOKMARK_LIST]: async function (store) {
       const { commit } = store
       try {
-        const res = await apiGetBookMark()
+        const res = await apiGetBookMarkList()
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
-          res.data.forEach((bookmark) => {
-            commit(Mutations.SET_BOOKMARK, bookmark)
+          const list = res.data.results
+          list.forEach((model) => {
+            commit(Mutations.SET_BOOKMARK, model)
           })
-          return res.data
+          return list
         }
       } catch (error) {
         return handleHttpErrorLog(error)
@@ -93,7 +94,7 @@ export default {
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
-          const bookmark = state.bookMarCollection[id]
+          const bookmark = state.collection[id]
           commit(Mutations.REMOVE_BOOKMARK, id)
           return bookmark
         }
@@ -109,7 +110,7 @@ export default {
      * @returns {BookMarkModel[]}
      */
     [Getters.BOOKMARK_LIST]: function (state) {
-      return Object.values(state.bookMarCollection)
+      return Object.values(state.collection)
     },
   },
 }

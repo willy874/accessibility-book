@@ -43,6 +43,19 @@ export default {
   methods: {
     /**
      * @param {number} id
+     * @return {Promise<BookMarkModel>}
+     */
+    deleteBookmark(id) {
+      return this.$store.dispatch(Actions.DELETE_BOOKMARK, id)
+    },
+    /**
+     * @return {Promise<BookMarkModel[]>}
+     */
+    fetchBookmarkList() {
+      return this.$store.dispatch(Actions.FETCH_BOOKMARK_LIST)
+    },
+    /**
+     * @param {number} id
      * @return {VueRouteLocation}
      */
     getChapterRoute(id) {
@@ -51,9 +64,6 @@ export default {
         params: { id },
       }
     },
-    async deleteBookMark(id) {
-      await this.$store.dispatch(Actions.DELETE_BOOKMARK, id)
-    },
     /**
      * @depend
      * @param {BookMarkModel[]} this.listModel
@@ -61,7 +71,7 @@ export default {
      */
     async effectComponentPage() {
       this.loading = true
-      this.listModel = await this.$store.dispatch(Actions.FETCH_BOOKMARK_LIST)
+      this.listModel = await this.fetchBookmarkList()
       this.loading = false
     },
   },

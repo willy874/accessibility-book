@@ -22,6 +22,18 @@ const bookmark = {
   REMOVE_BOOKMARK: 'removeBookmark',
 }
 
+const book = {
+  SET_BOOK: 'setBook',
+}
+
+const tag = {
+  SET_TAG: 'setTag',
+}
+
+const history = {
+  SET_HISTORY: 'setHistory',
+}
+
 /**
  * @enum
  */
@@ -31,4 +43,7 @@ export const Mutations = {
   ...storage,
   ...chapter,
   ...bookmark,
+  ...book,
+  ...tag,
+  ...history,
 }

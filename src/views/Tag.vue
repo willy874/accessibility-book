@@ -23,8 +23,7 @@
 </template>
 
 <script>
-import { apiGetTagList, apiGetChapterByTag } from '@/api/index'
-import { RouterName } from '@/consts'
+import { RouterName, Actions } from '@/consts'
 import Config from '@/config'
 
 export default {
@@ -48,6 +47,19 @@ export default {
   },
   methods: {
     /**
+     * @return {Promise<TagModel[]>}
+     */
+    fetchTagList() {
+      return this.$store.dispatch(Actions.FETCH_TAG_LIST)
+    },
+    /**
+     * @param {number} id
+     * @return {Promise<ChapterModel>}
+     */
+    fetchChapterByTagId(id) {
+      return this.$store.dispatch(Actions.FETCH_CHAPTER_BY_TAG_ID, id)
+    },
+    /**
      * @param {number} id
      * @return {VueRouteLocation}
      */
@@ -69,9 +81,8 @@ export default {
     },
     /**
      * @depend
-     * @param {TagModel[]} this.targetListModel
+     * @param {TagModel} this.targetListModel
      * @param {TagModel[]} this.listModel
-     * @param {number} this.active
      */
     async effectComponentPage() {
       /** @type {Route}**/
@@ -81,13 +92,13 @@ export default {
       const id = route.params.id
       if (id) {
         this.loading = false
-        const res = await apiGetChapterByTag(id)
+        const res = await this.fetchChapterByTagId(id)
         this.targetListModel = res.data
         this.loading = true
       } else {
         this.targetListModel = null
         this.loading = false
-        const res = await apiGetTagList()
+        const res = await this.fetchTagList()
         this.listModel = res.data
         this.loading = true
       }

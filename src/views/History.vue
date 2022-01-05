@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { apiGetHistory } from '@/api/index'
+import { apiGetHistoryList } from '@/api/index'
 import { RouterName } from '@/consts'
 
 export default {
@@ -81,7 +81,7 @@ export default {
      */
     async effectComponentPage() {
       this.loading = true
-      const res = await apiGetHistory()
+      const res = await apiGetHistoryList()
       this.listModel = res.data.sort((a, b) => {
         return b.last_modified - a.last_modified
       })

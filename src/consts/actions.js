@@ -15,12 +15,27 @@ const user = {
 
 const chapter = {
   FETCH_CHAPTER_BY_ID: 'fetchChapterById',
+  FETCH_CHAPTER_BY_TAG_ID: 'fetchChapterByTagId',
 }
 
 const bookmark = {
   FETCH_BOOKMARK_LIST: 'fetchBookmarkList',
   ADD_BOOKMARK: 'addBookmark',
   DELETE_BOOKMARK: 'deleteBookmark',
+}
+
+const book = {
+  FETCH_BOOK_LIST: 'fetchBookList',
+  FETCH_BOOK_BY_ID: 'fetchBookById',
+}
+
+const tag = {
+  FETCH_TAG_LIST: 'fetchTagList',
+}
+
+const history = {
+  FETCH_HISTORY_LIST: 'fetchHistoryList',
+  ADD_HISTORY: 'addHistory',
 }
 
 /**
@@ -32,4 +47,7 @@ export const Actions = {
   ...storage,
   ...chapter,
   ...bookmark,
+  ...book,
+  ...tag,
+  ...history,
 }

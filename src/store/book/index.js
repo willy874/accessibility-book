@@ -1,21 +1,21 @@
-import { apiGetChapterById, apiGetChapterByTagId } from '@/api/index'
+import { apiGetBookList, apiGetBookById } from '@/api/index'
 import { HttpError, handleHttpErrorLog } from '@/utils'
 import { Getters, Mutations, Actions } from '@/consts'
 
 export default {
   state: {
     /**
-     * @type {Record<number,ChapterModel>}
+     * @type {Record<number,BookModel>}
      */
     collection: {},
   },
   mutations: {
     /**
-     * @name setChapter
-     * @param {ChapterState} state
-     * @param {ChapterModel} model
+     * @name setBook
+     * @param {BookState} state
+     * @param {BookModel} book
      */
-    [Mutations.SET_CHAPTER]: function (state, model) {
+    [Mutations.SET_BOOK]: function (state, model) {
       if (Object.hasOwnProperty.call(state.collection, model)) {
         state.collection[model.id] = model
       } else {
@@ -29,39 +29,41 @@ export default {
   },
   actions: {
     /**
-     * @name fetchChapterById
-     * @param {ActionContext<ChapterState,RootState>} store
-     * @param {number} id
-     * @returns {Promise<ChapterModel>}
+     * @name fetchBookList
+     * @param {ActionContext<BookState,RootState>} store
+     * @returns {Promise<BookModel>}
      */
-    [Actions.FETCH_CHAPTER_BY_ID]: async function (store, id) {
+    [Actions.FETCH_BOOK_LIST]: async function (store) {
       const { commit } = store
       try {
-        const res = await apiGetChapterById(id)
+        const res = await apiGetBookList()
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
-          commit(Mutations.SET_CHAPTER, res.data)
-          return res.data
+          const list = res.data.results
+          list.forEach((model) => {
+            commit(Mutations.SET_BOOK, model)
+          })
+          return list
         }
       } catch (error) {
         return handleHttpErrorLog(error)
       }
     },
     /**
-     * @name fetchChapterByTagId
-     * @param {ActionContext<ChapterState,RootState>} store
+     * @name fetchBookById
+     * @param {ActionContext<BookState,RootState>} store
      * @param {number} id
-     * @returns {Promise<ChapterModel>}
+     * @returns {Promise<BookModel>}
      */
-    [Actions.FETCH_CHAPTER_BY_TAG_ID]: async function (store, id) {
+    [Actions.FETCH_BOOK_BY_ID]: async function (store, id) {
       const { commit } = store
       try {
-        const res = await apiGetChapterByTagId(id)
+        const res = await apiGetBookById(id)
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
-          commit(Mutations.SET_CHAPTER, res.data)
+          commit(Mutations.SET_BOOK, res.data)
           return res.data
         }
       } catch (error) {
@@ -71,11 +73,11 @@ export default {
   },
   getters: {
     /**
-     * @name chapterList
-     * @param {ChapterState} state
-     * @returns {ChapterModel[]}
+     * @name bookList
+     * @param {BookState} state
+     * @returns {BookModel[]}
      */
-    [Getters.CHAPTER_LIST]: function (state) {
+    [Getters.BOOK_LIST]: function (state) {
       return Object.values(state.collection)
     },
   },

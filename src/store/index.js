@@ -5,10 +5,14 @@ import user from './user/index'
 import storage from './storage/index'
 import chapter from './chapter/index'
 import bookmark from './bookmark/index'
+import book from './book/index'
+import tag from './tag/index'
+import history from './history/index'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  strict: process.env.NODE_ENV !== 'production',
   state: {
     init: false,
   },
@@ -37,5 +41,8 @@ export default new Vuex.Store({
     storage,
     chapter,
     bookmark,
+    book,
+    tag,
+    history,
   },
 })

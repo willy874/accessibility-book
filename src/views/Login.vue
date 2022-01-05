@@ -122,7 +122,7 @@ export default {
      * @param {string} token
      */
     async loginHandler(token) {
-      await this.$state.dispatch(Actions.SET_STORAGE, { key: StorageKey.TOKEN, value: token })
+      await this.$store.dispatch(Actions.SET_STORAGE, { key: StorageKey.TOKEN, value: token })
       /** @type {UserModel}**/
       const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
       if (userInfo) {
@@ -143,7 +143,6 @@ export default {
   },
 }
 </script>
-
 <style lang="scss">
 .form {
   max-width: $xs;

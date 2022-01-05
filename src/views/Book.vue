@@ -24,8 +24,7 @@
 </template>
 
 <script>
-import { apiGetBookList, apiGetBookById } from '@/api/index'
-import { RouterName } from '@/consts'
+import { RouterName, Actions } from '@/consts'
 import Config from '@/config'
 
 export default {
@@ -40,17 +39,28 @@ export default {
       loading: false,
     }
   },
-  computed: {},
   watch: {
     $route() {
       this.effectComponentPage()
     },
   },
   async created() {
-    // await this.passLogin()
     this.effectComponentPage()
   },
   methods: {
+    /**
+     * @param {number} id
+     * @return {Promise<BookModel>}
+     */
+    fetchBookById(id) {
+      return this.$store.dispatch(Actions.FETCH_BOOK_BY_ID, id)
+    },
+    /**
+     * @return {Promise<BookModel[]>}
+     */
+    fetchBookList() {
+      return this.$store.dispatch(Actions.FETCH_BOOK_LIST)
+    },
     /**
      * @param {number} id
      * @return {VueRouteLocation}
@@ -86,15 +96,13 @@ export default {
       if (id) {
         this.active = id
         this.loading = true
-        const res = await apiGetBookById(id)
-        this.targetModel = res.data
+        this.targetModel = await this.fetchBookById(id)
         this.loading = false
       } else {
         this.active = ''
         this.targetModel = null
         this.loading = true
-        const res = await apiGetBookList()
-        this.listModel = res.data
+        this.listModel = await this.fetchBookList()
         this.loading = false
       }
     },

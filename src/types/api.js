@@ -1,4 +1,12 @@
 /**
+ * @template T
+ * @typedef {Object} ResponseCollection
+ * @property {number} count
+ * @property {string} next
+ * @property {string} previous
+ * @property {Array<T>} results
+ */
+/**
  * @typedef {Object} ChapterModel
  * @property {number} id
  * @property {number} no

@@ -5,7 +5,7 @@
         <h2>章節列表</h2>
         <div class="chapter__bookmark">
           <span v-if="isBookMark">已加入書籤</span>
-          <button v-else type="button" @click="addBookMark">建立書籤</button>
+          <button v-else type="button" @click="onAddBookMark">建立書籤</button>
         </div>
       </div>
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
@@ -61,6 +61,26 @@ export default {
   methods: {
     transformMarkdownToHtml,
     /**
+     * @return {Promise<BookMarkModel[]>}
+     */
+    fetchBookmarkList() {
+      return this.$store.dispatch(Actions.FETCH_BOOKMARK_LIST)
+    },
+    /**
+     * @param {number} id
+     * @return {Promise<Chapter>}
+     */
+    fetchChapterById(id) {
+      return this.$store.dispatch(Actions.FETCH_CHAPTER_BY_ID, id)
+    },
+    /**
+     * @param {BookMarkRequestParam}
+     * @return {Promise<BookMarkModel>}
+     */
+    addBookmark(param) {
+      return this.$store.dispatch(Actions.ADD_BOOKMARK, param)
+    },
+    /**
      * @depend
      * @param {ChapterModel} this.targetModel
      * @param {ChapterModel[]} this.modelList
@@ -79,9 +99,9 @@ export default {
 
       if (id) {
         this.active = id
-        this.$store.dispatch(Actions.FETCH_BOOKMARK_LIST)
+        this.fetchBookmarkList()
         if (!targetModel) {
-          const chapter = await this.$store.dispatch(Actions.FETCH_CHAPTER_BY_ID, id)
+          const chapter = await this.fetchChapterById(id)
           apiPostHistory({ chapter: id })
           modelList.push(chapter)
         }
@@ -89,10 +109,10 @@ export default {
         this.$router.replace({ name: RouterName.HOME })
       }
     },
-    async addBookMark() {
+    async onAddBookMark() {
       /** @type {BookMarkRequestParam} **/
       const requestParam = { chapter: this.active }
-      await this.$store.dispatch(Actions.ADD_BOOKMARK, requestParam)
+      await this.addBookmark(requestParam)
     },
   },
 }
