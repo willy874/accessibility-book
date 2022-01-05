@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 const port = 8001
 app.use(express.static(path.resolve(process.cwd(), 'dist')))
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   const file = fs.readFileSync(path.resolve(process.cwd(), 'dist', 'index.html'))
   res.send(file.toString())
 })
