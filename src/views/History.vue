@@ -30,8 +30,7 @@
 </template>
 
 <script>
-import { apiGetHistoryList } from '@/api/index'
-import { RouterName } from '@/consts'
+import { RouterName, Actions } from '@/consts'
 
 export default {
   name: 'History',
@@ -52,6 +51,12 @@ export default {
     this.effectComponentPage()
   },
   methods: {
+    /**
+     * @return {Promise<HistoryModel[]>}
+     */
+    fetchHistoryList() {
+      return this.$store.dispatch(Actions.FETCH_HISTORY_LIST)
+    },
     /**
      * @param {number} id
      * @return {VueRouteLocation}
@@ -81,8 +86,8 @@ export default {
      */
     async effectComponentPage() {
       this.loading = true
-      const res = await apiGetHistoryList()
-      this.listModel = res.data.results.sort((a, b) => {
+      const list = await this.fetchHistoryList()
+      this.listModel = list.sort((a, b) => {
         return b.last_modified - a.last_modified
       })
       this.loading = false
