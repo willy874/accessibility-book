@@ -28,7 +28,7 @@ export const apiPostLineConnect = () => authRequest.post(`line/connect/`)
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
 export const apiPostRegister = (data) =>
-  authRequest.post(`registration/`, formDataFormat(data), {
+  authRequest.patch(`registration/`, formDataFormat(data), {
     headers: { ContentType: 'multipart/form-data' },
   })
 

@@ -107,9 +107,8 @@
  */
 /**
  * @typedef {Object} RegisterRequestParam
- * @property {string} username
- * @property {string} password1
- * @property {string} password2
+ * @property {string} first_name
+ * @property {string} last_name
  * @property {string} email
  * @property {Blob} photo
  */
