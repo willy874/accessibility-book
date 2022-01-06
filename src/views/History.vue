@@ -82,7 +82,7 @@ export default {
     async effectComponentPage() {
       this.loading = true
       const res = await apiGetHistoryList()
-      this.listModel = res.data.sort((a, b) => {
+      this.listModel = res.data.results.sort((a, b) => {
         return b.last_modified - a.last_modified
       })
       this.loading = false
