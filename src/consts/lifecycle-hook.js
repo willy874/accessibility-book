@@ -1,5 +1,5 @@
 /**
- * @enum
+ * @enum {string}
  */
 export const LifecycleHook = {
   CREATED: 'created',

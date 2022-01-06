@@ -3,12 +3,12 @@
     <h2>標籤列表</h2>
     <template v-if="loading">
       <div v-if="targetListModel && targetListModel.length">
-        <div v-for="model in targetListModel" :key="model.id">
+        <div v-for="model in targetListModel" :key="model.id" class="tag__list-item">
           <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
       <div v-else-if="listModel.length">
-        <div v-for="model in listModel" :key="model.id">
+        <div v-for="model in listModel" :key="model.id" class="tag__list-item">
           <RouterLink :to="getTagRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
@@ -23,8 +23,7 @@
 </template>
 
 <script>
-import { apiGetTagList, apiGetChapterByTag } from '@/api/index'
-import { RouterName } from '@/consts'
+import { RouterName, Actions } from '@/consts'
 import Config from '@/config'
 
 export default {
@@ -48,6 +47,19 @@ export default {
   },
   methods: {
     /**
+     * @return {Promise<TagModel[]>}
+     */
+    fetchTagList() {
+      return this.$store.dispatch(Actions.FETCH_TAG_LIST)
+    },
+    /**
+     * @param {number} id
+     * @return {Promise<ChapterModel>}
+     */
+    fetchChapterListByTagId(id) {
+      return this.$store.dispatch(Actions.FETCH_CHAPTER_LIST_BY_TAG_ID, id)
+    },
+    /**
      * @param {number} id
      * @return {VueRouteLocation}
      */
@@ -69,30 +81,35 @@ export default {
     },
     /**
      * @depend
-     * @param {TagModel[]} this.targetListModel
+     * @param {TagModel} this.targetListModel
      * @param {TagModel[]} this.listModel
-     * @param {number} this.active
      */
     async effectComponentPage() {
       /** @type {Route}**/
-      const route = Config.getRoute()
+      const route = Config.getRoute(this)
       if (!route) return
       /** @type {number} */
       const id = route.params.id
-
       if (id) {
         this.loading = false
-        const res = await apiGetChapterByTag(id)
-        this.targetListModel = res.data
+        this.targetListModel = await this.fetchChapterListByTagId(id)
         this.loading = true
       } else {
         this.targetListModel = null
         this.loading = false
-        const res = await apiGetTagList()
-        this.listModel = res.data
+        this.listModel = await this.fetchTagList()
         this.loading = true
       }
     },
   },
 }
 </script>
+<style lang="scss" scoped>
+h2 {
+  margin-bottom: 8px;
+}
+.tag__list-item {
+  padding: 8px;
+  font-size: 20px;
+}
+</style>

@@ -1,4 +1,7 @@
 /**
+ * @typedef {import('vue')} Vue
+ */
+/**
  * @typedef {import('vue').ComponentOptions} ComponentOptions
  */
 /**
@@ -19,4 +22,13 @@
 /**
  * @template V
  * @typedef {import('vue-router'.NavigationGuard<V>)>} NavigationGuard
+ */
+/**
+ * @typedef {Object} VuePluginOptions
+ * @property {VueRouter} $router
+ * @property {Store} $store
+ */
+/**
+ * @template D,M,C,P
+ * @typedef {import("vue/types/options").ThisTypedComponentOptionsWithRecordProps<VuePluginOptions,D,M,C,P>} VueComponentThisOptions
  */

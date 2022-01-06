@@ -9,4 +9,11 @@ export default {
   [Mutations.SET_USER_INFO]: function (state, data) {
     state.info = data
   },
+  /**
+   * @name removeUserInfo
+   * @param {UserState} state
+   */
+  [Mutations.REMOVE_USER_INFO]: function (state) {
+    state.info = null
+  },
 }

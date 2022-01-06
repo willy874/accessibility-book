@@ -1,17 +1,21 @@
 <template>
   <div id="app">
     <template v-if="route">
-      <router-view :route="route" />
-      <div v-if="isShowHeader">
-        <Header />
-      </div>
+      <Header v-if="isShow" class="header" />
+      <article class="article">
+        <div class="main">
+          <router-view />
+        </div>
+      </article>
+      <Footer v-if="isShow" class="footer" />
     </template>
   </div>
 </template>
 <script>
 import 'markdown-it-latex/dist/index.css'
 import Header from './layouts/Header.vue'
-import { RouterName, LocalStorageKey } from '@/consts'
+import Footer from './layouts/Footer.vue'
+import { StorageKey, Actions } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
 
@@ -19,6 +23,7 @@ export default {
   name: 'App',
   components: {
     Header,
+    Footer,
   },
   data() {
     return {
@@ -28,7 +33,7 @@ export default {
     }
   },
   computed: {
-    isShowHeader() {
+    isShow() {
       return !Config.value.loginRoutes.includes(this.route.name)
     },
   },
@@ -38,43 +43,63 @@ export default {
     },
   },
   async created() {
-    if (Config.value.liff) {
+    const isLiff = this.$route.query && this.$route.query['liff.state']
+    if (Config.value.liff || isLiff) {
       await liff.init({ liffId: Config.value.liffId })
+    }
+    if (await this.$store.dispatch(Actions.GET_STORAGE, StorageKey.TOKEN)) {
+      await this.$store.dispatch(Actions.FETCH_USER_INFO)
     }
     this.changeRoute()
   },
   methods: {
-    changeRoute() {
+    async changeRoute() {
       this.route = Config.getRoute(this)
       console.log('onRouteChange', this.route)
-      const isLogin = Boolean(localStorage.getItem(LocalStorageKey.TOKEN))
-      const loginRoutes = Config.value.loginRoutes
-      if (!isLogin && !loginRoutes.includes(this.route.name)) {
-        localStorage.setItem(LocalStorageKey.REPLACE_PATH, this.route.path)
-        this.$router.replace({ name: RouterName.LOGIN })
-      }
     },
   },
 }
 </script>
 <style lang="scss">
+@import './style/main.scss';
+html,
+body {
+  height: 100%;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+</style>
+<style lang="scss" scoped>
+.header {
+  flex-shrink: 0;
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+}
+.article {
+  flex-grow: 1;
+  height: 0;
+  position: relative;
+  .main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1rem;
+    overflow: auto;
   }
+}
+.footer {
+  flex-shrink: 0;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 </style>

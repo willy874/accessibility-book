@@ -1,6 +1,6 @@
 <template>
   <main>
-    <form title="帳號登入的表單" @submit="signIn">
+    <form class="form" title="帳號登入的表單" @submit="signIn">
       <h2 class="form-title" title="這裡是登入頁面">登入</h2>
       <div>
         <label class="form-label" for="user-email" title="帳號信箱">帳號信箱</label>
@@ -45,10 +45,9 @@
 
 <script>
 import { apiPostUserLogin, apiPostLineLogin } from '@/api'
+import { HttpError, handleHttpErrorLog } from '@/utils'
 import Config from '@/config'
-// import liff from '@line/liff'
-// import { validate, ValidateType } from '@/utils'
-import { RouterName, LocalStorageKey, Actions } from '@/consts'
+import { RouterName, StorageKey, Actions } from '@/consts'
 
 export default {
   name: 'Login',
@@ -70,24 +69,33 @@ export default {
     },
   },
   created() {
-    const isLogin = Boolean(localStorage.getItem(LocalStorageKey.TOKEN))
     const responseType = Config.value.lineLoginRequestParam.response_type
-    if (isLogin) {
-      this.$router.replace({ name: RouterName.HOME })
-    }
     if (this.$route.query[responseType]) {
       this.fetchLineLoginApi(this.$route.query[responseType])
     }
   },
   methods: {
+    /**
+     * @param {StorageKey} key
+     * @param {string} value
+     * @return {UserModel}
+     */
+    setStorage(key, value) {
+      this.$store.dispatch(Actions.SET_STORAGE, { key, value })
+    },
+    /**
+     * @return {UserModel}
+     */
+    fetchUserInfo() {
+      return this.$store.dispatch(Actions.FETCH_USER_INFO)
+    },
+    checkLoginReplace() {
+      this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
+    },
     signIn(e) {
       e.preventDefault()
       const user = this.user
       const error = false
-      // validate(ValidateType.email, user.email) === false ? (vm.emailError = error = true) : (vm.emailError = error = false)
-      // validate(ValidateType.password, user.password) === false
-      //   ? (vm.passwordError = error = true)
-      //   : (vm.passwordError = error = false)
       if (error === false) {
         this.fetchUserApi(user)
       }
@@ -96,11 +104,12 @@ export default {
       try {
         const res = await apiPostUserLogin(user)
         if (res.isAxiosError) {
-          throw new Error(res.data.detail)
+          throw new HttpError(res)
         } else {
           this.loginHandler(res.data.key)
         }
       } catch (error) {
+        handleHttpErrorLog(error)
         this.noPass = true
       }
     },
@@ -111,36 +120,31 @@ export default {
           return_url: Config.value.lineLoginRequestParam.redirect_uri,
         })
         if (res.isAxiosError) {
-          throw new Error(res.data.detail)
+          throw new HttpError(res)
         } else {
           this.loginHandler(res.data.key)
         }
       } catch (error) {
+        handleHttpErrorLog(error)
         this.noPass = true
       }
     },
     /**
      * @param {string} token
-     * @return {Promise<Route>}
      */
     async loginHandler(token) {
-      localStorage.setItem(LocalStorageKey.TOKEN, token)
-      /** @type {UserModel}**/
-      const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
+      this.setStorage(StorageKey.TOKEN, token)
+      const userInfo = await this.fetchUserInfo()
       if (userInfo) {
-        /** @type {Route}**/
-        const route = Config.getRoute()
         if (!userInfo.is_password_set) {
-          return await this.$router.replace({ name: RouterName.REGISTER })
+          await this.$router.replace({ name: RouterName.REGISTER })
+          return
         }
         if (!userInfo.is_authorized) {
-          return await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
+          await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
+          return
         }
-        const replacePath = localStorage.getItem(LocalStorageKey.REPLACE_PATH, route.path)
-        if (replacePath) {
-          return await this.$router.replace(replacePath)
-        }
-        return await this.$router.replace({ name: RouterName.HOME })
+        this.checkLoginReplace()
       }
     },
     linkLineSignIn() {
@@ -149,9 +153,8 @@ export default {
   },
 }
 </script>
-
 <style lang="scss">
-form {
+.form {
   max-width: $xs;
   margin: 2rem auto;
   display: flex;
@@ -161,10 +164,6 @@ form {
   border-radius: 0.5rem;
   background-color: #e0fff3;
   gap: 1rem;
-}
-
-input {
-  box-sizing: border-box;
 }
 
 .form-input,

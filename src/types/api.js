@@ -1,4 +1,12 @@
 /**
+ * @template T
+ * @typedef {Object} ResponseCollection
+ * @property {number} count
+ * @property {string} next
+ * @property {string} previous
+ * @property {Array<T>} results
+ */
+/**
  * @typedef {Object} ChapterModel
  * @property {number} id
  * @property {number} no
@@ -89,6 +97,13 @@
  */
 /**
  * @typedef {Object} HistoryModel
+ * @property {number} id
+ * @property {JSON} payload
+ * @property {number} user
+ * @property {number} chapter
+ * @property {string} chapter_name
+ * @property {array} tag
+ * @property {string} last_modified
  */
 /**
  * @typedef {Object} RegisterRequestParam
@@ -96,6 +111,7 @@
  * @property {string} password1
  * @property {string} password2
  * @property {string} email
+ * @property {Blob} photo
  */
 /**
  * @typedef {Object} BookMarkRequestParam

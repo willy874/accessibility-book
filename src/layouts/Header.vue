@@ -2,45 +2,70 @@
   <header>
     <nav>
       <ul>
-        <li>
-          <RouterLink to="/">首頁</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/book/">書籍</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/tag/">標籤</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/bookmark/">書籤</RouterLink>
-        </li>
+        <li>國一</li>
+        <li>國二</li>
+        <li>國三</li>
+        <li>國中總複習</li>
+        <li>高一</li>
+        <li>高二</li>
+        <li>高三</li>
+        <li>高中總複習</li>
       </ul>
-      <div>
-        <button type="button" @click="signOut">登出</button>
-      </div>
     </nav>
   </header>
 </template>
 
 <script>
-import { apiPostLogout } from '@/api'
-import { RouterName, LocalStorageKey } from '@/consts'
+import { apiGetMenuJson } from '@/api'
 
 export default {
   name: 'Header',
-  methods: {
-    async signOut() {
-      try {
-        const res = await apiPostLogout()
-        if (res.isAxiosError) {
-          throw res
-        }
-        localStorage.removeItem(LocalStorageKey.TOKEN)
-        this.$router.replace({ name: RouterName.LOGIN })
-      } catch (error) {}
-    },
+  data() {
+    return {
+      listModel: null,
+    }
+  },
+  async created() {
+    const res = await apiGetMenuJson()
+    console.log(res)
   },
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+header {
+  nav {
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 500;
+    box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.4);
+    ul {
+      display: flex;
+      list-style: none;
+      margin: 8px 0;
+      li {
+        padding: 4px;
+        text-align: center;
+        flex-shrink: 0;
+        flex-basis: 25%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: black;
+        &:hover {
+          cursor: pointer;
+          background: #42b983;
+          color: white;
+        }
+        a {
+          display: block;
+          padding: 1rem;
+          height: 100%;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+</style>

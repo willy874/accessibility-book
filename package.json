@@ -4,14 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve --open",
-    "serve": "vue-cli-service serve --host tpwlliff.3anology.info --port 443",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "yarn build & yarn serve",
+    "serve": "node server"
   },
   "dependencies": {
     "@line/liff": "^2.16.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "dayjs": "^1.10.7",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
     "markdown-it": "^12.2.0",

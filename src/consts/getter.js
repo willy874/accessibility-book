@@ -1,4 +1,0 @@
-/**
- * @enum
- */
-export const Getter = {}

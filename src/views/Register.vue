@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="form-title" title="這裡是註冊頁面">註冊</h2>
-    <form>
+    <form @submit="submit">
       <div>
         <label>使用者名稱</label>
         <input
@@ -30,30 +30,64 @@
         <label>電子信箱</label>
         <input v-model="form.email" type="email" name="email" title="請輸入電子信箱" placeholder="請輸入電子信箱" />
       </div>
+      <div class="submit-btn-container">
+        <button type="submit">送出</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
 import { apiPostRegister } from '@/api'
-import Config from '@/config'
-import { RouterName, LocalStorageKey, Actions } from '@/consts'
+import { validate, ValidateType } from '@/utils'
+import { RouterName, StorageKey, Actions } from '@/consts'
 
+/**
+ * @typedef {Object} RegistrationForm
+ * @property {string} username
+ * @property {string} password1
+ * @property {string} password2
+ * @property {string} email
+ * @property {Blob} photo
+ */
 export default {
   name: 'Register',
   data() {
     return {
+      /** @type {RegistrationForm} **/
       form: {
         username: '',
         password1: '',
         password2: '',
         email: '',
+        photo: null,
       },
     }
   },
   methods: {
-    async submit() {
+    /**
+     * @param {StorageKey} key
+     * @param {string} value
+     * @return {UserModel}
+     */
+    setStorage(key, value) {
+      this.$store.dispatch(Actions.SET_STORAGE, { key, value })
+    },
+    /**
+     * @return {UserModel}
+     */
+    fetchUserInfo() {
+      return this.$store.dispatch(Actions.FETCH_USER_INFO)
+    },
+    checkLoginReplace() {
+      this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
+    },
+    async submit(e) {
+      e.preventDefault()
       try {
+        if (validate(this.form).label) {
+          return
+        }
         const res = await apiPostRegister(this.form)
         if (res.isAxiosError) {
           throw new Error(res.data.detail)
@@ -65,22 +99,77 @@ export default {
       }
     },
     async loginHandler(token) {
-      localStorage.setItem(LocalStorageKey.TOKEN, token)
-      /** @type {UserModel}**/
-      const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
-      /** @type {Route}**/
-      const route = Config.getRoute()
+      await this.setStorage(StorageKey.TOKEN, token)
+      const userInfo = await this.fetchUserInfo()
       if (userInfo) {
         if (!userInfo.is_authorized) {
-          return await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
+          await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
+          return
         }
-        const replacePath = localStorage.getItem(LocalStorageKey.REPLACE_PATH, route.path)
-        if (replacePath) {
-          return await this.$router.replace(replacePath)
-        }
-        return await this.$router.replace({ name: RouterName.HOME })
+        this.checkLoginReplace()
       }
+    },
+    /**
+     * @param {RegistrationForm} form
+     * @return {string[]}
+     */
+    validate(form) {
+      const errors = []
+      if (form.username === '') {
+        errors.push('使用者名稱不可空白')
+      }
+      if (!validate(ValidateType.EMAIL, form.email)) {
+        errors.push('電子郵件信箱格式不正確')
+      }
+      if (form.email === '') {
+        errors.push('電子郵件信箱不可空白')
+      }
+      if (!validate(ValidateType.PASSWORD, form.password1)) {
+        errors.push('密碼請輸入6~30碼英數混合')
+      }
+      if (form.password1 === '') {
+        errors.push('密碼不可空白')
+      }
+      if (form.password1 !== form.password2) {
+        errors.push('確認密碼請與密碼相同')
+      }
+      if (!form.photo) {
+        errors.push('請上傳盲胞證或志工證')
+      }
+      return errors
     },
   },
 }
 </script>
+<style lang="scss" scoped>
+form > div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  margin: 8px 0;
+  label {
+    flex-shrink: 0;
+    width: 120px;
+  }
+  input {
+    flex-grow: 1;
+    border: 1px solid #217842;
+    border-radius: 4px;
+    padding: 4px;
+    height: 34px;
+  }
+}
+.submit-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 0;
+  button {
+    border: 1px solid #000;
+    background-color: transparent;
+    padding: 4px 16px;
+    font-size: 20px;
+    border-radius: 4px;
+  }
+}
+</style>

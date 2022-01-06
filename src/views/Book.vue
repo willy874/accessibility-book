@@ -2,14 +2,17 @@
   <div>
     <h2>書籍列表</h2>
     <template v-if="loading">
+      <div>讀取中</div>
+    </template>
+    <template v-else>
       <div v-if="targetModel">
         <h3>{{ targetModel.name }}</h3>
-        <div v-for="model in targetModel.chapter_set" :key="model.id">
+        <div v-for="model in targetModel.chapter_set" :key="model.id" class="book__list-item">
           <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
       <div v-else-if="listModel.length">
-        <div v-for="model in listModel" :key="model.id">
+        <div v-for="model in listModel" :key="model.id" class="book__list-item">
           <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
@@ -17,15 +20,11 @@
         <div>沒有資料</div>
       </div>
     </template>
-    <template v-else>
-      <div>讀取中</div>
-    </template>
   </div>
 </template>
 
 <script>
-import { apiGetBookList, apiGetBookById } from '@/api/index'
-import { RouterName } from '@/consts'
+import { RouterName, Actions } from '@/consts'
 import Config from '@/config'
 
 export default {
@@ -40,17 +39,28 @@ export default {
       loading: false,
     }
   },
-  computed: {},
   watch: {
     $route() {
       this.effectComponentPage()
     },
   },
   async created() {
-    // await this.passLogin()
     this.effectComponentPage()
   },
   methods: {
+    /**
+     * @param {number} id
+     * @return {Promise<BookModel>}
+     */
+    fetchBookById(id) {
+      return this.$store.dispatch(Actions.FETCH_BOOK_BY_ID, id)
+    },
+    /**
+     * @return {Promise<BookModel[]>}
+     */
+    fetchBookList() {
+      return this.$store.dispatch(Actions.FETCH_BOOK_LIST)
+    },
     /**
      * @param {number} id
      * @return {VueRouteLocation}
@@ -79,25 +89,35 @@ export default {
      */
     async effectComponentPage() {
       /** @type {Route}**/
-      const route = Config.getRoute()
+      const route = Config.getRoute(this)
       if (!route) return
       /** @type {number} */
       const id = route.params.id
       if (id) {
         this.active = id
-        this.loading = false
-        const res = await apiGetBookById(id)
-        this.targetModel = res.data
         this.loading = true
+        this.targetModel = await this.fetchBookById(id)
+        this.loading = false
       } else {
         this.active = ''
         this.targetModel = null
-        this.loading = false
-        const res = await apiGetBookList()
-        this.listModel = res.data
         this.loading = true
+        this.listModel = await this.fetchBookList()
+        this.loading = false
       }
     },
   },
 }
 </script>
+<style lang="scss" scoped>
+h2 {
+  margin-bottom: 8px;
+}
+h3 {
+  margin-bottom: 8px;
+}
+.book__list-item {
+  padding: 8px;
+  font-size: 20px;
+}
+</style>
