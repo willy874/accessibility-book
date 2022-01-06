@@ -22,6 +22,9 @@ const history = {
   HISTORY_LIST: 'historyList',
 }
 
+/**
+ * @enum {string}
+ */
 export const Getters = {
   ...root,
   ...chapter,

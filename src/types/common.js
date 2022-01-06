@@ -14,6 +14,3 @@
  * @property {string} version
  * @property {string} platform
  */
-/**
- * @type {Record}
- */

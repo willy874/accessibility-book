@@ -1,5 +1,5 @@
 /**
- * @enum
+ * @enum {string}
  */
 export const RouterHook = {
   BEFORE_ROUTE_ENTER: 'beforeRouteEnter',

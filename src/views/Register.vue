@@ -39,24 +39,55 @@
 
 <script>
 import { apiPostRegister } from '@/api'
+import { validate, ValidateType } from '@/utils'
 import { RouterName, StorageKey, Actions } from '@/consts'
 
+/**
+ * @typedef {Object} RegistrationForm
+ * @property {string} username
+ * @property {string} password1
+ * @property {string} password2
+ * @property {string} email
+ * @property {Blob} photo
+ */
 export default {
   name: 'Register',
   data() {
     return {
+      /** @type {RegistrationForm} **/
       form: {
         username: '',
         password1: '',
         password2: '',
         email: '',
+        photo: null,
       },
     }
   },
   methods: {
+    /**
+     * @param {StorageKey} key
+     * @param {string} value
+     * @return {UserModel}
+     */
+    setStorage(key, value) {
+      this.$store.dispatch(Actions.SET_STORAGE, { key, value })
+    },
+    /**
+     * @return {UserModel}
+     */
+    fetchUserInfo() {
+      return this.$store.dispatch(Actions.FETCH_USER_INFO)
+    },
+    checkLoginReplace() {
+      this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
+    },
     async submit(e) {
       e.preventDefault()
       try {
+        if (validate(this.form).label) {
+          return
+        }
         const res = await apiPostRegister(this.form)
         if (res.isAxiosError) {
           throw new Error(res.data.detail)
@@ -68,16 +99,44 @@ export default {
       }
     },
     async loginHandler(token) {
-      await this.$state.dispatch(Actions.SET_STORAGE, { key: StorageKey.TOKEN, value: token })
-      /** @type {UserModel}**/
-      const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
+      await this.setStorage(StorageKey.TOKEN, token)
+      const userInfo = await this.fetchUserInfo()
       if (userInfo) {
         if (!userInfo.is_authorized) {
           await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
           return
         }
-        this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
+        this.checkLoginReplace()
       }
+    },
+    /**
+     * @param {RegistrationForm} form
+     * @return {string[]}
+     */
+    validate(form) {
+      const errors = []
+      if (form.username === '') {
+        errors.push('使用者名稱不可空白')
+      }
+      if (!validate(ValidateType.EMAIL, form.email)) {
+        errors.push('電子郵件信箱格式不正確')
+      }
+      if (form.email === '') {
+        errors.push('電子郵件信箱不可空白')
+      }
+      if (!validate(ValidateType.PASSWORD, form.password1)) {
+        errors.push('密碼請輸入6~30碼英數混合')
+      }
+      if (form.password1 === '') {
+        errors.push('密碼不可空白')
+      }
+      if (form.password1 !== form.password2) {
+        errors.push('確認密碼請與密碼相同')
+      }
+      if (!form.photo) {
+        errors.push('請上傳盲胞證或志工證')
+      }
+      return errors
     },
   },
 }

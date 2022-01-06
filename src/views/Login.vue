@@ -75,6 +75,23 @@ export default {
     }
   },
   methods: {
+    /**
+     * @param {StorageKey} key
+     * @param {string} value
+     * @return {UserModel}
+     */
+    setStorage(key, value) {
+      this.$store.dispatch(Actions.SET_STORAGE, { key, value })
+    },
+    /**
+     * @return {UserModel}
+     */
+    fetchUserInfo() {
+      return this.$store.dispatch(Actions.FETCH_USER_INFO)
+    },
+    checkLoginReplace() {
+      this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
+    },
     signIn(e) {
       e.preventDefault()
       const user = this.user
@@ -116,9 +133,8 @@ export default {
      * @param {string} token
      */
     async loginHandler(token) {
-      await this.$store.dispatch(Actions.SET_STORAGE, { key: StorageKey.TOKEN, value: token })
-      /** @type {UserModel}**/
-      const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
+      this.setStorage(StorageKey.TOKEN, token)
+      const userInfo = await this.fetchUserInfo()
       if (userInfo) {
         if (!userInfo.is_password_set) {
           await this.$router.replace({ name: RouterName.REGISTER })
@@ -128,7 +144,7 @@ export default {
           await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
           return
         }
-        this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
+        this.checkLoginReplace()
       }
     },
     linkLineSignIn() {

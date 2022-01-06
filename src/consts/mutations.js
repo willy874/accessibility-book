@@ -35,7 +35,7 @@ const history = {
 }
 
 /**
- * @enum
+ * @enum {string}
  */
 export const Mutations = {
   ...root,

@@ -39,7 +39,7 @@ const history = {
 }
 
 /**
- * @enum
+ * @enum {string}
  */
 export const Actions = {
   ...root,

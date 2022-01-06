@@ -25,6 +25,3 @@
 /**
  * @typedef {import('axios').AxiosInstance} AxiosInstance
  */
-/**
- * @typedef {Object} InterceptorsOptions
- */

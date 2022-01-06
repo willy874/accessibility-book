@@ -1,4 +1,5 @@
 import { request, authRequest, baseRequest } from './request'
+import { formDataFormat } from '@/utils'
 
 /**
  * @param {LoginRequestParam} data
@@ -26,7 +27,10 @@ export const apiPostLineConnect = () => authRequest.post(`line/connect/`)
  * @param {RegisterRequestParam} data
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
-export const apiPostRegister = (data) => authRequest.post(`registration/`, data)
+export const apiPostRegister = (data) =>
+  authRequest.post(`registration/`, formDataFormat(data), {
+    headers: { ContentType: 'multipart/form-data' },
+  })
 
 /**
  * @returns {Promise<AxiosResponse<null>>}
