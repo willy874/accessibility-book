@@ -20,6 +20,11 @@ import { apiGetMenuJson } from '@/api'
 
 export default {
   name: 'Header',
+  data() {
+    return {
+      listModel: null,
+    }
+  },
   async created() {
     const res = await apiGetMenuJson()
     console.log(res)
@@ -38,7 +43,7 @@ header {
     ul {
       display: flex;
       list-style: none;
-      flex-wrap: wrap;
+      margin: 8px 0;
       li {
         padding: 4px;
         text-align: center;
