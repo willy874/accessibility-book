@@ -31,6 +31,7 @@
 
 <script>
 import { RouterName, Actions } from '@/consts'
+import dayjs from 'dayjs'
 
 export default {
   name: 'History',
@@ -72,12 +73,7 @@ export default {
      * @return {number}
      */
     getDate(time) {
-      const date = new Date(time)
-      const dateDetail = {
-        fullDate: `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`,
-        fullTime: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
-      }
-      return [dateDetail.fullDate, dateDetail.fullTime].join(' ')
+      return dayjs(time).format('YYYY/MM/DD hh:mm:ss')
     },
     /**
      * @depend

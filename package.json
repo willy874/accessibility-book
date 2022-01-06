@@ -13,6 +13,7 @@
     "@line/liff": "^2.16.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "dayjs": "^1.10.7",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
     "markdown-it": "^12.2.0",
