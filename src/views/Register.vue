@@ -3,16 +3,6 @@
     <h2 class="form-title" title="這裡是註冊頁面">註冊</h2>
     <form @submit="submit">
       <div>
-        <label>使用者名稱</label>
-        <input
-          v-model="form.username"
-          type="text"
-          name="email"
-          title="請輸入使用者名稱"
-          placeholder="請輸入使用者名稱"
-        />
-      </div>
-      <div>
         <label>密碼</label>
         <input v-model="form.password1" type="password" name="password" title="請輸入密碼" placeholder="請輸入密碼" />
       </div>
@@ -44,9 +34,8 @@ import { RouterName, StorageKey, Actions } from '@/consts'
 
 /**
  * @typedef {Object} RegistrationForm
- * @property {string} username
- * @property {string} password1
- * @property {string} password2
+ * @property {string} first_name
+ * @property {string} last_name
  * @property {string} email
  * @property {Blob} photo
  */
@@ -56,13 +45,23 @@ export default {
     return {
       /** @type {RegistrationForm} **/
       form: {
-        username: '',
-        password1: '',
-        password2: '',
+        first_name: '',
+        last_name: '',
         email: '',
         photo: null,
+        password1: '',
+        password2: '',
       },
+      errors: {},
     }
+  },
+  computed: {
+    /**
+     * @return {UserModel}
+     */
+    userInfo() {
+      return this.$store.state.user.info
+    },
   },
   methods: {
     /**
@@ -114,29 +113,37 @@ export default {
      * @return {string[]}
      */
     validate(form) {
-      const errors = []
-      if (form.username === '') {
-        errors.push('使用者名稱不可空白')
-      }
-      if (!validate(ValidateType.EMAIL, form.email)) {
-        errors.push('電子郵件信箱格式不正確')
+      for (const key in form) {
+        this.errors[key] = []
       }
       if (form.email === '') {
-        errors.push('電子郵件信箱不可空白')
+        this.errors.first_name.push('')
+      }
+      if (form.email === '') {
+        this.errors.last_name.push('')
+      }
+      if (!validate(ValidateType.EMAIL, form.email)) {
+        this.errors.email.push('電子郵件信箱格式不正確')
+      }
+      if (form.email === '') {
+        this.errors.email.push('電子郵件信箱不可空白')
       }
       if (!validate(ValidateType.PASSWORD, form.password1)) {
-        errors.push('密碼請輸入6~30碼英數混合')
+        this.errors.password1.push('密碼請輸入6~30碼英數混合')
       }
       if (form.password1 === '') {
-        errors.push('密碼不可空白')
+        this.errors.password1.push('密碼不可空白')
       }
       if (form.password1 !== form.password2) {
-        errors.push('確認密碼請與密碼相同')
+        this.errors.password2.push('確認密碼請與密碼相同')
       }
       if (!form.photo) {
-        errors.push('請上傳盲胞證或志工證')
+        this.errors.photo.push('請上傳盲胞證或志工證')
       }
-      return errors
+    },
+    isValid(field) {
+      const fieldError = this.errors[field]
+      return fieldError.length
     },
   },
 }
