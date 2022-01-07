@@ -124,3 +124,13 @@
  * @property {number} user
  * @property {number} chapter
  */
+/**
+ * @typedef {Object} MenuListModel
+ * @property {string} label
+ * @property {number} sort
+ * @property {string} targetUrl
+ * @property {array<T>} targetTag
+ * @property {string} type
+ * @property {array<T>} child
+ * @property {boolean} is_filter
+ */

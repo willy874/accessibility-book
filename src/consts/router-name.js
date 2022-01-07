@@ -15,4 +15,5 @@ export const RouterName = {
   NO_AUTHORIZED: 'noAuthorized',
   HISTORY: 'History',
   NAVIGATION: 'Navigation',
+  MENULIST: 'MenuList',
 }
