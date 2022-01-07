@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import { apiGetHistoryList } from '@/api/index'
 import { RouterName, Actions } from '@/consts'
 import dayjs from 'dayjs'
 
