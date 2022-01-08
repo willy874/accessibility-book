@@ -102,7 +102,7 @@
  * @property {number} user
  * @property {number} chapter
  * @property {string} chapter_name
- * @property {array} tag
+ * @property {string[]} tag
  * @property {string} last_modified
  */
 /**

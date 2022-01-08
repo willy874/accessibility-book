@@ -99,9 +99,9 @@ export default {
     },
     async loginHandler(token) {
       await this.setStorage(StorageKey.TOKEN, token)
-      const userInfo = await this.fetchUserInfo()
-      if (userInfo) {
-        if (!userInfo.is_authorized) {
+      await this.fetchUserInfo()
+      if (this.userInfo) {
+        if (!this.userInfo.is_authorized) {
           await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
           return
         }
