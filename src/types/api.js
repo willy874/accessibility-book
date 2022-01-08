@@ -128,6 +128,7 @@
  * @typedef {Object} MenuListModel
  * @property {string} label
  * @property {number} sort
+ * @property {string} uuid
  * @property {string} targetUrl
  * @property {array<T>} targetTag
  * @property {string} type

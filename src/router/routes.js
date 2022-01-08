@@ -79,7 +79,7 @@ export default [
     component: History,
   },
   {
-    path: '/menulist/:sort',
+    path: '/menulist/:uuid',
     name: RouterName.MENULIST,
     component: MenuList,
   },
