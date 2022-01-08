@@ -22,6 +22,10 @@ const history = {
   HISTORY_LIST: 'historyList',
 }
 
+const menulist = {
+  MENU_LIST: 'menuList',
+}
+
 /**
  * @enum {string}
  */
@@ -32,4 +36,5 @@ export const Getters = {
   ...book,
   ...tag,
   ...history,
+  ...menulist,
 }

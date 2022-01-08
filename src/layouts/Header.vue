@@ -2,7 +2,7 @@
   <header>
     <nav>
       <ul>
-        <li>國一</li>
+        <li><RouterLink>國一</RouterLink></li>
         <li>國二</li>
         <li>國三</li>
         <li>國中總複習</li>
@@ -16,13 +16,22 @@
 </template>
 
 <script>
-import { apiGetMenuJson } from '@/api'
+// import { apiGetMenuJson } from '@/api'
+import { Actions } from '@/consts'
 
 export default {
   name: 'Header',
   async created() {
-    const res = await apiGetMenuJson()
+    const res = await this.fetchMenuList()
     console.log(res)
+  },
+  methods: {
+    /**
+     * @return {Promise<MenuListModel[]>}
+     */
+    fetchMenuList() {
+      return this.$store.dispatch(Actions.FETCH_MENU_LIST)
+    },
   },
 }
 </script>
@@ -37,8 +46,7 @@ header {
     box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.4);
     ul {
       display: flex;
-      list-style: none;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       li {
         padding: 4px;
         text-align: center;

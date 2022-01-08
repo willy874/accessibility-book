@@ -31,6 +31,9 @@
       <div v-if="route.name === RouterName.LOGIN">
         <Login />
       </div>
+      <div v-if="route.name === RouterName.MENULIST">
+        <MenuList />
+      </div>
     </template>
   </div>
 </template>
@@ -44,6 +47,7 @@ import Book from './Book.vue'
 import BookMark from './BookMark.vue'
 import Navigation from './Navigation.vue'
 import Login from './Login.vue'
+import MenuList from './MenuList.vue'
 export default {
   name: 'Home',
   components: {
@@ -53,6 +57,7 @@ export default {
     BookMark,
     Navigation,
     Login,
+    MenuList,
   },
   data() {
     return {

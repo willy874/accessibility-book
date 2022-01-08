@@ -29,20 +29,20 @@ export default {
   },
   actions: {
     /**
-     * @name fetchBookList
-     * @param {ActionContext<BookState,RootState>} store
-     * @returns {Promise<BookModel>}
+     * @name fetchMenuList
+     * @param {ActionContext<MenuListState,RootState>} store
+     * @returns {Promise<MenuListModel>}
      */
-    [Actions.FETCH_BOOK_LIST]: async function (store) {
+    [Actions.FETCH_MENU_LIST]: async function (store) {
       const { commit } = store
       try {
         const res = await apiGetMenuJson()
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
-          const list = res.data.results
+          const list = res.data.content.menu
           list.forEach((model) => {
-            commit(Mutations.SET_BOOK, model)
+            commit(Mutations.SET_MENULIST, model)
           })
           return list
         }

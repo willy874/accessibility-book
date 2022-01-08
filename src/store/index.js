@@ -8,6 +8,7 @@ import bookmark from './bookmark/index'
 import book from './book/index'
 import tag from './tag/index'
 import history from './history/index'
+import menu from './menu/index'
 
 Vue.use(Vuex)
 
@@ -44,5 +45,6 @@ export default new Vuex.Store({
     book,
     tag,
     history,
+    menu,
   },
 })
