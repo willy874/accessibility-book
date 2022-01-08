@@ -35,6 +35,10 @@
  * @property {Record<number,HistoryModel>} collection
  */
 /**
+ * @typedef {Object} MenuListState
+ * @property {Record<number,MenuListModel>} collection
+ */
+/**
  * @typedef {Object} RootState
  * @property {boolean} init
  * @property {UserState} user

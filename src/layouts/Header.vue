@@ -2,27 +2,47 @@
   <header>
     <nav>
       <ul>
-        <li>國一</li>
-        <li>國二</li>
-        <li>國三</li>
-        <li>國中總複習</li>
-        <li>高一</li>
-        <li>高二</li>
-        <li>高三</li>
-        <li>高中總複習</li>
+        <li v-for="model in listModel" :key="model.uuid">
+          <RouterLink :to="getMenuRoute(model.uuid, model.label)">{{ model.label }}</RouterLink>
+        </li>
       </ul>
     </nav>
   </header>
 </template>
 
 <script>
-import { apiGetMenuJson } from '@/api'
+// import { apiGetMenuJson } from '@/api'
+import { Actions, RouterName } from '@/consts'
 
 export default {
   name: 'Header',
+  data() {
+    return {
+      /** @type {MenuListModel[]} */
+      listModel: null,
+    }
+  },
   async created() {
-    const res = await apiGetMenuJson()
-    console.log(res)
+    this.listModel = await this.fetchMenuList()
+    console.log(this.listModel)
+  },
+  methods: {
+    /**
+     * @return {Promise<MenuListModel[]>}
+     */
+    fetchMenuList() {
+      return this.$store.dispatch(Actions.FETCH_MENU_LIST)
+    },
+    /**
+     * @param {string} uuid
+     * @return {VueRouteLocation}
+     */
+    getMenuRoute(uuid, label) {
+      return {
+        name: RouterName.MENULIST,
+        params: { uuid, label },
+      }
+    },
   },
 }
 </script>
@@ -37,7 +57,7 @@ header {
     box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.4);
     ul {
       display: flex;
-      list-style: none;
+      width: 100%;
       flex-wrap: wrap;
       li {
         padding: 4px;
