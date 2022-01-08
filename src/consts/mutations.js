@@ -34,6 +34,10 @@ const history = {
   SET_HISTORY: 'setHistory',
 }
 
+const menulist = {
+  SET_MENULIST: 'setMenuList',
+}
+
 /**
  * @enum {string}
  */
@@ -46,4 +50,5 @@ export const Mutations = {
   ...book,
   ...tag,
   ...history,
+  ...menulist,
 }

@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import { apiGetHistoryList } from '@/api/index'
-import { RouterName } from '@/consts'
+import { RouterName, Actions } from '@/consts'
+import dayjs from 'dayjs'
 
 export default {
   name: 'History',
@@ -53,6 +53,12 @@ export default {
   },
   methods: {
     /**
+     * @return {Promise<BookModel[]>}
+     */
+    fetchHistoryList() {
+      return this.$store.dispatch(Actions.FETCH_HISTORY_LIST)
+    },
+    /**
      * @param {number} id
      * @return {VueRouteLocation}
      */
@@ -67,12 +73,7 @@ export default {
      * @return {number}
      */
     getDate(time) {
-      const date = new Date(time)
-      const dateDetail = {
-        fullDate: `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`,
-        fullTime: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
-      }
-      return [dateDetail.fullDate, dateDetail.fullTime].join(' ')
+      return dayjs(time).format('YYYY/MM/DD hh:mm:ss')
     },
     /**
      * @depend
@@ -81,8 +82,8 @@ export default {
      */
     async effectComponentPage() {
       this.loading = true
-      const res = await apiGetHistoryList()
-      this.listModel = res.data.results.sort((a, b) => {
+      const res = await this.fetchHistoryList()
+      this.listModel = res.sort((a, b) => {
         return b.last_modified - a.last_modified
       })
       this.loading = false

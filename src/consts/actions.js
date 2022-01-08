@@ -38,6 +38,10 @@ const history = {
   ADD_HISTORY: 'addHistory',
 }
 
+const menulist = {
+  FETCH_MENU_LIST: 'fetchMenuList',
+}
+
 /**
  * @enum {string}
  */
@@ -50,4 +54,5 @@ export const Actions = {
   ...book,
   ...tag,
   ...history,
+  ...menulist,
 }
