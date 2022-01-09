@@ -23,7 +23,6 @@ export default {
   },
   async created() {
     this.listModel = await this.fetchMenuList()
-    console.log(this.listModel)
   },
   methods: {
     /**

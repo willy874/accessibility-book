@@ -1,4 +1,4 @@
-import { apiGetBookList, apiGetBookById } from '@/api/index'
+import { apiGetBookList, apiGetBookById, apiGetBookListByQuery } from '@/api/index'
 import { HttpError, handleHttpErrorLog } from '@/utils'
 import { Getters, Mutations, Actions } from '@/consts'
 
@@ -65,6 +65,29 @@ export default {
         } else {
           commit(Mutations.SET_BOOK, res.data)
           return res.data
+        }
+      } catch (error) {
+        return handleHttpErrorLog(error)
+      }
+    },
+    /**
+     * @name fetchBookByQuery
+     * @param {ActionContext<BookState,RootState>} store
+     * @param {StringData} query
+     * @returns {Promise<BookModel>}
+     */
+    [Actions.FETCH_BOOK_LIST_BY_QUERY]: async function (store, query) {
+      const { commit } = store
+      try {
+        const res = await apiGetBookListByQuery(query)
+        if (res.isAxiosError) {
+          throw new HttpError(res)
+        } else {
+          const list = res.data.results
+          list.forEach((model) => {
+            commit(Mutations.SET_BOOK, model)
+          })
+          return list
         }
       } catch (error) {
         return handleHttpErrorLog(error)

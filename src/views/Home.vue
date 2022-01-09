@@ -5,11 +5,16 @@
         <h2>首頁</h2>
         <section id="news">
           <h4 class="section-title">最新消息</h4>
-          <ul>
-            <li v-for="model in listModel" :key="model">
-              <p v-html="transformMarkdownToHtml(model.content)"></p>
-            </li>
-          </ul>
+          <div v-if="newsListModel">
+            <ul class="list">
+              <li v-for="model in newsListModel" :key="model.id" class="list-item">
+                <h4>{{ model.name }}</h4>
+                <p>
+                  發佈時間:<span>{{ getDate(model.publish_date) }}</span>
+                </p>
+              </li>
+            </ul>
+          </div>
         </section>
         <section id="release_list">
           <h4 class="section-title">最新上架</h4>
@@ -44,8 +49,7 @@
 </template>
 
 <script>
-import { transformMarkdownToHtml } from '@/utils'
-import { RouterName } from '@/consts'
+import { RouterName, Actions } from '@/consts'
 import Config from '@/config'
 import Chapter from './Chapter.vue'
 import Tag from './Tag.vue'
@@ -54,7 +58,8 @@ import BookMark from './BookMark.vue'
 import Navigation from './Navigation.vue'
 import Login from './Login.vue'
 import MenuList from './MenuList.vue'
-import { apiGetNewsJson } from '@/api'
+import dayjs from 'dayjs'
+
 export default {
   name: 'Home',
   components: {
@@ -71,7 +76,7 @@ export default {
       RouterName,
       route: null,
       /** @type {NewsModel[]} */
-      listModel: null,
+      newsListModel: null,
     }
   },
   watch: {
@@ -83,13 +88,27 @@ export default {
     this.effectComponentPage()
   },
   methods: {
-    transformMarkdownToHtml,
+    /**
+     * @return {Promise<NewsModel[]>}
+     */
+    fetchNews() {
+      return this.$store.dispatch(Actions.FETCH_NEWS_LIST)
+    },
+    /**
+     * @param {string} time
+     * @return {number}
+     */
+    getDate(time) {
+      return dayjs(time).format('YYYY/MM/DD hh:mm:ss')
+    },
+    /**
+     * @depend
+     * @param {NewsModel} this.listModel
+     */
     async effectComponentPage() {
       /** @type {Route}**/
       this.route = Config.getRoute(this) || this.$route
-      const res = await apiGetNewsJson()
-      const { results } = res.data
-      this.listModel = results
+      this.newsListModel = await this.fetchNews()
     },
   },
 }
@@ -99,5 +118,10 @@ export default {
 .section-title {
   text-align: center;
   font-size: 1.5rem;
+  margin: 8px auto;
+}
+.list {
+  border: 1px solid #000;
+  padding: 16px;
 }
 </style>

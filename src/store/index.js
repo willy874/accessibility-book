@@ -9,6 +9,7 @@ import book from './book/index'
 import tag from './tag/index'
 import history from './history/index'
 import menu from './menu/index'
+import news from './news/index'
 
 Vue.use(Vuex)
 
@@ -46,5 +47,6 @@ export default new Vuex.Store({
     tag,
     history,
     menu,
+    news,
   },
 })

@@ -54,6 +54,12 @@ export const apiGetUserInfo = () => request.get(`user/`)
 export const apiGetBookList = () => request.get(`book/`)
 
 /**
+ * @param {StringData} query
+ * @returns {Promise<AxiosResponse<ResponseCollection<BookModel>>>  }
+ */
+export const apiGetBookListByQuery = (query) => request.get(`book/`, { params: query })
+
+/**
  * @param {number} id
  * @returns {Promise<AxiosResponse<BookModel>>  }
  */

@@ -11,7 +11,7 @@
           <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
       </div>
-      <div v-else-if="listModel.length">
+      <div v-else-if="listModel && listModel.length">
         <div v-for="model in listModel" :key="model.id" class="book__list-item">
           <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
         </div>
@@ -61,6 +61,9 @@ export default {
     fetchBookList() {
       return this.$store.dispatch(Actions.FETCH_BOOK_LIST)
     },
+    fetchBookListByQuery(query) {
+      return this.$store.dispatch(Actions.FETCH_BOOK_LIST_BY_QUERY, query)
+    },
     /**
      * @param {number} id
      * @return {VueRouteLocation}
@@ -93,10 +96,18 @@ export default {
       if (!route) return
       /** @type {number} */
       const id = route.params.id
+      /** @type {array<T>} */
+      const query = route.query
       if (id) {
         this.active = id
         this.loading = true
         this.targetModel = await this.fetchBookById(id)
+        this.loading = false
+      } else if (query.tag__name) {
+        this.active = ''
+        this.targetModel = null
+        this.loading = true
+        this.listModel = await this.fetchBookListByQuery(query)
         this.loading = false
       } else {
         this.active = ''
