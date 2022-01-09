@@ -108,3 +108,8 @@ export const apiDeleteBookMark = (id) => request.delete(`bookmark/${id}`)
  * @returns {Promise<AxiosResponse<unknown>>}
  */
 export const apiGetMenuJson = () => request.get(`test/`)
+
+/**
+ * @returns {Promise<AxiosResponse<unknown>>}
+ */
+export const apiGetNewsJson = () => request.get(`news/`)

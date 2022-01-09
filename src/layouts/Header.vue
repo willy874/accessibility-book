@@ -11,7 +11,6 @@
 </template>
 
 <script>
-// import { apiGetMenuJson } from '@/api'
 import { Actions, RouterName } from '@/consts'
 
 export default {
@@ -37,10 +36,10 @@ export default {
      * @param {string} uuid
      * @return {VueRouteLocation}
      */
-    getMenuRoute(uuid, label) {
+    getMenuRoute(uuid) {
       return {
         name: RouterName.MENULIST,
-        params: { uuid, label },
+        params: { uuid },
       }
     },
   },

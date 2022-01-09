@@ -5,6 +5,11 @@
         <h2>首頁</h2>
         <section id="news">
           <h4 class="section-title">最新消息</h4>
+          <ul>
+            <li v-for="model in listModel" :key="model">
+              <p v-html="transformMarkdownToHtml(model.content)"></p>
+            </li>
+          </ul>
         </section>
         <section id="release_list">
           <h4 class="section-title">最新上架</h4>
@@ -39,6 +44,7 @@
 </template>
 
 <script>
+import { transformMarkdownToHtml } from '@/utils'
 import { RouterName } from '@/consts'
 import Config from '@/config'
 import Chapter from './Chapter.vue'
@@ -48,6 +54,7 @@ import BookMark from './BookMark.vue'
 import Navigation from './Navigation.vue'
 import Login from './Login.vue'
 import MenuList from './MenuList.vue'
+import { apiGetNewsJson } from '@/api'
 export default {
   name: 'Home',
   components: {
@@ -63,6 +70,8 @@ export default {
     return {
       RouterName,
       route: null,
+      /** @type {NewsModel[]} */
+      listModel: null,
     }
   },
   watch: {
@@ -74,9 +83,13 @@ export default {
     this.effectComponentPage()
   },
   methods: {
+    transformMarkdownToHtml,
     async effectComponentPage() {
       /** @type {Route}**/
       this.route = Config.getRoute(this) || this.$route
+      const res = await apiGetNewsJson()
+      const { results } = res.data
+      this.listModel = results
     },
   },
 }
