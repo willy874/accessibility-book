@@ -135,3 +135,12 @@
  * @property {array<T>} child
  * @property {boolean} is_filter
  */
+
+/**
+ * @typedef {Object} NewsModel
+ * @property {number} id
+ * @property {string} content
+ * @property {string} created
+ * @property {string} name
+ * @property {string} publish_date
+ */

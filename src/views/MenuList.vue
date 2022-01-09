@@ -1,13 +1,12 @@
 <template>
   <div>
-    <h2>{{ title }}</h2>
     <template v-if="loading">
       <div>讀取中</div>
     </template>
     <template v-else>
       <div v-if="targetModel">
         <div v-for="model in targetModel" :key="model.uuid" class="menu__list-item">
-          <RouterLink :to="getBookRouteByTagName(model.taregtTag)">{{ model.label }} </RouterLink>
+          <RouterLink :to="getBookRouteByTagName(model.targetTag)">{{ model.label }} </RouterLink>
         </div>
       </div>
     </template>
@@ -37,19 +36,23 @@ export default {
     this.effectComponentPage()
   },
   methods: {
+    /**
+     * @param {array<T>} tags
+     * @returns {VueRouteLocation}
+     */
     getBookRouteByTagName(tags) {
       return {
         name: RouterName.BOOK,
-        query: { tag__name: [tags] },
+        query: { tag__name: tags },
       }
     },
     /**
      * @return {Promise<MenuListModel>}
      */
-    async fetchMenuList(id) {
+    async getMenuList(id) {
       const list = await this.$store.dispatch(Actions.FETCH_MENU_LIST)
-      const filted = await list.find((item) => item.uuid === id)
-      return filted
+      const filterModel = list.find((item) => item.uuid === id)
+      return filterModel
     },
     /**
      * @depend
@@ -61,10 +64,10 @@ export default {
       if (!route) return
       /** @type {string} */
       const id = route.params.uuid
-      this.title = route.params.label
       this.loading = true
-      this.listModel = await this.fetchMenuList(id)
-      this.targetModel = await this.listModel.child
+      this.listModel = await this.getMenuList(id)
+      this.targetModel = this.listModel.child
+      console.log(this.targetModel.targetTag)
       this.loading = false
       console.log(this.targetModel)
     },
