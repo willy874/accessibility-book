@@ -67,9 +67,7 @@ export default {
       this.loading = true
       this.listModel = await this.getMenuList(id)
       this.targetModel = this.listModel.child
-      console.log(this.targetModel.targetTag)
       this.loading = false
-      console.log(this.targetModel)
     },
   },
 }
