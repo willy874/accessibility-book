@@ -26,6 +26,10 @@ const menulist = {
   MENU_LIST: 'menuList',
 }
 
+const news = {
+  NEWS_LIST: 'newsList',
+}
+
 /**
  * @enum {string}
  */
@@ -37,4 +41,5 @@ export const Getters = {
   ...tag,
   ...history,
   ...menulist,
+  ...news,
 }

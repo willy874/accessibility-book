@@ -130,9 +130,9 @@
  * @property {number} sort
  * @property {string} uuid
  * @property {string} targetUrl
- * @property {array<T>} targetTag
+ * @property {Array<string>} targetTag
  * @property {string} type
- * @property {array<T>} child
+ * @property {Array<MenuListModel>} child
  * @property {boolean} is_filter
  */
 

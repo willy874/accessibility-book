@@ -26,6 +26,7 @@ const bookmark = {
 
 const book = {
   FETCH_BOOK_LIST: 'fetchBookList',
+  FETCH_BOOK_LIST_BY_QUERY: 'fetchBookListByQuery',
   FETCH_BOOK_BY_ID: 'fetchBookById',
 }
 
@@ -42,6 +43,10 @@ const menulist = {
   FETCH_MENU_LIST: 'fetchMenuList',
 }
 
+const news = {
+  FETCH_NEWS_LIST: 'fetchNewsList',
+}
+
 /**
  * @enum {string}
  */
@@ -55,4 +60,5 @@ export const Actions = {
   ...tag,
   ...history,
   ...menulist,
+  ...news,
 }

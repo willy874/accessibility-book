@@ -38,6 +38,10 @@ const menulist = {
   SET_MENULIST: 'setMenuList',
 }
 
+const news = {
+  SET_NEWS: 'setNews',
+}
+
 /**
  * @enum {string}
  */
@@ -51,4 +55,5 @@ export const Mutations = {
   ...tag,
   ...history,
   ...menulist,
+  ...news,
 }
