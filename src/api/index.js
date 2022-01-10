@@ -24,13 +24,22 @@ export const apiPostLineLogin = (data) => authRequest.post(`line/`, data)
 export const apiPostLineConnect = () => authRequest.post(`line/connect/`)
 
 /**
+ * @param {PasswordRegisterRequestParam} data
+ * @returns {Promise<AxiosResponse<null>>}
+ */
+export const apiPostPasswordRegister = (data) => authRequest.post(`password/change/`, data)
+
+/**
+ * @param {PasswordChangeRequestParam} data
+ * @returns {Promise<AxiosResponse<null>>}
+ */
+export const apiPostPasswordChange = (data) => authRequest.put(`password/change/`, data)
+
+/**
  * @param {RegisterRequestParam} data
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
-export const apiPostRegister = (data) =>
-  authRequest.patch(`registration/`, formDataFormat(data), {
-    headers: { ContentType: 'multipart/form-data' },
-  })
+export const apiPostRegister = (data) => authRequest.patch(`registration/`, formDataFormat(data))
 
 /**
  * @returns {Promise<AxiosResponse<null>>}
@@ -54,7 +63,7 @@ export const apiGetUserInfo = () => request.get(`user/`)
 export const apiGetBookList = () => request.get(`book/`)
 
 /**
- * @param {StringData} query
+ * @param {JsonData} query
  * @returns {Promise<AxiosResponse<ResponseCollection<BookModel>>>  }
  */
 export const apiGetBookListByQuery = (query) => request.get(`book/`, { params: query })

@@ -109,8 +109,19 @@
  * @typedef {Object} RegisterRequestParam
  * @property {string} first_name
  * @property {string} last_name
- * @property {string} email
+ * @property {string} [email]
  * @property {Blob} photo
+ */
+/**
+ * @typedef {Object} PasswordRegisterRequestParam
+ * @property {string} new_password1
+ * @property {string} new_password2
+ */
+/**
+ * @typedef {Object} PasswordChangeRequestParam
+ * @property {string} new_password1
+ * @property {string} new_password2
+ * @property {string} old_password
  */
 /**
  * @typedef {Object} BookMarkRequestParam
@@ -125,17 +136,16 @@
  * @property {number} chapter
  */
 /**
- * @typedef {Object} MenuListModel
+ * @typedef {Object} MenuModel
  * @property {string} label
  * @property {number} sort
  * @property {string} uuid
  * @property {string} targetUrl
- * @property {Array<string>} targetTag
+ * @property {string[]} targetTag
  * @property {string} type
- * @property {Array<MenuListModel>} child
+ * @property {Array<MenuModel>} [child]
  * @property {boolean} is_filter
  */
-
 /**
  * @typedef {Object} NewsModel
  * @property {number} id

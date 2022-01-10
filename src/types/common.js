@@ -8,6 +8,10 @@
  * @typedef {{ [key: string]: string}} StringData
  */
 /**
+ * @template K,T
+ * @typedef {{ [key: K]: T }} GenericsData
+ */
+/**
  * @typedef {Object} AppInfo
  * @property {boolean} isApp
  * @property {string} merchant

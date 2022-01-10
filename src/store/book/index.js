@@ -74,7 +74,7 @@ export default {
      * @name fetchBookByQuery
      * @param {ActionContext<BookState,RootState>} store
      * @param {StringData} query
-     * @returns {Promise<BookModel>}
+     * @returns {Promise<BookModel[]>}
      */
     [Actions.FETCH_BOOK_LIST_BY_QUERY]: async function (store, query) {
       const { commit } = store

@@ -2,35 +2,61 @@
   <div>
     <h2 class="form-title" title="這裡是註冊頁面">註冊</h2>
     <form @submit="submit">
-      <div>
+      <div class="form-item" :class="{ 'is-valid': isValid(errors, 'last_name') }">
+        <label>姓氏</label>
+        <input v-model="form.last_name" type="text" name="last_name" title="請輸入姓氏" placeholder="請輸入姓氏" />
+      </div>
+      <div class="form-item" :class="{ 'is-valid': isValid(errors, 'first_name') }">
+        <label>名字</label>
+        <input v-model="form.first_name" type="text" name="first_name" title="請輸入名字" placeholder="請輸入名字" />
+      </div>
+      <div class="form-item" :class="{ 'is-valid': isValid(errors, 'password1') }">
         <label>密碼</label>
         <input v-model="form.password1" type="password" name="password" title="請輸入密碼" placeholder="請輸入密碼" />
       </div>
-      <div>
+      <div class="form-item" :class="{ 'is-valid': isValid(errors, 'password_check') }">
         <label>確認密碼</label>
         <input
           v-model="form.password2"
           type="password"
-          name="password_check"
+          name="password2"
           title="請輸入確認密碼"
           placeholder="請輸入確認密碼"
         />
       </div>
-      <div>
+      <div v-if="isEmailEmpty" class="form-item" :class="{ 'is-valid': isValid(errors, 'email') }">
         <label>電子信箱</label>
-        <input v-model="form.email" type="email" name="email" title="請輸入電子信箱" placeholder="請輸入電子信箱" />
+        <input
+          v-model="form.email"
+          type="text"
+          name="email"
+          title="請輸入電子郵件信箱"
+          placeholder="請輸入郵件電子信箱"
+        />
+      </div>
+      <div v-else class="form-item readonly">
+        <label>電子信箱</label>
+        <input :value="userInfo.email" type="text" name="email" title="電子郵件信箱" readonly />
+      </div>
+      <div class="form-item" :class="{ 'is-valid': isValid(errors, 'photo') }">
+        <label>證件上傳</label>
+        <input type="file" name="photo" @change="onPhotoUpload" />
       </div>
       <div class="submit-btn-container">
         <button type="submit">送出</button>
+      </div>
+      <div v-if="preview" class="form-item">
+        <label>證件預覽</label>
+        <div class="preview"><img :src="preview" alt="證件預覽圖" /></div>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import { apiPostRegister } from '@/api'
-import { validate, ValidateType } from '@/utils'
-import { RouterName, StorageKey, Actions } from '@/consts'
+import { apiPostRegister, apiPostPasswordRegister } from '@/api'
+import { validate, isValid, flatten, HttpError, handleHttpErrorLog } from '@/utils'
+import { RouterName, StorageKey, Actions, ValidateType } from '@/consts'
 
 /**
  * @typedef {Object} RegistrationForm
@@ -38,6 +64,17 @@ import { RouterName, StorageKey, Actions } from '@/consts'
  * @property {string} last_name
  * @property {string} email
  * @property {Blob} photo
+ * @property {string} password1
+ * @property {string} password2
+ */
+/**
+ * @typedef {Object} RegistrationError
+ * @property {string[]} first_name
+ * @property {string[]} last_name
+ * @property {string[]} email
+ * @property {string[]} photo
+ * @property {string[]} password1
+ * @property {string[]} password2
  */
 export default {
   name: 'Register',
@@ -52,7 +89,14 @@ export default {
         password1: '',
         password2: '',
       },
+      /**
+       * @type {RegistrationError|{}}
+       */
       errors: {},
+      /**
+       * @type {string}
+       */
+      preview: '',
     }
   },
   computed: {
@@ -62,12 +106,21 @@ export default {
     userInfo() {
       return this.$store.state.user.info
     },
+    isEmailEmpty() {
+      return !this.userInfo.email
+    },
+    /**
+     * @return {string[]}
+     */
+    errorsToArray() {
+      return flatten(Object.values(this.errors)).filter((v) => v)
+    },
   },
   methods: {
+    isValid,
     /**
      * @param {StorageKey} key
      * @param {string} value
-     * @return {UserModel}
      */
     setStorage(key, value) {
       this.$store.dispatch(Actions.SET_STORAGE, { key, value })
@@ -81,20 +134,71 @@ export default {
     checkLoginReplace() {
       this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
     },
+    async fetchUserRegister(form) {
+      try {
+        const res = await apiPostRegister({
+          first_name: form.first_name,
+          last_name: form.last_name,
+          photo: form.photo,
+          email: !this.isEmailEmpty ? form.email : undefined,
+        })
+        console.log('apiPostRegister', res)
+        if (res.isAxiosError) {
+          throw new HttpError(res)
+        }
+        return null
+      } catch (error) {
+        return handleHttpErrorLog(error)
+      }
+    },
+    async fetchPasswordRegister(form) {
+      try {
+        const res = await apiPostPasswordRegister({
+          password1: form.password1,
+          password2: form.password2,
+        })
+        console.log('apiPostPasswordRegister', res)
+        if (res.isAxiosError) {
+          throw new HttpError(res)
+        }
+        return null
+      } catch (error) {
+        return handleHttpErrorLog(error)
+      }
+    },
     async submit(e) {
       e.preventDefault()
+      this.errors = this.validate(this.form)
+      if (this.errorsToArray.length) {
+        alert('註冊失敗！\n\n' + this.errorsToArray.toString().replace(/,/g, '，\n') + '。')
+        return
+      }
       try {
-        if (validate(this.form).label) {
-          return
+        const userRegisterError = await this.fetchUserRegister(this.form)
+        if (userRegisterError) {
+          throw userRegisterError
         }
-        const res = await apiPostRegister(this.form)
-        if (res.isAxiosError) {
-          throw new Error(res.data.detail)
-        } else {
-          this.loginHandler(res.data.key)
+        const passwordRegisterError = await this.fetchPasswordRegister(this.form)
+        if (passwordRegisterError) {
+          throw passwordRegisterError
         }
+        console.log('submit success')
+        // this.loginHandler(res.data.key)
       } catch (error) {
-        this.$router.replace({ name: RouterName.LOGIN })
+        // this.$router.replace({ name: RouterName.LOGIN })
+      }
+    },
+    onPhotoUpload(e) {
+      /** @type {HTMLInputElement}} */
+      const input = e.target
+      if (input && input.files.length) {
+        const file = Array.from(input.files)[0]
+        this.form.photo = file
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.preview = e.target.result
+        }
+        reader.readAsDataURL(file)
       }
     },
     async loginHandler(token) {
@@ -110,61 +214,76 @@ export default {
     },
     /**
      * @param {RegistrationForm} form
-     * @return {string[]}
+     * @return {RegistrationError}
      */
     validate(form) {
-      for (const key in form) {
-        this.errors[key] = []
-      }
-      if (form.email === '') {
-        this.errors.first_name.push('')
-      }
-      if (form.email === '') {
-        this.errors.last_name.push('')
-      }
-      if (!validate(ValidateType.EMAIL, form.email)) {
-        this.errors.email.push('電子郵件信箱格式不正確')
-      }
-      if (form.email === '') {
-        this.errors.email.push('電子郵件信箱不可空白')
-      }
-      if (!validate(ValidateType.PASSWORD, form.password1)) {
-        this.errors.password1.push('密碼請輸入6~30碼英數混合')
-      }
-      if (form.password1 === '') {
-        this.errors.password1.push('密碼不可空白')
-      }
-      if (form.password1 !== form.password2) {
-        this.errors.password2.push('確認密碼請與密碼相同')
-      }
-      if (!form.photo) {
-        this.errors.photo.push('請上傳盲胞證或志工證')
-      }
-    },
-    isValid(field) {
-      const fieldError = this.errors[field]
-      return fieldError.length
+      return validate(form, {
+        first_name: {
+          [ValidateType.IS_EMPTY]: { message: '請填寫名字' },
+        },
+        last_name: {
+          [ValidateType.IS_EMPTY]: { message: '請填寫姓氏' },
+        },
+        email: this.isEmailEmpty
+          ? {
+              [ValidateType.IS_EMPTY]: { message: '請填寫電子郵件信箱' },
+              [ValidateType.EMAIL]: { message: '請輸入正確的電子郵件信箱格式' },
+            }
+          : undefined,
+        photo: {
+          [ValidateType.IS_EMPTY]: { message: '請上傳盲胞證或志工證' },
+        },
+        password1: {
+          [ValidateType.IS_EMPTY]: { message: '請填寫密碼' },
+          [ValidateType.PASSWORD]: { min: 6, max: 30 },
+        },
+        password2: {
+          [ValidateType.IS_EMPTY]: { message: '請填寫確認密碼' },
+          [ValidateType.EQUAL]: { message: '請確認填寫密碼是否相等', equal: form.password1 },
+        },
+      })
     },
   },
 }
 </script>
 <style lang="scss" scoped>
-form > div {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  margin: 8px 0;
-  label {
-    flex-shrink: 0;
-    width: 120px;
-  }
-  input {
-    flex-grow: 1;
-    border: 1px solid #217842;
-    border-radius: 4px;
-    padding: 4px;
-    height: 34px;
+form {
+  .form-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    margin: 8px 0;
+    label {
+      flex-shrink: 0;
+      width: 120px;
+    }
+    input {
+      flex-grow: 1;
+      border: 1px solid #217842;
+      border-radius: 4px;
+      padding: 4px;
+      height: 34px;
+    }
+    input[type='file'] {
+      border: 0;
+    }
+    .preview {
+      img {
+        max-width: 100%;
+      }
+    }
+    &.is-valid {
+      label {
+        color: #f00;
+      }
+      input {
+        border: 1px solid #f00;
+      }
+    }
+    &.readonly input {
+      border: 1px solid transparent;
+    }
   }
 }
 .submit-btn-container {

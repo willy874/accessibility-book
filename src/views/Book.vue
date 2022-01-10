@@ -61,6 +61,10 @@ export default {
     fetchBookList() {
       return this.$store.dispatch(Actions.FETCH_BOOK_LIST)
     },
+    /**
+     * @param {JsonData} query
+     * @return {Promise<BookModel[]>}
+     */
     fetchBookListByQuery(query) {
       return this.$store.dispatch(Actions.FETCH_BOOK_LIST_BY_QUERY, query)
     },

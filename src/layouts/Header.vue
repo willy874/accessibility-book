@@ -17,7 +17,7 @@ export default {
   name: 'Header',
   data() {
     return {
-      /** @type {MenuListModel[]} */
+      /** @type {MenuModel[]} */
       listModel: null,
     }
   },
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     /**
-     * @return {Promise<MenuListModel[]>}
+     * @return {Promise<MenuModel[]>}
      */
     fetchMenuList() {
       return this.$store.dispatch(Actions.FETCH_MENU_LIST)
@@ -58,7 +58,8 @@ header {
       width: 100%;
       flex-wrap: wrap;
       li {
-        padding: 4px;
+        padding-left: 8px;
+        padding-right: 8px;
         text-align: center;
         flex-shrink: 0;
         flex-basis: 25%;
@@ -73,9 +74,8 @@ header {
         }
         a {
           display: block;
-          padding: 1rem;
-          height: 100%;
-          width: 100%;
+          padding-top: 16px;
+          padding-bottom: 16px;
         }
       }
     }

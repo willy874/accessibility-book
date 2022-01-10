@@ -3,12 +3,13 @@
     <template v-if="loading">
       <div>讀取中</div>
     </template>
-    <template v-else>
-      <div v-if="targetModel">
-        <div v-for="model in targetModel" :key="model.uuid" class="menu__list-item">
-          <RouterLink :to="getBookRouteByTagName(model.targetTag)">{{ model.label }} </RouterLink>
-        </div>
+    <template v-else-if="childListModel && childListModel.length">
+      <div v-for="model in childListModel" :key="model.uuid" class="menu__list-item">
+        <RouterLink :to="getBookRouteByTagName(model.targetTag)">{{ model.label }} </RouterLink>
       </div>
+    </template>
+    <template v-else>
+      <div>沒有資料</div>
     </template>
   </div>
 </template>
@@ -20,9 +21,8 @@ export default {
   name: 'MenuList',
   data() {
     return {
-      /** @type {MenuListModel} */
-      listModel: null,
-      targetModel: null,
+      /** @type {MenuModel} */
+      childListModel: null,
       loading: false,
       title: '',
     }
@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     /**
-     * @param {array<T>} tags
+     * @param {string[]} tags
      * @returns {VueRouteLocation}
      */
     getBookRouteByTagName(tags) {
@@ -47,16 +47,14 @@ export default {
       }
     },
     /**
-     * @return {Promise<MenuListModel>}
+     * @return {Promise<MenuModel[]>}
      */
-    async getMenuList(id) {
-      const list = await this.$store.dispatch(Actions.FETCH_MENU_LIST)
-      const filterModel = list.find((item) => item.uuid === id)
-      return filterModel
+    async getMenuList() {
+      return this.$store.dispatch(Actions.FETCH_MENU_LIST)
     },
     /**
      * @depend
-     * @param {MenuListModel} this.listModel
+     * @param {MenuModel[]} this.childListModel
      */
     async effectComponentPage() {
       /** @type {Route} */
@@ -64,10 +62,15 @@ export default {
       if (!route) return
       /** @type {string} */
       const id = route.params.uuid
-      this.loading = true
-      this.listModel = await this.getMenuList(id)
-      this.targetModel = this.listModel.child
-      this.loading = false
+      if (id) {
+        this.loading = true
+        const listModel = await this.getMenuList(id)
+        const menuModel = listModel.find((item) => item.uuid === id)
+        if (menuModel) {
+          this.childListModel = menuModel.child
+        }
+        this.loading = false
+      }
     },
   },
 }

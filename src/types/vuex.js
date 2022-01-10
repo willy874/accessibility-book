@@ -36,7 +36,7 @@
  */
 /**
  * @typedef {Object} MenuListState
- * @property {Record<number,MenuListModel>} collection
+ * @property {Record<number,MenuModel>} collection
  */
 /**
  * @typedef {Object} RootState

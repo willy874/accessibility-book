@@ -5,7 +5,7 @@ import { Getters, Mutations, Actions } from '@/consts'
 export default {
   state: {
     /**
-     * @type {Record<number,MenuListModel>}
+     * @type {Record<number,MenuModel>}
      */
     collection: {},
   },
@@ -13,7 +13,7 @@ export default {
     /**
      * @name setMenuList
      * @param {MenuListState} state
-     * @param {MenuListModel} menuList
+     * @param {MenuModel} menuList
      */
     [Mutations.SET_MENULIST]: function (state, model) {
       if (Object.hasOwnProperty.call(state.collection, model)) {
@@ -31,7 +31,7 @@ export default {
     /**
      * @name fetchMenuList
      * @param {ActionContext<MenuListState,RootState>} store
-     * @returns {Promise<MenuListModel>}
+     * @returns {Promise<MenuModel>}
      */
     [Actions.FETCH_MENU_LIST]: async function (store) {
       const { commit } = store
@@ -55,7 +55,7 @@ export default {
     /**
      * @name menuList
      * @param {MenuListState} state
-     * @returns {MenuListModel[]}
+     * @returns {MenuModel[]}
      */
     [Getters.MENU_LIST]: function (state) {
       return Object.values(state.collection)
