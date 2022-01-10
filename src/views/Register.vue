@@ -54,9 +54,9 @@
 </template>
 
 <script>
-import { apiPostRegister, apiPostPasswordRegister } from '@/api'
+import { apiPostPasswordRegister } from '@/api'
 import { validate, isValid, flatten, HttpError, handleHttpErrorLog } from '@/utils'
-import { RouterName, StorageKey, Actions, ValidateType } from '@/consts'
+import { RouterName, Actions, ValidateType } from '@/consts'
 
 /**
  * @typedef {Object} RegistrationForm
@@ -134,34 +134,34 @@ export default {
     checkLoginReplace() {
       this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
     },
-    async fetchUserRegister(form) {
-      try {
-        const res = await apiPostRegister({
-          first_name: form.first_name,
-          last_name: form.last_name,
-          photo: form.photo,
-          email: !this.isEmailEmpty ? form.email : undefined,
-        })
-        console.log('apiPostRegister', res)
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        }
-        return null
-      } catch (error) {
-        return handleHttpErrorLog(error)
+    /**
+     * @param {UserUpdateRequestParam} form
+     * @return {UserModel}
+     */
+    async updateUserInfo(form) {
+      const data = {
+        first_name: form.first_name,
+        last_name: form.last_name,
+        photo: form.photo,
+        email: !this.isEmailEmpty ? form.email : undefined,
       }
+      return this.$store.dispatch(Actions.UPDATED_USER_INFO, data)
     },
-    async fetchPasswordRegister(form) {
+    /**
+     * @param {PasswordRegisterRequestParam} form
+     * @return {{ detail: string }}
+     */
+    async createPassword(form) {
+      const data = {
+        new_password1: form.password1,
+        new_password2: form.password2,
+      }
       try {
-        const res = await apiPostPasswordRegister({
-          password1: form.password1,
-          password2: form.password2,
-        })
-        console.log('apiPostPasswordRegister', res)
+        const res = await apiPostPasswordRegister(data)
         if (res.isAxiosError) {
           throw new HttpError(res)
         }
-        return null
+        return res.data
       } catch (error) {
         return handleHttpErrorLog(error)
       }
@@ -174,18 +174,16 @@ export default {
         return
       }
       try {
-        const userRegisterError = await this.fetchUserRegister(this.form)
-        if (userRegisterError) {
-          throw userRegisterError
+        const result = await Promise.all([this.updateUserInfo(this.form), this.createPassword(this.form)])
+        const errors = result.find((r) => r instanceof HttpError)
+        if (errors) {
+          throw errors
+        } else {
+          this.loginHandler()
         }
-        const passwordRegisterError = await this.fetchPasswordRegister(this.form)
-        if (passwordRegisterError) {
-          throw passwordRegisterError
-        }
-        console.log('submit success')
-        // this.loginHandler(res.data.key)
       } catch (error) {
-        // this.$router.replace({ name: RouterName.LOGIN })
+        handleHttpErrorLog(error)
+        this.$router.replace({ name: RouterName.LOGIN })
       }
     },
     onPhotoUpload(e) {
@@ -201,9 +199,7 @@ export default {
         reader.readAsDataURL(file)
       }
     },
-    async loginHandler(token) {
-      await this.setStorage(StorageKey.TOKEN, token)
-      await this.fetchUserInfo()
+    async loginHandler() {
       if (this.userInfo) {
         if (!this.userInfo.is_authorized) {
           await this.$router.replace({ name: RouterName.NO_AUTHORIZED })

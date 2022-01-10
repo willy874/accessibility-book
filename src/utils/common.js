@@ -4,7 +4,6 @@ import debounce from 'lodash/debounce'
 export function formDataFormat(data) {
   const format = (value, keys = []) => {
     Object.keys(value).forEach((key) => {
-      console.log(value, key)
       const formName = [...keys, key].map((k, i) => (i ? `[${k}]` : k)).join('')
       if (value[key] instanceof Blob) {
         formData.append(formName, value[key], value[key].name)

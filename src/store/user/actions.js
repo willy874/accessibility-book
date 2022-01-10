@@ -1,5 +1,5 @@
 import { HttpError, handleHttpErrorLog } from '@/utils'
-import { apiGetUserInfo, apiPostLogout } from '@/api'
+import { apiGetUserInfo, apiPostLogout, apiPatchUserInfo } from '@/api'
 import { RouterName, StorageKey, Mutations, Actions } from '@/consts'
 import Config from '@/config'
 
@@ -13,6 +13,25 @@ export default {
     const { state, commit } = store
     try {
       const res = await apiGetUserInfo()
+      if (res.isAxiosError) {
+        throw new HttpError(res)
+      }
+      commit(Mutations.SET_USER_INFO, res.data)
+      return state.info
+    } catch (error) {
+      handleHttpErrorLog(error)
+    }
+  },
+  /**
+   * @name fetchUserInfo
+   * @param {ActionContext<UserState,RootState>} store
+   * @param {UserUpdateRequestParam} data
+   * @returns {Promise<UserModel>}
+   */
+  [Actions.UPDATED_USER_INFO]: async function (store, data) {
+    const { state, commit } = store
+    try {
+      const res = await apiPatchUserInfo(data)
       if (res.isAxiosError) {
         throw new HttpError(res)
       }

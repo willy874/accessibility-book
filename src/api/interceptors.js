@@ -85,7 +85,7 @@ export function getResponseError(options) {
  */
 export function getAuthRequestSuccess(options) {
   return (req) => {
-    if (req.url === 'logout/') {
+    if (req.url !== 'login/') {
       const token = localStorage.getItem(StorageKey.TOKEN)
       if (token) {
         req.headers.Authorization = Config.value.authorizationHeaderPrefix + ' ' + token

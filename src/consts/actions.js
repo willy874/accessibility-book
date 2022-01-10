@@ -9,6 +9,7 @@ const storage = {
 const user = {
   FETCH_USER_INFO: 'fetchUserInfo',
   CHECK_LOGIN_REPLACE: 'checkLoginReplace',
+  UPDATED_USER_INFO: 'updateUserInfo',
   LOGIN: 'login',
   LOGOUT: 'logout',
 }

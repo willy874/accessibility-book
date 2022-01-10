@@ -36,12 +36,6 @@ export const apiPostPasswordRegister = (data) => authRequest.post(`password/chan
 export const apiPostPasswordChange = (data) => authRequest.put(`password/change/`, data)
 
 /**
- * @param {RegisterRequestParam} data
- * @returns {Promise<AxiosResponse<LoginResponseData>>}
- */
-export const apiPostRegister = (data) => authRequest.patch(`registration/`, formDataFormat(data))
-
-/**
  * @returns {Promise<AxiosResponse<null>>}
  */
 export const apiGetSocialAccounts = () => baseRequest.get(`socialaccounts/`)
@@ -56,6 +50,12 @@ export const apiPostSocialAccountsDisconnectedById = (id) => baseRequest.post(`s
  * @returns {Promise<AxiosResponse<UserModel>>  }
  */
 export const apiGetUserInfo = () => request.get(`user/`)
+
+/**
+ * @param {UserUpdateRequestParam} data
+ * @returns {Promise<AxiosResponse<unknown>>}
+ */
+export const apiPatchUserInfo = (data) => request.patch(`user/`, formDataFormat(data))
 
 /**
  * @returns {Promise<AxiosResponse<ResponseCollection<BookModel>>>  }
