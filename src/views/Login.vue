@@ -1,62 +1,60 @@
 <template>
   <main>
-    <form class="form" title="帳號登入的表單" @submit="signIn">
+    <form class="form" title="帳號登入的表單" @submit="submit">
       <h2 class="form-title" title="這裡是登入頁面">登入</h2>
-      <div>
-        <label class="form-label" for="user-email" title="帳號信箱">帳號信箱</label>
+      <div class="form-item">
+        <label class="form-label" title="帳號信箱">帳號信箱</label>
         <input
-          id="user-email"
-          v-model="user.username"
+          v-model="form.username"
           class="form-input"
-          :class="[{ error: emailError }]"
+          :class="{ 'is-valid': isValid(errors, 'username') }"
           type="text"
           name="email"
           title="這裡輸入帳號信箱"
         />
       </div>
-      <div>
-        <label class="form-label" for="user-password" title="密碼">密碼</label>
+      <div class="form-item">
+        <label class="form-label" title="密碼">密碼</label>
         <input
-          id="user-password"
-          v-model="user.password"
+          v-model="form.password"
           class="form-input"
-          :class="[{ error: passwordError }]"
+          :class="{ 'is-valid': isValid(errors, 'password') }"
           type="password"
           name="password"
           title="這裡輸入帳號密碼"
         />
-        <div class="msg">
-          <strong v-if="passwordError" class="error-msg" title="帳號信箱或者密碼格式錯誤">
-            帳號信箱或者密碼格式錯誤
-          </strong>
-        </div>
       </div>
       <button type="submit" title="點擊登入" class="btn-submit">登入</button>
       <button type="button" title="點擊使用Line登入" class="btn-submit" @click="linkLineSignIn">Line登入</button>
-      <div class="msg">
-        <strong v-if="passwordError" class="error-msg" title="帳號密碼格式錯誤">帳號密碼格式錯誤</strong>
-      </div>
-      <div class="msg">
-        <strong v-if="noPass" class="error-msg" title="登入錯誤，請重新登入">登入錯誤，請重新登入</strong>
-      </div>
     </form>
   </main>
 </template>
 
 <script>
 import { apiPostUserLogin, apiPostLineLogin } from '@/api'
-import { HttpError, handleHttpErrorLog } from '@/utils'
+import { HttpError, handleHttpErrorLog, validate, isValid, flatten } from '@/utils'
 import Config from '@/config'
-import { RouterName, StorageKey, Actions } from '@/consts'
+import { RouterName, StorageKey, Actions, ValidateType } from '@/consts'
 
+/**
+ * @typedef {Object} LoginForm
+ * @property {string} username
+ * @property {string} password
+ */
+/**
+ * @typedef {Object} LoginError
+ * @property {string[]} username
+ * @property {string[]} password
+ */
 export default {
   name: 'Login',
   data() {
     return {
-      user: { username: 'user', password: 'zY7bSBgk' },
-      emailError: false,
-      passwordError: false,
-      noPass: false,
+      form: { username: 'user', password: 'zY7bSBgk' },
+      /**
+       * @type {LoginError}
+       */
+      errors: {},
     }
   },
   computed: {
@@ -67,6 +65,12 @@ export default {
       })
       return `https://access.line.me/oauth2/v2.1/authorize?${qs.toString()}`
     },
+    /**
+     * @return {string[]}
+     */
+    errorsToArray() {
+      return flatten(Object.values(this.errors)).filter((v) => v)
+    },
   },
   created() {
     const responseType = Config.value.lineLoginRequestParam.response_type
@@ -75,6 +79,7 @@ export default {
     }
   },
   methods: {
+    isValid,
     /**
      * @param {StorageKey} key
      * @param {string} value
@@ -92,25 +97,40 @@ export default {
     checkLoginReplace() {
       this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
     },
-    signIn(e) {
+    async submit(e) {
       e.preventDefault()
-      const user = this.user
-      const error = false
-      if (error === false) {
-        this.fetchUserApi(user)
+      this.errors = await this.validate(this.form)
+      if (this.errorsToArray.length) {
+        alert('註冊失敗！\n\n' + this.errorsToArray.toString().replace(/,/g, '，\n') + '。')
+        return
+      }
+      try {
+        const res = await this.fetchUserLogin(this.form)
+        if (res instanceof Error) {
+          throw res
+        } else {
+          this.loginHandler()
+        }
+      } catch (error) {
+        handleHttpErrorLog(error)
+        this.$router.replace({ name: RouterName.LOGIN })
       }
     },
-    async fetchUserApi(user) {
+    /**
+     * @param {LoginRequestParam} user
+     * @return {LoginResponseData}
+     */
+    async fetchUserLogin(user) {
       try {
         const res = await apiPostUserLogin(user)
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
           this.loginHandler(res.data.key)
+          return null
         }
       } catch (error) {
         handleHttpErrorLog(error)
-        this.noPass = true
       }
     },
     async fetchLineLoginApi(code) {
@@ -126,7 +146,6 @@ export default {
         }
       } catch (error) {
         handleHttpErrorLog(error)
-        this.noPass = true
       }
     },
     /**
@@ -147,6 +166,20 @@ export default {
         this.checkLoginReplace()
       }
     },
+    /**
+     * @param {LoginForm} form
+     * @return {LoginError}
+     */
+    async validate(form) {
+      return await validate(form, {
+        username: {
+          [ValidateType.IS_EMPTY]: { message: '請填寫帳號' },
+        },
+        password: {
+          [ValidateType.IS_EMPTY]: { message: '請填寫密碼' },
+        },
+      })
+    },
     linkLineSignIn() {
       location.href = this.lineUrl
     },
@@ -156,23 +189,23 @@ export default {
 <style lang="scss">
 .form {
   max-width: $xs;
-  margin: 2rem auto;
+  margin: 32px auto;
   display: flex;
   flex-direction: column;
   padding: 10px 15px;
   border: 1px solid #217842;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   background-color: #e0fff3;
-  gap: 1rem;
 }
-
-.form-input,
-.btn-submit {
-  font-size: 2rem;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  outline-color: #217842;
-  border: 1px solid #217842;
+.form-item {
+  margin: 8px 0;
+  input {
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 16px;
+    outline-color: #217842;
+    border: 1px solid #217842;
+  }
 }
 
 .form-input {
@@ -180,11 +213,16 @@ export default {
 }
 
 .form-label {
-  font-size: 1.5rem;
+  font-size: 24px;
 }
 
 .btn-submit {
-  margin: 2rem 0;
+  margin: 8px 0;
+  font-size: 16px;
+  border-radius: 8px;
+  padding: 16px;
+  outline-color: #217842;
+  border: 1px solid #217842;
   background-color: #217842;
   color: #e0fff3;
   &:hover {
@@ -193,13 +231,13 @@ export default {
 }
 
 .msg {
-  padding-top: 0.5rem;
-  height: 1rem;
+  padding-top: 8px;
+  height: 16px;
 }
 
 .error-msg {
   color: red;
-  font-size: 1.2rem;
+  font-size: 18px;
 }
 
 .form-title {

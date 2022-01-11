@@ -1,5 +1,5 @@
 /**
- * @typedef {'is_empty' | 'password' | 'email' | 'equal'} ValidateEnum
+ * @typedef {'is_empty' | 'password' | 'email' | 'equal'} ValidateTypeEnum
  */
 /**
  * @typedef {'token' | 'replaceRoute'} StorageKeyEnum

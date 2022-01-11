@@ -2,32 +2,56 @@
   <div>
     <h2 class="form-title" title="這裡是註冊頁面">註冊</h2>
     <form @submit="submit">
-      <div class="form-item" :class="{ 'is-valid': isValid(errors, 'last_name') }">
+      <div class="form-item">
         <label>姓氏</label>
-        <input v-model="form.last_name" type="text" name="last_name" title="請輸入姓氏" placeholder="請輸入姓氏" />
+        <input
+          v-model="form.last_name"
+          :class="{ 'is-valid': isValid(errors, 'last_name') }"
+          type="text"
+          name="last_name"
+          title="請輸入姓氏"
+          placeholder="請輸入姓氏"
+        />
       </div>
-      <div class="form-item" :class="{ 'is-valid': isValid(errors, 'first_name') }">
+      <div class="form-item">
         <label>名字</label>
-        <input v-model="form.first_name" type="text" name="first_name" title="請輸入名字" placeholder="請輸入名字" />
+        <input
+          v-model="form.first_name"
+          :class="{ 'is-valid': isValid(errors, 'first_name') }"
+          type="text"
+          name="first_name"
+          title="請輸入名字"
+          placeholder="請輸入名字"
+        />
       </div>
-      <div class="form-item" :class="{ 'is-valid': isValid(errors, 'password1') }">
+      <div class="form-item">
         <label>密碼</label>
-        <input v-model="form.password1" type="password" name="password" title="請輸入密碼" placeholder="請輸入密碼" />
+        <input
+          v-model="form.password1"
+          :class="{ 'is-valid': isValid(errors, 'password1') }"
+          type="password"
+          name="password"
+          title="請輸入密碼"
+          placeholder="請輸入密碼"
+        />
       </div>
-      <div class="form-item" :class="{ 'is-valid': isValid(errors, 'password_check') }">
+      <div class="form-item">
         <label>確認密碼</label>
         <input
           v-model="form.password2"
+          :class="{ 'is-valid': isValid(errors, 'password2') }"
           type="password"
-          name="password2"
+          name="password_check"
           title="請輸入確認密碼"
           placeholder="請輸入確認密碼"
         />
       </div>
-      <div v-if="isEmailEmpty" class="form-item" :class="{ 'is-valid': isValid(errors, 'email') }">
+      <div v-if="isEmailEmpty" class="form-item">
         <label>電子信箱</label>
         <input
           v-model="form.email"
+          class="form-item"
+          :class="{ 'is-valid': isValid(errors, 'email') }"
           type="text"
           name="email"
           title="請輸入電子郵件信箱"
@@ -38,9 +62,9 @@
         <label>電子信箱</label>
         <input :value="userInfo.email" type="text" name="email" title="電子郵件信箱" readonly />
       </div>
-      <div class="form-item" :class="{ 'is-valid': isValid(errors, 'photo') }">
+      <div class="form-item">
         <label>證件上傳</label>
-        <input type="file" name="photo" @change="onPhotoUpload" />
+        <input type="file" :class="{ 'is-valid': isValid(errors, 'photo') }" name="photo" @change="onPhotoUpload" />
       </div>
       <div class="submit-btn-container">
         <button type="submit">送出</button>
@@ -107,7 +131,7 @@ export default {
       return this.$store.state.user.info
     },
     isEmailEmpty() {
-      return !this.userInfo.email
+      return !this.userInfo?.email
     },
     /**
      * @return {string[]}
@@ -168,7 +192,7 @@ export default {
     },
     async submit(e) {
       e.preventDefault()
-      this.errors = this.validate(this.form)
+      this.errors = await this.validate(this.form)
       if (this.errorsToArray.length) {
         alert('註冊失敗！\n\n' + this.errorsToArray.toString().replace(/,/g, '，\n') + '。')
         return
@@ -212,8 +236,8 @@ export default {
      * @param {RegistrationForm} form
      * @return {RegistrationError}
      */
-    validate(form) {
-      return validate(form, {
+    async validate(form) {
+      return await validate(form, {
         first_name: {
           [ValidateType.IS_EMPTY]: { message: '請填寫名字' },
         },
@@ -228,6 +252,14 @@ export default {
           : undefined,
         photo: {
           [ValidateType.IS_EMPTY]: { message: '請上傳盲胞證或志工證' },
+          [ValidateType.IMAGE]: {
+            size: '2MB',
+            type: 'jpg,jpeg,png',
+            messageOption: {
+              size: '檔案大小上限不可超過 2MB',
+              type: '檔案類型僅允許 jpg、png',
+            },
+          },
         },
         password1: {
           [ValidateType.IS_EMPTY]: { message: '請填寫密碼' },
@@ -256,7 +288,6 @@ form {
     }
     input {
       flex-grow: 1;
-      border: 1px solid #217842;
       border-radius: 4px;
       padding: 4px;
       height: 34px;
@@ -267,14 +298,6 @@ form {
     .preview {
       img {
         max-width: 100%;
-      }
-    }
-    &.is-valid {
-      label {
-        color: #f00;
-      }
-      input {
-        border: 1px solid #f00;
       }
     }
     &.readonly input {

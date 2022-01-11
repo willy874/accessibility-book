@@ -24,7 +24,7 @@ export function isArrayEmpty(value) {
  * @returns {value is Object}
  */
 export function isObjectEmpty(value) {
-  return value && value.constructor === Object && JSON.stringify(value) === '{}'
+  return typeof value === 'object' && value && value.constructor === Object && JSON.stringify(value) === '{}'
 }
 
 /**
@@ -44,7 +44,7 @@ export function isEmpty(value) {
   if (value === undefined) result = true
   if (value === null) result = true
   if (typeof value === 'number' && isNaN(value)) result = true
-  if (value === '') result = true
+  if (typeof value === 'string' && /^\s*$/.test(value)) result = true
   if (isArrayEmpty(value)) result = true
   if (isObjectEmpty(value)) result = true
   if (isBlobEmpty(value)) result = true
