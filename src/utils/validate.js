@@ -121,13 +121,17 @@ const validateHandler = {
       if (option.type) {
         const allowedTypes = typeof option.type === 'string' ? option.type.split(',') : Array.from(option.type)
         const types = allowedTypes.map((v) => String(v).toLocaleLowerCase())
+        let isAllowed = false
         for (let index = 0; index < types.length; index++) {
           const type = types[index]
           const reg = new RegExp(type)
           if (reg.test(value.type.toLocaleLowerCase())) {
-            errors.push(messageData.type || messageData.default || '檔案類型錯誤')
+            isAllowed = true
             break
           }
+        }
+        if (!isAllowed) {
+          errors.push(messageData.type || messageData.default || '檔案類型錯誤')
         }
       }
     } else {

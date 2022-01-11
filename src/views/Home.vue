@@ -23,26 +23,38 @@
           <h4 class="section-title">推薦書單</h4>
         </section>
       </div>
-      <div v-if="route.name === RouterName.CHAPTER">
-        <Chapter />
-      </div>
-      <div v-if="route.name === RouterName.TAG">
-        <Tag />
-      </div>
       <div v-if="route.name === RouterName.BOOK">
         <Book />
       </div>
       <div v-if="route.name === RouterName.BOOK_MARK">
         <BookMark />
       </div>
-      <div v-if="route.name === RouterName.NAVIGATION">
-        <Navigation />
+      <div v-if="route.name === RouterName.CHAPTER">
+        <Chapter />
+      </div>
+      <div v-if="route.name === RouterName.HISTORY">
+        <History />
       </div>
       <div v-if="route.name === RouterName.LOGIN">
         <Login />
       </div>
       <div v-if="route.name === RouterName.MENULIST">
         <MenuList />
+      </div>
+      <div v-if="route.name === RouterName.NAVIGATION">
+        <Navigation />
+      </div>
+      <div v-if="route.name === RouterName.NO_AUTHORIZED">
+        <NoAuthorized />
+      </div>
+      <div v-if="route.name === RouterName.REGISTER">
+        <Register />
+      </div>
+      <div v-if="route.name === RouterName.TAG">
+        <Tag />
+      </div>
+      <div v-if="route.name === RouterName.USER">
+        <User />
       </div>
     </template>
   </div>
@@ -51,25 +63,33 @@
 <script>
 import { RouterName, Actions } from '@/consts'
 import Config from '@/config'
-import Chapter from './Chapter.vue'
-import Tag from './Tag.vue'
 import Book from './Book.vue'
 import BookMark from './BookMark.vue'
-import Navigation from './Navigation.vue'
+import Chapter from './Chapter.vue'
+import History from './History.vue'
 import Login from './Login.vue'
 import MenuList from './MenuList.vue'
+import Navigation from './Navigation.vue'
+import NoAuthorized from './NoAuthorized.vue'
+import Register from './Register.vue'
+import Tag from './Tag.vue'
+import User from './User.vue'
 import dayjs from 'dayjs'
 
 export default {
   name: 'Home',
   components: {
-    Chapter,
-    Tag,
     Book,
     BookMark,
-    Navigation,
+    Chapter,
+    History,
     Login,
     MenuList,
+    Navigation,
+    NoAuthorized,
+    Register,
+    Tag,
+    User,
   },
   data() {
     return {
