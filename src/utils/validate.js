@@ -1,3 +1,4 @@
+import { flatten } from './array'
 import { isEmpty } from './condition'
 import { handleWarningLog } from './error'
 import { blobToBase64, urlToImageElement, transformFileSize } from './image'
@@ -190,10 +191,21 @@ export async function validate(form, options) {
 
 /**
  * @param {ErrorResult} errors
+ * @return {string[]}
+ */
+export function errorsToArray(errors) {
+  return flatten(Object.values(errors)).filter((v) => v)
+}
+
+/**
+ * @param {ErrorResult} errors
  * @param {string} field
- * @return {string|null}
+ * @return {boolean}
  */
 export function isValid(errors, field) {
-  const fieldError = errors[field]
-  return fieldError ? fieldError[0] : null
+  if (field) {
+    const fieldError = errors[field]
+    return Boolean(fieldError ? fieldError[0] : null)
+  }
+  return Boolean(errorsToArray(errors).length)
 }

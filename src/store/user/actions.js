@@ -1,5 +1,5 @@
 import { HttpError, handleHttpErrorLog } from '@/utils'
-import { apiGetUserInfo, apiPostLogout, apiPatchUserInfo } from '@/api'
+import { apiGetUserInfo, apiPatchUserInfo, apiPostUserLogin, apiPostLogout } from '@/api'
 import { RouterName, StorageKey, Mutations, Actions } from '@/consts'
 import Config from '@/config'
 
@@ -78,6 +78,26 @@ export default {
       }
     } catch (error) {
       return false
+    }
+  },
+  /**
+   * @name login
+   * @param {ActionContext<UserState,RootState>} store
+   * @param {LoginRequestParam} data
+   * @returns {Promise<LoginResponseData>}
+   */
+  [Actions.LOGIN]: async function (store, data) {
+    const { dispatch } = store
+    try {
+      const res = await apiPostUserLogin(data)
+      if (res.isAxiosError) {
+        throw new HttpError(res)
+      }
+      const token = res.data.key
+      await dispatch(Actions.SET_STORAGE, { key: StorageKey.TOKEN, value: token })
+      return token
+    } catch (error) {
+      handleHttpErrorLog(error)
     }
   },
   /**

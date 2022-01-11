@@ -79,7 +79,7 @@
 
 <script>
 import { apiPostPasswordRegister } from '@/api'
-import { validate, isValid, flatten, HttpError, handleHttpErrorLog } from '@/utils'
+import { validate, isValid, errorsToArray, flatten, HttpError, handleHttpErrorLog, blobToBase64 } from '@/utils'
 import { RouterName, Actions, ValidateType } from '@/consts'
 
 /**
@@ -193,8 +193,8 @@ export default {
     async submit(e) {
       e.preventDefault()
       this.errors = await this.validate(this.form)
-      if (this.errorsToArray.length) {
-        alert('註冊失敗！\n\n' + this.errorsToArray.toString().replace(/,/g, '，\n') + '。')
+      if (isValid(this.errors)) {
+        alert('註冊失敗！\n\n' + errorsToArray(this.errors).toString().replace(/,/g, '，\n') + '。')
         return
       }
       try {
@@ -210,17 +210,13 @@ export default {
         this.$router.replace({ name: RouterName.LOGIN })
       }
     },
-    onPhotoUpload(e) {
+    async onPhotoUpload(e) {
       /** @type {HTMLInputElement}} */
       const input = e.target
       if (input && input.files.length) {
         const file = Array.from(input.files)[0]
         this.form.photo = file
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.preview = e.target.result
-        }
-        reader.readAsDataURL(file)
+        this.preview = await blobToBase64(file)
       }
     },
     async loginHandler() {

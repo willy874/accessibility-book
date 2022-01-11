@@ -25,14 +25,14 @@
         />
       </div>
       <button type="submit" title="點擊登入" class="btn-submit">登入</button>
-      <button type="button" title="點擊使用Line登入" class="btn-submit" @click="linkLineSignIn">Line登入</button>
+      <a title="點擊使用Line登入" class="btn-submit" :href="lineUrl">Line登入</a>
     </form>
   </main>
 </template>
 
 <script>
-import { apiPostUserLogin, apiPostLineLogin } from '@/api'
-import { HttpError, handleHttpErrorLog, validate, isValid, flatten } from '@/utils'
+import { apiPostLineLogin } from '@/api'
+import { HttpError, handleHttpErrorLog, validate, isValid, errorsToArray } from '@/utils'
 import Config from '@/config'
 import { RouterName, StorageKey, Actions, ValidateType } from '@/consts'
 
@@ -65,17 +65,11 @@ export default {
       })
       return `https://access.line.me/oauth2/v2.1/authorize?${qs.toString()}`
     },
-    /**
-     * @return {string[]}
-     */
-    errorsToArray() {
-      return flatten(Object.values(this.errors)).filter((v) => v)
-    },
   },
   created() {
     const responseType = Config.value.lineLoginRequestParam.response_type
     if (this.$route.query[responseType]) {
-      this.fetchLineLoginApi(this.$route.query[responseType])
+      this.fetchLineLogin(this.$route.query[responseType])
     }
   },
   methods: {
@@ -94,46 +88,35 @@ export default {
     fetchUserInfo() {
       return this.$store.dispatch(Actions.FETCH_USER_INFO)
     },
+    /**
+     * @param {LoginRequestParam}
+     * @return {string}}
+     */
+    async login(form) {
+      return await this.$store.dispatch(Actions.LOGIN, form)
+    },
     checkLoginReplace() {
       this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
     },
     async submit(e) {
       e.preventDefault()
       this.errors = await this.validate(this.form)
-      if (this.errorsToArray.length) {
-        alert('註冊失敗！\n\n' + this.errorsToArray.toString().replace(/,/g, '，\n') + '。')
+      if (isValid(this.errors)) {
+        alert('註冊失敗！\n\n' + errorsToArray(this.errors).toString().replace(/,/g, '，\n') + '。')
         return
       }
       try {
-        const res = await this.fetchUserLogin(this.form)
-        if (res instanceof Error) {
-          throw res
-        } else {
-          this.loginHandler()
-        }
+        await this.login(this.form)
+        this.loginHandler()
       } catch (error) {
         handleHttpErrorLog(error)
         this.$router.replace({ name: RouterName.LOGIN })
       }
     },
     /**
-     * @param {LoginRequestParam} user
-     * @return {LoginResponseData}
+     * @param {string} form
      */
-    async fetchUserLogin(user) {
-      try {
-        const res = await apiPostUserLogin(user)
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        } else {
-          this.loginHandler(res.data.key)
-          return null
-        }
-      } catch (error) {
-        handleHttpErrorLog(error)
-      }
-    },
-    async fetchLineLoginApi(code) {
+    async fetchLineLogin(code) {
       try {
         const res = await apiPostLineLogin({
           code,
@@ -142,17 +125,15 @@ export default {
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
-          this.loginHandler(res.data.key)
+          const token = res.data.key
+          await this.setStorage(StorageKey.TOKEN, token)
+          this.loginHandler()
         }
       } catch (error) {
         handleHttpErrorLog(error)
       }
     },
-    /**
-     * @param {string} token
-     */
-    async loginHandler(token) {
-      this.setStorage(StorageKey.TOKEN, token)
+    async loginHandler() {
       const userInfo = await this.fetchUserInfo()
       if (userInfo) {
         if (!userInfo.is_password_set) {
@@ -179,9 +160,6 @@ export default {
           [ValidateType.IS_EMPTY]: { message: '請填寫密碼' },
         },
       })
-    },
-    linkLineSignIn() {
-      location.href = this.lineUrl
     },
   },
 }
@@ -225,6 +203,7 @@ export default {
   border: 1px solid #217842;
   background-color: #217842;
   color: #e0fff3;
+  text-align: center;
   &:hover {
     background-color: #1a5f34;
   }

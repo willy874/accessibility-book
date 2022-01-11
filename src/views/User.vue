@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="signout-button" type="button" @click="signOut">登出</button>
+    <button class="logout-button" type="button" @click="signOut">登出</button>
   </div>
 </template>
 
@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.signout-button {
+.logout-button {
   padding: 1rem;
   background: gray;
   color: white;

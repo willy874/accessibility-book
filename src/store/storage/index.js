@@ -75,7 +75,7 @@ export default {
       }
     },
     /**
-     * @name setStorage
+     * @name removeStorage
      * @param {ActionContext<StorageState,RootState>} store
      * @param {string} key
      */
