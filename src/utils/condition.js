@@ -37,16 +37,30 @@ export function isBlobEmpty(value) {
 
 /**
  * @param {unknown} value
+ * @returns {value is string}
+ */
+export function isStringEmpty(value) {
+  return typeof value === 'string' && /^\s*$/.test(value)
+}
+
+/**
+ * @param {unknown} value
+ * @returns {value is number}
+ */
+export function isNumberEmpty(value) {
+  return typeof value === 'number' && isNaN(value)
+}
+
+/**
+ * @param {unknown} value
  * @returns {boolean}
  */
 export function isEmpty(value) {
-  let result
-  if (value === undefined) result = true
-  if (value === null) result = true
-  if (typeof value === 'number' && isNaN(value)) result = true
-  if (typeof value === 'string' && /^\s*$/.test(value)) result = true
-  if (isArrayEmpty(value)) result = true
-  if (isObjectEmpty(value)) result = true
-  if (isBlobEmpty(value)) result = true
-  return result
+  if (value === undefined) return true
+  if (value === null) return true
+  if (isNumberEmpty(value)) return true
+  if (isStringEmpty(value)) return true
+  if (isArrayEmpty(value)) return true
+  if (isObjectEmpty(value)) return true
+  if (isBlobEmpty(value)) return true
 }
