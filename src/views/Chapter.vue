@@ -51,14 +51,6 @@ export default {
       return this.bookmarkList.some((item) => item.chapter === this.active)
     },
   },
-  watch: {
-    $route() {
-      this.effectComponentPage()
-    },
-  },
-  async created() {
-    this.effectComponentPage()
-  },
   methods: {
     transformMarkdownToHtml,
     /**

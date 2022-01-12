@@ -1,20 +1,8 @@
 <template>
   <nav>
     <ul>
-      <li>
-        <RouterLink :to="{ name: RouterName.HOME }">首頁</RouterLink>
-      </li>
-      <li>
-        <RouterLink :to="{ name: RouterName.BOOK }">書籍</RouterLink>
-      </li>
-      <li>
-        <RouterLink :to="{ name: RouterName.TAG }">標籤</RouterLink>
-      </li>
-      <li>
-        <RouterLink :to="{ name: RouterName.BOOK_MARK }">書籤</RouterLink>
-      </li>
-      <li>
-        <RouterLink :to="{ name: RouterName.HISTORY }">歷史觀看列表</RouterLink>
+      <li v-for="(nav, name) in navigation" :key="name">
+        <RouterLink :to="{ name }">{{ nav.title }}</RouterLink>
       </li>
     </ul>
   </nav>
@@ -26,7 +14,23 @@ export default {
   name: 'Navigation',
   data() {
     return {
-      RouterName,
+      navigation: {
+        [RouterName.HOME]: {
+          title: '首頁',
+        },
+        [RouterName.BOOK]: {
+          title: '書籍',
+        },
+        [RouterName.TAG]: {
+          title: '標籤',
+        },
+        [RouterName.BOOK_MARK]: {
+          title: '書籤',
+        },
+        [RouterName.HISTORY]: {
+          title: '歷史紀錄',
+        },
+      },
     }
   },
 }

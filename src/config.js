@@ -3,11 +3,9 @@ import { isApp } from '@/utils'
 
 const base = 'https://api.pastwind.org'
 
-/**
- * @property {string[]} loginRoutes
- */
 const config = {
   env: process.env,
+  package: JSON.parse(process.env.VUE_APP_PACKAGE),
   lineLoginRequestParam: {
     response_type: 'code',
     client_id: '1656649897',
@@ -16,7 +14,6 @@ const config = {
     redirect_uri: location.origin + '/login',
   },
   isApp: isApp(),
-  version: '0.0.1',
   liffId: '1656538444-L3wP67PM',
   liff: location.host === 'tpwlweb.3anology.info',
   authorizationHeaderPrefix: 'Token',
@@ -51,6 +48,10 @@ class VueConfig {
     return app
   }
 
+  /**
+   * @param {Vue} vm
+   * @returns {Route}
+   */
   static getRoute(vm) {
     const instance = vm || app
     const LiifQuery = instance?.$route?.query?.['liff.state']

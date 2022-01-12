@@ -43,4 +43,10 @@
  * @property {boolean} init
  * @property {UserState} user
  * @property {StorageState} storage
+ * @property {ChapterState} chapter
+ * @property {BookMarkState} bookmark
+ * @property {BookState} book
+ * @property {TagState} tag
+ * @property {HistoryState} history
+ * @property {MenuState} menu
  */

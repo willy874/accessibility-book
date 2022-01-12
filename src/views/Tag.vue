@@ -37,14 +37,6 @@ export default {
       loading: false,
     }
   },
-  watch: {
-    $route() {
-      this.effectComponentPage()
-    },
-  },
-  async created() {
-    this.effectComponentPage()
-  },
   methods: {
     /**
      * @return {Promise<TagModel[]>}

@@ -1,5 +1,5 @@
 /**
- * @enum {string}
+ * @enum {LifecycleHookEnum}
  */
 export const LifecycleHook = {
   CREATED: 'created',
@@ -11,4 +11,5 @@ export const LifecycleHook = {
   DEACTIVATED: 'deactivated',
   BEFORE_DESTROY: 'beforeDestroy',
   DESTROYED: 'destroyed',
+  WATCH_ROUTE: 'watchRoute',
 }

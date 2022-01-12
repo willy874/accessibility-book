@@ -27,15 +27,9 @@ export default {
   },
   data() {
     return {
-      route: null,
       path: '',
       href: '',
     }
-  },
-  computed: {
-    isShow() {
-      return !Config.value.loginRoutes.includes(this.route.name)
-    },
   },
   watch: {
     $route() {
@@ -47,15 +41,17 @@ export default {
     if (Config.value.liff || isLiff) {
       await liff.init({ liffId: Config.value.liffId })
     }
-    if (await this.$store.dispatch(Actions.GET_STORAGE, StorageKey.TOKEN)) {
+    if (await this.getStorage(StorageKey.TOKEN)) {
       await this.$store.dispatch(Actions.FETCH_USER_INFO)
     }
     this.changeRoute()
   },
   methods: {
-    async changeRoute() {
-      this.route = Config.getRoute(this)
-      console.log('onRouteChange', this.route)
+    /**
+     * @return {Promise<Route>}
+     */
+    changeRoute() {
+      return this.$store.dispatch(Actions.ROUTE_CHANGE, this)
     },
   },
 }

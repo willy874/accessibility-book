@@ -38,14 +38,6 @@ export default {
       return this.$store.getters[Getters.BOOKMARK_LIST]
     },
   },
-  watch: {
-    $route() {
-      this.effectComponentPage()
-    },
-  },
-  async created() {
-    this.effectComponentPage()
-  },
   methods: {
     /**
      * @param {number} id

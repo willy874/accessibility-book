@@ -1,4 +1,8 @@
 const path = require('path')
+const fs = require('fs')
+const packagePath = path.join(process.cwd(), 'package.json')
+const packageJson = fs.readFileSync(packagePath).toString()
+process.env.VUE_APP_PACKAGE = packageJson
 
 module.exports = {
   productionSourceMap: false,

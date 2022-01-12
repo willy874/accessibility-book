@@ -4,7 +4,7 @@
       <div>讀取中</div>
     </template>
     <template v-else-if="childListModel && childListModel.length">
-      <div v-for="model in childListModel" :key="model.uuid" class="menu__list-item">
+      <div v-for="model in childListModel" :key="model.id" class="menu__list-item">
         <RouterLink :to="getBookRouteByTagName(model.targetTag)">{{ model.label }} </RouterLink>
       </div>
     </template>
@@ -26,14 +26,6 @@ export default {
       loading: false,
       title: '',
     }
-  },
-  watch: {
-    $route() {
-      this.effectComponentPage()
-    },
-  },
-  async created() {
-    this.effectComponentPage()
   },
   methods: {
     /**
@@ -61,11 +53,11 @@ export default {
       const route = Config.getRoute(this)
       if (!route) return
       /** @type {string} */
-      const id = route.params.uuid
+      const id = route.params.id
       if (id) {
         this.loading = true
         const listModel = await this.getMenuList(id)
-        const menuModel = listModel.find((item) => item.uuid === id)
+        const menuModel = listModel.find((item) => item.id === id)
         if (menuModel) {
           this.childListModel = menuModel.child
         }

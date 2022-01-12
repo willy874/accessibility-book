@@ -76,14 +76,6 @@ export default {
   methods: {
     isValid,
     /**
-     * @param {StorageKey} key
-     * @param {string} value
-     * @return {UserModel}
-     */
-    setStorage(key, value) {
-      this.$store.dispatch(Actions.SET_STORAGE, { key, value })
-    },
-    /**
      * @return {UserModel}
      */
     fetchUserInfo() {

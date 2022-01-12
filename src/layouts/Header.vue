@@ -3,7 +3,7 @@
     <nav>
       <ul>
         <li v-for="model in listModel" :key="model.uuid">
-          <RouterLink :to="getMenuRoute(model.uuid, model.label)">{{ model.label }}</RouterLink>
+          <RouterLink :to="getMenuRoute(model.uuid)">{{ model.label }}</RouterLink>
         </li>
       </ul>
     </nav>
@@ -32,13 +32,13 @@ export default {
       return this.$store.dispatch(Actions.FETCH_MENU_LIST)
     },
     /**
-     * @param {string} uuid
+     * @param {string} id
      * @return {VueRouteLocation}
      */
-    getMenuRoute(uuid) {
+    getMenuRoute(id) {
       return {
         name: RouterName.MENU,
-        params: { uuid },
+        params: { id },
       }
     },
   },
@@ -60,22 +60,28 @@ header {
       li {
         padding-left: 8px;
         padding-right: 8px;
-        text-align: center;
         flex-shrink: 0;
         flex-basis: 25%;
         display: flex;
         align-items: center;
-        justify-content: center;
         color: black;
-        &:hover {
-          cursor: pointer;
-          background: #42b983;
-          color: white;
-        }
         a {
           display: block;
+          width: 100%;
           padding-top: 16px;
           padding-bottom: 16px;
+          text-align: center;
+          &.router-link-active {
+            cursor: auto;
+            background: #42b983;
+            color: white;
+          }
+          &:hover {
+            cursor: pointer;
+            background: #42b983;
+            color: white;
+            opacity: 0.8;
+          }
         }
       }
     }

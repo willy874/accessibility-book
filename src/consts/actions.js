@@ -1,10 +1,12 @@
 /**
  * @typedef {import('@/store')}
  */
-const root = {}
+const root = {
+  ROUTE_CHANGE: 'routeChange',
+}
 
 /**
- * @typedef {import('@/store/storage')}
+ * @typedef {import('@/store/storage').actions}
  */
 const storage = {
   SET_STORAGE: 'setStorage',

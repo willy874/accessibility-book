@@ -11,6 +11,7 @@ import History from '../views/History.vue'
 import Navigation from '../views/Navigation.vue'
 import Menu from '../views/Menu.vue'
 import User from '../views/User.vue'
+import NEWS from '../views/News.vue'
 
 export default [
   {
@@ -79,8 +80,18 @@ export default [
     component: History,
   },
   {
-    path: '/menu/:uuid',
+    path: '/menu/:id',
     name: RouterName.MENU,
     component: Menu,
+  },
+  {
+    path: '/news',
+    name: RouterName.NEWS,
+    component: NEWS,
+  },
+  {
+    path: '/news/:id',
+    name: RouterName.NEWS_DETAIL,
+    component: NEWS,
   },
 ]

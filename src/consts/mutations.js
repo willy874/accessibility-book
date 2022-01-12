@@ -3,10 +3,11 @@
  */
 const root = {
   SET_INIT: 'setInit',
+  SET_ROUTE: 'setRoute',
 }
 
 /**
- * @typedef {import('@/store/storage')}
+ * @typedef {import('@/store/storage').mutations}
  */
 const storage = {
   CREATE_STORAGE: 'createStorage',

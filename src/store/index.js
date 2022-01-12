@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { Getters, Mutations } from '@/consts'
-import user from './user/index'
-import storage from './storage/index'
+import Config from '@/config'
+import { Getters, Mutations, Actions } from '@/consts'
+import * as user from './user/index'
+import * as storage from './storage/index'
 import chapter from './chapter/index'
 import bookmark from './bookmark/index'
 import book from './book/index'
@@ -17,18 +18,38 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
     init: false,
+    route: null,
   },
   mutations: {
     /**
      * @param {RootState} state
      * @param {boolean} bool
-     * @returns {boolean}
      */
     [Mutations.SET_INIT]: function (state, bool) {
       state.init = bool
     },
+    /**
+     * @param {RootState} state
+     * @param {Route} route
+     */
+    [Mutations.SET_ROUTE]: function (state, route) {
+      state.route = route
+    },
   },
-  actions: {},
+  actions: {
+    /**
+     * @name fetchUserInfo
+     * @param {Store<RootState>} store
+     * @param {Vue>} vm
+     * @returns {Promise<void>}
+     */
+    [Actions.ROUTE_CHANGE]: async function (store, vm) {
+      const { commit } = store
+      const route = Config.getRoute(vm)
+      commit(Mutations.SET_ROUTE, route)
+      return route
+    },
+  },
   getters: {
     /**
      * @param {RootState} state
