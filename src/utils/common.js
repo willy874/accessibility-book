@@ -22,4 +22,19 @@ export function formDataFormat(data) {
   return formData
 }
 
+export function formUrlEncodedFormat(data) {
+  const queryParams = new URLSearchParams()
+  for (const key in data) {
+    const value = data[key]
+    if (Array.isArray(value)) {
+      value.forEach((v) => queryParams.append(key, v))
+    } else if (typeof value === 'object') {
+      queryParams.append(key, JSON.stringify(value))
+    } else {
+      queryParams.append(key, value)
+    }
+  }
+  return queryParams
+}
+
 export { throttle, debounce }

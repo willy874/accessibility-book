@@ -1,5 +1,5 @@
 import { request, authRequest, baseRequest } from './request'
-import { formDataFormat } from '@/utils'
+import { formDataFormat, formUrlEncodedFormat } from '@/utils'
 
 /**
  * @param {LoginRequestParam} data
@@ -66,7 +66,7 @@ export const apiGetBookList = () => request.get(`book/`)
  * @param {JsonData} query
  * @returns {Promise<AxiosResponse<ResponseCollection<BookModel>>>  }
  */
-export const apiGetBookListByQuery = (query) => request.get(`book/`, { params: query })
+export const apiGetBookListByQuery = (query) => request.get(`book/`, { params: formUrlEncodedFormat(query) })
 
 /**
  * @param {number} id
