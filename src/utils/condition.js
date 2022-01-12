@@ -64,3 +64,39 @@ export function isEmpty(value) {
   if (isObjectEmpty(value)) return true
   if (isBlobEmpty(value)) return true
 }
+
+/**
+ * @param {Array<string|RegExp>} data
+ * @param {string} text
+ * @returns {boolean}
+ */
+export function isTextIncludes(data, text) {
+  for (let index = 0; index < data.length; index++) {
+    const value = data[index]
+    if (value instanceof RegExp) {
+      if (value.test(text)) return true
+    } else {
+      const reg = new RegExp(String(value))
+      if (reg.test(text)) return true
+    }
+  }
+  return false
+}
+
+/**
+ * @param {Array<string|RegExp>} data
+ * @param {string} text
+ * @returns {boolean}
+ */
+export function isTextExcludes(data, text) {
+  for (let index = 0; index < data.length; index++) {
+    const value = data[index]
+    if (value instanceof RegExp) {
+      if (value.test(text)) return false
+    } else {
+      const reg = new RegExp(String(value))
+      if (reg.test(text)) return false
+    }
+  }
+  return true
+}

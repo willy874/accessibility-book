@@ -1,5 +1,5 @@
 import { flatten } from './array'
-import { isEmpty } from './condition'
+import { isEmpty, isTextIncludes } from './condition'
 import { handleWarningLog } from './error'
 import { blobToBase64, urlToImageElement, transformFileSize } from './image'
 import { ValidateType } from '@/consts'
@@ -121,15 +121,7 @@ const validateHandler = {
       if (option.type) {
         const allowedTypes = typeof option.type === 'string' ? option.type.split(',') : Array.from(option.type)
         const types = allowedTypes.map((v) => String(v).toLocaleLowerCase())
-        let isAllowed = false
-        for (let index = 0; index < types.length; index++) {
-          const type = types[index]
-          const reg = new RegExp(type)
-          if (reg.test(value.type.toLocaleLowerCase())) {
-            isAllowed = true
-            break
-          }
-        }
+        const isAllowed = isTextIncludes(types, value.type.toLocaleLowerCase())
         if (!isAllowed) {
           errors.push(messageData.type || messageData.default || '檔案類型錯誤')
         }
