@@ -17,7 +17,6 @@ export default {
   name: 'Header',
   data() {
     return {
-      /** @type {MenuModel[]} */
       listModel: null,
     }
   },
@@ -55,8 +54,13 @@ header {
     box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.4);
     ul {
       display: flex;
+<<<<<<< HEAD
       width: 100%;
       flex-wrap: wrap;
+=======
+      list-style: none;
+      margin: 8px 0;
+>>>>>>> a5034daedbe14c450d763a3a01f633a6f7581b07
       li {
         padding-left: 8px;
         padding-right: 8px;

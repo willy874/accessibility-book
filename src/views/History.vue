@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     /**
-     * @return {Promise<BookModel[]>}
+     * @return {Promise<HistoryModel[]>}
      */
     fetchHistoryList() {
       return this.$store.dispatch(Actions.FETCH_HISTORY_LIST)
@@ -74,8 +74,13 @@ export default {
      */
     async effectComponentPage() {
       this.loading = true
+<<<<<<< HEAD
       const res = await this.fetchHistoryList()
       this.listModel = res.sort((a, b) => {
+=======
+      const list = await this.fetchHistoryList()
+      this.listModel = list.sort((a, b) => {
+>>>>>>> a5034daedbe14c450d763a3a01f633a6f7581b07
         return b.last_modified - a.last_modified
       })
       this.loading = false
