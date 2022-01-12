@@ -1,6 +1,6 @@
 <template>
   <main>
-    <form class="form" title="帳號登入的表單" @submit="submit">
+    <form class="form" title="帳號登入的表單" @submit="throttleSubmit">
       <h2 class="form-title" title="這裡是登入頁面">登入</h2>
       <div class="form-item">
         <label class="form-label" title="帳號信箱">帳號信箱</label>
@@ -32,7 +32,7 @@
 
 <script>
 import { apiPostLineLogin } from '@/api'
-import { HttpError, handleHttpErrorLog, validate, isValid, errorsToArray } from '@/utils'
+import { HttpError, handleHttpErrorLog, validate, isValid, errorsToArray, throttle } from '@/utils'
 import Config from '@/config'
 import { RouterName, StorageKey, Actions, ValidateType } from '@/consts'
 
@@ -55,6 +55,7 @@ export default {
        * @type {LoginError}
        */
       errors: {},
+      throttleSubmit: throttle(this.submit, 400),
     }
   },
   computed: {

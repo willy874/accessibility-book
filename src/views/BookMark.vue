@@ -9,7 +9,7 @@
         <div v-for="model in listModel" :key="model.id">
           <div class="bookmark__list-item">
             <RouterLink :to="getChapterRoute(model.chapter)">{{ model.chapter_name }}</RouterLink>
-            <button @click="deleteBookMark(model.id)">刪除</button>
+            <button @click="throttleDeleteBookMark(model.id)">刪除</button>
           </div>
         </div>
       </div>
@@ -21,16 +21,22 @@
 </template>
 
 <script>
-import { RouterName, Actions } from '@/consts'
+import { throttle } from '@/utils'
+import { RouterName, Getters, Actions } from '@/consts'
 
 export default {
   name: 'BookMark',
   data() {
     return {
       /** @type {BookMarkModel[]} */
-      listModel: null,
       loading: false,
+      throttleDeleteBookMark: throttle(this.deleteBookmark, 400),
     }
+  },
+  computed: {
+    listModel() {
+      return this.$store.getters[Getters.BOOKMARK_LIST]
+    },
   },
   watch: {
     $route() {
@@ -71,7 +77,7 @@ export default {
      */
     async effectComponentPage() {
       this.loading = true
-      this.listModel = await this.fetchBookmarkList()
+      await this.fetchBookmarkList()
       this.loading = false
     },
   },

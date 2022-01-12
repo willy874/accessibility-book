@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="form-title" title="這裡是註冊頁面">註冊</h2>
-    <form @submit="submit">
+    <form @submit="throttleSubmit">
       <div class="form-item">
         <label>姓氏</label>
         <input
@@ -79,7 +79,16 @@
 
 <script>
 import { apiPostPasswordRegister } from '@/api'
-import { validate, isValid, errorsToArray, flatten, HttpError, handleHttpErrorLog, blobToBase64 } from '@/utils'
+import {
+  validate,
+  isValid,
+  errorsToArray,
+  flatten,
+  HttpError,
+  handleHttpErrorLog,
+  blobToBase64,
+  throttle,
+} from '@/utils'
 import { RouterName, Actions, ValidateType } from '@/consts'
 
 /**
@@ -121,6 +130,7 @@ export default {
        * @type {string}
        */
       preview: '',
+      throttleSubmit: throttle(this.submit, 400),
     }
   },
   computed: {

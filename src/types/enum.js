@@ -6,6 +6,6 @@
  */
 /**
  * @typedef {
- * 'Home'|'User'|'Chapter'|'Book'|'BookDetail'|'BookMark'|'Tag'|'TagDetail'|'Login'|'Register'|'noAuthorized'|'History'|'Navigation'|'MenuList'
+ * 'Home'|'User'|'Chapter'|'Book'|'BookDetail'|'BookMark'|'Tag'|'TagDetail'|'Login'|'Register'|'noAuthorized'|'History'|'Navigation'|'Menu'
  * } RouterNameEnum
  */

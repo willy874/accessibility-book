@@ -37,7 +37,7 @@ export default {
      */
     getMenuRoute(uuid) {
       return {
-        name: RouterName.MENULIST,
+        name: RouterName.MENU,
         params: { uuid },
       }
     },

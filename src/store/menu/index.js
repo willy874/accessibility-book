@@ -12,7 +12,7 @@ export default {
   mutations: {
     /**
      * @name setMenuList
-     * @param {MenuListState} state
+     * @param {MenuState} state
      * @param {MenuModel} menuList
      */
     [Mutations.SET_MENULIST]: function (state, model) {
@@ -30,7 +30,7 @@ export default {
   actions: {
     /**
      * @name fetchMenuList
-     * @param {ActionContext<MenuListState,RootState>} store
+     * @param {ActionContext<MenuState,RootState>} store
      * @returns {Promise<MenuModel>}
      */
     [Actions.FETCH_MENU_LIST]: async function (store) {
@@ -54,7 +54,7 @@ export default {
   getters: {
     /**
      * @name menuList
-     * @param {MenuListState} state
+     * @param {MenuState} state
      * @returns {MenuModel[]}
      */
     [Getters.MENU_LIST]: function (state) {

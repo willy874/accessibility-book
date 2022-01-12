@@ -18,7 +18,7 @@
 import { Actions, RouterName } from '@/consts'
 import Config from '@/config'
 export default {
-  name: 'MenuList',
+  name: 'Menu',
   data() {
     return {
       /** @type {MenuModel} */

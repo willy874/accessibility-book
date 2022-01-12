@@ -5,7 +5,7 @@
         <h2>章節列表</h2>
         <div class="chapter__bookmark">
           <span v-if="isBookMark">已加入書籤</span>
-          <button v-else type="button" @click="onAddBookMark">建立書籤</button>
+          <button v-else type="button" @click="throttleAddBookMark">建立書籤</button>
         </div>
       </div>
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { transformMarkdownToHtml } from '@/utils'
+import { transformMarkdownToHtml, throttle } from '@/utils'
 import { apiPostHistory } from '@/api/index'
 import { RouterName, Getters, Actions } from '@/consts'
 import Config from '@/config'
@@ -28,6 +28,7 @@ export default {
     return {
       modelList: [],
       active: -1,
+      throttleAddBookMark: throttle(this.addBookmark, 400),
     }
   },
   computed: {
@@ -77,8 +78,10 @@ export default {
      * @param {BookMarkRequestParam}
      * @return {Promise<BookMarkModel>}
      */
-    addBookmark(param) {
-      return this.$store.dispatch(Actions.ADD_BOOKMARK, param)
+    addBookmark() {
+      if (this.active > 0) {
+        return this.$store.dispatch(Actions.ADD_BOOKMARK, { chapter: this.active })
+      }
     },
     /**
      * @depend
@@ -108,11 +111,6 @@ export default {
       } else {
         this.$router.replace({ name: RouterName.HOME })
       }
-    },
-    async onAddBookMark() {
-      /** @type {BookMarkRequestParam} **/
-      const requestParam = { chapter: this.active }
-      await this.addBookmark(requestParam)
     },
   },
 }

@@ -38,8 +38,8 @@
       <div v-if="route.name === RouterName.LOGIN">
         <Login />
       </div>
-      <div v-if="route.name === RouterName.MENULIST">
-        <MenuList />
+      <div v-if="route.name === RouterName.MENU">
+        <Menu />
       </div>
       <div v-if="route.name === RouterName.NAVIGATION">
         <Navigation />
@@ -68,7 +68,7 @@ import BookMark from './BookMark.vue'
 import Chapter from './Chapter.vue'
 import History from './History.vue'
 import Login from './Login.vue'
-import MenuList from './MenuList.vue'
+import Menu from './Menu.vue'
 import Navigation from './Navigation.vue'
 import NoAuthorized from './NoAuthorized.vue'
 import Register from './Register.vue'
@@ -84,7 +84,7 @@ export default {
     Chapter,
     History,
     Login,
-    MenuList,
+    Menu,
     Navigation,
     NoAuthorized,
     Register,

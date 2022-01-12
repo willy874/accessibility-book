@@ -9,7 +9,7 @@ import NoAuthorized from '../views/NoAuthorized.vue'
 import BookMark from '../views/BookMark.vue'
 import History from '../views/History.vue'
 import Navigation from '../views/Navigation.vue'
-import MenuList from '../views/MenuList.vue'
+import Menu from '../views/Menu.vue'
 import User from '../views/User.vue'
 
 export default [
@@ -79,8 +79,8 @@ export default [
     component: History,
   },
   {
-    path: '/menulist/:uuid',
-    name: RouterName.MENULIST,
-    component: MenuList,
+    path: '/menu/:uuid',
+    name: RouterName.MENU,
+    component: Menu,
   },
 ]

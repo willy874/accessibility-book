@@ -35,7 +35,7 @@
  * @property {Record<number,HistoryModel>} collection
  */
 /**
- * @typedef {Object} MenuListState
+ * @typedef {Object} MenuState
  * @property {Record<number,MenuModel>} collection
  */
 /**
