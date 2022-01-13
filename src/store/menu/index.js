@@ -13,7 +13,7 @@ export default {
     /**
      * @name setMenuList
      * @param {MenuState} state
-     * @param {MenuModel} menuList
+     * @param {MenuModel[]} model
      */
     [Mutations.SET_MENULIST]: function (state, model) {
       if (Object.hasOwnProperty.call(state.collection, model)) {
@@ -36,6 +36,7 @@ export default {
     [Actions.FETCH_MENU_LIST]: async function (store) {
       const { commit } = store
       try {
+        commit(Mutations.SET_LOADING, true)
         const res = await apiGetMenuJson()
         if (res.isAxiosError) {
           throw new HttpError(res)
@@ -43,6 +44,7 @@ export default {
           const list = res.data.content.menu
           list.forEach((model) => {
             commit(Mutations.SET_MENULIST, model)
+            commit(Mutations.SET_LOADING, false)
           })
           return list
         }

@@ -1,29 +1,24 @@
 <template>
   <div>
-    <template v-if="loading">
-      <div>讀取中</div>
-    </template>
-    <template v-else-if="childListModel && childListModel.length">
+    <div v-if="isLoading">讀取中</div>
+    <div v-else-if="childListModel && childListModel.length">
       <div v-for="model in childListModel" :key="model.id" class="menu__list-item">
         <RouterLink :to="getBookRouteByTagName(model.targetTag)">{{ model.label }} </RouterLink>
       </div>
-    </template>
-    <template v-else>
-      <div>沒有資料</div>
-    </template>
+    </div>
+    <div v-else>無資料</div>
   </div>
 </template>
 
 <script>
 import { Actions, RouterName } from '@/consts'
-import Config from '@/config'
+
 export default {
   name: 'Menu',
   data() {
     return {
       /** @type {MenuModel} */
       childListModel: null,
-      loading: false,
       title: '',
     }
   },
@@ -46,22 +41,19 @@ export default {
     },
     /**
      * @depend
+     * @param {Route} this.route
      * @param {MenuModel[]} this.childListModel
+     * @param {LifecycleHookEnum} type
      */
-    async effectComponentPage() {
-      /** @type {Route} */
-      const route = Config.getRoute(this)
-      if (!route) return
+    async effectRoute(type) {
       /** @type {string} */
-      const id = route.params.id
+      const id = this.route.params.id
       if (id) {
-        this.loading = true
         const listModel = await this.getMenuList(id)
-        const menuModel = listModel.find((item) => item.id === id)
+        const menuModel = listModel.find((item) => item.uuid === id)
         if (menuModel) {
           this.childListModel = menuModel.child
         }
-        this.loading = false
       }
     },
   },

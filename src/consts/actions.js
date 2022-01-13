@@ -78,6 +78,7 @@ const menu = {
  */
 const news = {
   FETCH_NEWS_LIST: 'fetchNewsList',
+  FETCH_NEWS_BY_ID: 'fetchNewsById',
 }
 
 /**

@@ -1,41 +1,47 @@
 <template>
   <div>
     <h2>標籤列表</h2>
-    <template v-if="loading">
-      <div v-if="targetListModel && targetListModel.length">
-        <div v-for="model in targetListModel" :key="model.id" class="tag__list-item">
-          <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
-        </div>
+    <div v-if="isLoading">讀取中</div>
+    <div v-else-if="tagListById && tagListById.length">
+      <div v-for="model in tagListById" :key="model.id" class="tag__list-item">
+        <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
       </div>
-      <div v-else-if="listModel.length">
-        <div v-for="model in listModel" :key="model.id" class="tag__list-item">
-          <RouterLink :to="getTagRoute(model.id)">{{ model.name }}</RouterLink>
-        </div>
+    </div>
+    <div v-else-if="tagList && tagList.length">
+      <div v-for="model in tagList" :key="model.id" class="tag__list-item">
+        <RouterLink :to="getTagRoute(model.id)">{{ model.name }}</RouterLink>
       </div>
-      <div v-else>
-        <div>沒有資料</div>
-      </div>
-    </template>
-    <template v-else>
-      <div>讀取中</div>
-    </template>
+    </div>
+    <div v-else>沒有資料</div>
   </div>
 </template>
 
 <script>
-import { RouterName, Actions } from '@/consts'
-import Config from '@/config'
+import { RouterName, Getters, Actions } from '@/consts'
 
 export default {
   name: 'Tag',
   data() {
     return {
-      /** @type {TagModel[]} */
-      listModel: null,
       /** @type {TagModel} */
-      targetListModel: null,
-      loading: false,
+      tagListById: null,
+      /** @type {number} */
+      active: null,
     }
+  },
+  computed: {
+    /**
+     * @return {ChapterModel[]}
+     */
+    tagList() {
+      return this.$store.getters[Getters.TAG_LIST]
+    },
+    /**
+     * @returns {ChapterModel}
+     */
+    targetModel() {
+      return this.tagList.find((p) => p.id === this.active)
+    },
   },
   methods: {
     /**
@@ -73,24 +79,20 @@ export default {
     },
     /**
      * @depend
-     * @param {TagModel} this.targetListModel
-     * @param {TagModel[]} this.listModel
+     * @param {Route} this.route
+     * @param {number} this.active
+     * @param {LifecycleHookEnum} type
      */
-    async effectComponentPage() {
-      /** @type {Route}**/
-      const route = Config.getRoute(this)
-      if (!route) return
+    async effectRoute(type) {
       /** @type {number} */
-      const id = route.params.id
+      const id = Number(this.route.params.id)
       if (id) {
-        this.loading = false
-        this.targetListModel = await this.fetchChapterListByTagId(id)
-        this.loading = true
+        this.active = id
+        this.tagListById = await this.fetchChapterListByTagId(id)
       } else {
-        this.targetListModel = null
-        this.loading = false
+        this.tagListById = null
+        this.active = null
         this.listModel = await this.fetchTagList()
-        this.loading = true
       }
     },
   },

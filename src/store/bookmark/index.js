@@ -47,6 +47,7 @@ export default {
     [Actions.FETCH_BOOKMARK_LIST]: async function (store) {
       const { commit } = store
       try {
+        commit(Mutations.SET_LOADING, true)
         const res = await apiGetBookMarkList()
         if (res.isAxiosError) {
           throw new HttpError(res)
@@ -55,9 +56,11 @@ export default {
           list.forEach((model) => {
             commit(Mutations.SET_BOOKMARK, model)
           })
+          commit(Mutations.SET_LOADING, false)
           return list
         }
       } catch (error) {
+        commit(Mutations.SET_LOADING, false)
         return handleHttpErrorLog(error)
       }
     },
@@ -70,14 +73,17 @@ export default {
     [Actions.ADD_BOOKMARK]: async function (store, params) {
       const { commit } = store
       try {
+        commit(Mutations.SET_LOADING, params.chapter)
         const res = await apiPostBookMark(params)
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
           commit(Mutations.SET_BOOKMARK, res.data)
+          commit(Mutations.SET_LOADING, false)
           return res.data
         }
       } catch (error) {
+        commit(Mutations.SET_LOADING, false)
         return handleHttpErrorLog(error)
       }
     },
@@ -90,15 +96,18 @@ export default {
     [Actions.DELETE_BOOKMARK]: async function (store, id) {
       const { state, commit } = store
       try {
+        commit(Mutations.SET_LOADING, id)
         const res = await apiDeleteBookMark(id)
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
           const bookmark = state.collection[id]
           commit(Mutations.REMOVE_BOOKMARK, id)
+          commit(Mutations.SET_LOADING, false)
           return bookmark
         }
       } catch (error) {
+        commit(Mutations.SET_LOADING, false)
         return handleHttpErrorLog(error)
       }
     },

@@ -1,8 +1,8 @@
 <template>
   <header>
     <nav>
-      <ul>
-        <li v-for="model in listModel" :key="model.uuid">
+      <ul v-if="menuList">
+        <li v-for="model in sortMenuList" :key="model.uuid">
           <RouterLink :to="getMenuRoute(model.uuid)">{{ model.label }}</RouterLink>
         </li>
       </ul>
@@ -11,17 +11,20 @@
 </template>
 
 <script>
-import { Actions, RouterName } from '@/consts'
+import { Getters, Actions, RouterName } from '@/consts'
 
 export default {
   name: 'Header',
   data() {
-    return {
-      listModel: null,
-    }
+    return {}
   },
-  async created() {
-    this.listModel = await this.fetchMenuList()
+  computed: {
+    menuList() {
+      return this.$store.getters[Getters.MENU_LIST]
+    },
+    sortMenuList() {
+      return this.menuList.map((p) => p).sort((a, b) => a.sort - b.sort)
+    },
   },
   methods: {
     /**
@@ -39,6 +42,12 @@ export default {
         name: RouterName.MENU,
         params: { id },
       }
+    },
+    /**
+     * @param {LifecycleHookEnum} type
+     */
+    async effectRoute(type) {
+      await this.fetchMenuList()
     },
   },
 }
@@ -75,7 +84,7 @@ header {
           padding-top: 16px;
           padding-bottom: 16px;
           text-align: center;
-          &.router-link-active {
+          &.router-link-exact-active {
             cursor: auto;
             background: #42b983;
             color: white;

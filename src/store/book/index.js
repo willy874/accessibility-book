@@ -36,6 +36,7 @@ export default {
     [Actions.FETCH_BOOK_LIST]: async function (store) {
       const { commit } = store
       try {
+        commit(Mutations.SET_LOADING, true)
         const res = await apiGetBookList()
         if (res.isAxiosError) {
           throw new HttpError(res)
@@ -44,6 +45,7 @@ export default {
           list.forEach((model) => {
             commit(Mutations.SET_BOOK, model)
           })
+          commit(Mutations.SET_LOADING, false)
           return list
         }
       } catch (error) {
@@ -59,14 +61,17 @@ export default {
     [Actions.FETCH_BOOK_BY_ID]: async function (store, id) {
       const { commit } = store
       try {
+        commit(Mutations.SET_LOADING, true)
         const res = await apiGetBookById(id)
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
           commit(Mutations.SET_BOOK, res.data)
+          commit(Mutations.SET_LOADING, false)
           return res.data
         }
       } catch (error) {
+        commit(Mutations.SET_LOADING, false)
         return handleHttpErrorLog(error)
       }
     },
@@ -79,6 +84,7 @@ export default {
     [Actions.FETCH_BOOK_LIST_BY_QUERY]: async function (store, query) {
       const { commit } = store
       try {
+        commit(Mutations.SET_LOADING, true)
         const res = await apiGetBookListByQuery(query)
         if (res.isAxiosError) {
           throw new HttpError(res)
@@ -87,9 +93,11 @@ export default {
           list.forEach((model) => {
             commit(Mutations.SET_BOOK, model)
           })
+          commit(Mutations.SET_LOADING, false)
           return list
         }
       } catch (error) {
+        commit(Mutations.SET_LOADING, false)
         return handleHttpErrorLog(error)
       }
     },

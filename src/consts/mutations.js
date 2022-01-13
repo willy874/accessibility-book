@@ -4,6 +4,7 @@
 const root = {
   SET_INIT: 'setInit',
   SET_ROUTE: 'setRoute',
+  SET_LOADING: 'setLoading',
 }
 
 /**
@@ -28,6 +29,7 @@ const user = {
  */
 const chapter = {
   SET_CHAPTER: 'setChapter',
+  SET_CHAPTER_ACTIVE_BOOK: 'setChapterActiveBook',
 }
 
 /**

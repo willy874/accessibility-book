@@ -2,31 +2,72 @@ import dayjs from 'dayjs'
 import Config from '@/config'
 import { Actions, LifecycleHook } from '@/consts'
 
+/**
+ * @type {Vue}
+ */
 export default {
+  data() {
+    return {
+      loop: true,
+    }
+  },
   watch: {
-    $route() {
-      this.effectComponentPage(LifecycleHook.WATCH_ROUTE)
+    async $route() {
+      if (this.effectRoute && this.loop) {
+        this.loop = false
+        await this.effectRoute(LifecycleHook.WATCH_ROUTE)
+        this.checkLoop()
+      }
     },
   },
-  created() {
-    this.effectComponentPage(LifecycleHook.CREATED)
+  async created() {
+    if (this.loop) {
+      this.loop = false
+      if (this.effectRoute) await this.effectRoute(LifecycleHook.CREATED)
+      if (this.effectComponent) await this.effectComponent(LifecycleHook.CREATED)
+      this.checkLoop()
+    }
   },
-  mounted() {
-    this.effectComponentPage(LifecycleHook.MOUNTED)
+  async mounted() {
+    if (this.effectComponent && this.loop) {
+      this.loop = false
+      await this.effectComponent(LifecycleHook.MOUNTED)
+      this.checkLoop()
+    }
   },
-  updated() {
-    this.effectComponentPage(LifecycleHook.UPDATED)
+  async updated() {
+    if (this.effectComponent && this.loop) {
+      this.loop = false
+      await this.effectComponent(LifecycleHook.UPDATED)
+      this.checkLoop()
+    }
   },
-  activated() {
-    this.effectComponentPage(LifecycleHook.ACTIVATED)
+  async activated() {
+    if (this.loop) {
+      this.loop = false
+      if (this.effectRoute) await this.effectRoute(LifecycleHook.ACTIVATED)
+      if (this.effectComponent) await this.effectComponent(LifecycleHook.ACTIVATED)
+      this.checkLoop()
+    }
   },
-  deactivated() {
-    this.effectComponentPage(LifecycleHook.DEACTIVATED)
+  async deactivated() {
+    if (this.effectComponent && this.loop) {
+      this.loop = false
+      await this.effectComponent(LifecycleHook.DEACTIVATED)
+      this.checkLoop()
+    }
   },
-  destroyed() {
-    this.effectComponentPage(LifecycleHook.DESTROYED)
+  async destroyed() {
+    if (this.effectComponent && this.loop) {
+      this.loop = false
+      await this.effectComponent(LifecycleHook.DESTROYED)
+      this.checkLoop()
+    }
   },
   computed: {
+    isLoading() {
+      return this.$store.state.loading
+    },
     isShow() {
       return !Config.value.loginRoutes.includes(this.route.name)
     },
@@ -35,12 +76,9 @@ export default {
     },
   },
   methods: {
-    /**
-     * @param {LifecycleHookEnum} type
-     * @return {Promise<unknown>}
-     */
-    async effectComponentPage(type) {
-      return type
+    async checkLoop() {
+      await this.$nextTick()
+      this.loop = true
     },
     /**
      * @param {StorageKeyEnum} key

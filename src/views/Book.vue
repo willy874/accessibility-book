@@ -1,57 +1,60 @@
 <template>
   <div>
     <h2>書籍列表</h2>
-    <template v-if="loading">
-      <div>讀取中</div>
-    </template>
-    <template v-else>
-      <div v-if="targetModel">
-        <h3>{{ targetModel.name }}</h3>
-        <div v-for="model in targetModel.chapter_set" :key="model.id" class="book__list-item">
-          <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
-        </div>
+    <div v-if="isLoading">讀取中</div>
+    <div v-else-if="targetModel">
+      <h3>{{ targetModel.name }}</h3>
+      <div v-for="model in targetModel.chapter_set" :key="model.id" class="book__list-item">
+        <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
       </div>
-      <div v-else-if="listModel && listModel.length">
-        <div v-for="model in listModel" :key="model.id" class="book__list-item">
-          <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
-        </div>
+    </div>
+    <div v-else-if="bookList && bookList.length">
+      <div v-for="model in bookList" :key="model.id" class="book__list-item">
+        <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
       </div>
-      <div v-else>
-        <div>沒有資料</div>
-      </div>
-    </template>
+    </div>
+    <div v-else>無資料</div>
   </div>
 </template>
 
 <script>
-import { RouterName, Actions } from '@/consts'
-import Config from '@/config'
+import { RouterName, Getters, Actions } from '@/consts'
 
 export default {
   name: 'Book',
   data() {
     return {
-      /** @type {BookModel[]} */
-      listModel: null,
-      /** @type {BookModel} */
-      targetModel: null,
       active: '',
       loading: false,
     }
   },
-  methods: {
+  computed: {
     /**
-     * @param {number} id
-     * @return {Promise<BookModel>}
+     * @return {ChapterModel[]}
      */
-    fetchBookById(id) {
-      return this.$store.dispatch(Actions.FETCH_BOOK_BY_ID, id)
+    bookList() {
+      return this.$store.getters[Getters.BOOK_LIST]
     },
+    /**
+     * @returns {ChapterModel}
+     */
+    targetModel() {
+      return this.bookList.find((p) => p.id === this.active)
+    },
+  },
+  methods: {
     /**
      * @return {Promise<BookModel[]>}
      */
     fetchBookList() {
       return this.$store.dispatch(Actions.FETCH_BOOK_LIST)
+    },
+    /**
+     * @param {string} id
+     * @return {Promise<BookModel>}
+     */
+    fetchBookById(id) {
+      return this.$store.dispatch(Actions.FETCH_BOOK_BY_ID, id)
     },
     /**
      * @param {JsonData} query
@@ -82,35 +85,23 @@ export default {
     },
     /**
      * @depend
-     * @param {BookModel} this.targetModel
-     * @param {BookModel[]} this.listModel
-     * @param {number} this.active
+     * @param {Route} this.route
+     * @param {string} this.active
+     * @param {LifecycleHookEnum} type
      */
-    async effectComponentPage() {
-      /** @type {Route}**/
-      const route = Config.getRoute(this)
-      if (!route) return
-      /** @type {number} */
-      const id = route.params.id
-      /** @type {array<T>} */
-      const query = route.query
+    async effectRoute(type) {
+      /** @type {string} */
+      const id = this.route.params.id
+      const query = this.route.query
       if (id) {
         this.active = id
-        this.loading = true
-        this.targetModel = await this.fetchBookById(id)
-        this.loading = false
+        await this.fetchBookById(id)
       } else if (query.tag__name) {
         this.active = ''
-        this.targetModel = null
-        this.loading = true
-        this.listModel = await this.fetchBookListByQuery(query)
-        this.loading = false
+        await this.fetchBookListByQuery(query)
       } else {
         this.active = ''
-        this.targetModel = null
-        this.loading = true
-        this.listModel = await this.fetchBookList()
-        this.loading = false
+        await this.fetchBookList()
       }
     },
   },

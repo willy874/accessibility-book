@@ -8,6 +8,7 @@ export default {
      * @type {Record<number,ChapterModel>}
      */
     collection: {},
+    activeBook: null,
   },
   mutations: {
     /**
@@ -26,6 +27,14 @@ export default {
         state.collection = collection
       }
     },
+    /**
+     * @name setChapterActiveBook
+     * @param {ChapterState} state
+     * @param {BookModel} model
+     */
+    [Mutations.SET_CHAPTER_ACTIVE_BOOK]: function (state, model) {
+      state.activeBook = model
+    },
   },
   actions: {
     /**
@@ -35,16 +44,22 @@ export default {
      * @returns {Promise<ChapterModel>}
      */
     [Actions.FETCH_CHAPTER_BY_ID]: async function (store, id) {
-      const { commit } = store
+      const { commit, dispatch } = store
       try {
+        commit(Mutations.SET_LOADING, true)
         const res = await apiGetChapterById(id)
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
-          commit(Mutations.SET_CHAPTER, res.data)
+          const chapter = res.data
+          const book = await dispatch(Actions.FETCH_BOOK_BY_ID, chapter.book)
+          commit(Mutations.SET_CHAPTER_ACTIVE_BOOK, book)
+          commit(Mutations.SET_CHAPTER, chapter)
+          commit(Mutations.SET_LOADING, false)
           return res.data
         }
       } catch (error) {
+        commit(Mutations.SET_LOADING, false)
         return handleHttpErrorLog(error)
       }
     },
@@ -57,6 +72,7 @@ export default {
     [Actions.FETCH_CHAPTER_LIST_BY_TAG_ID]: async function (store, id) {
       const { commit } = store
       try {
+        commit(Mutations.SET_LOADING, true)
         const res = await apiGetChapterListByTagId(id)
         if (res.isAxiosError) {
           throw new HttpError(res)
@@ -65,9 +81,11 @@ export default {
           list.forEach((model) => {
             commit(Mutations.SET_CHAPTER, model)
           })
+          commit(Mutations.SET_LOADING, false)
           return list
         }
       } catch (error) {
+        commit(Mutations.SET_LOADING, false)
         return handleHttpErrorLog(error)
       }
     },

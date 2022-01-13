@@ -117,7 +117,7 @@ export const apiPostBookMark = (data) => request.post(`bookmark/`, data)
  * @param {number} id
  * @returns {Promise<AxiosResponse<null>>}
  */
-export const apiDeleteBookMark = (id) => request.delete(`bookmark/${id}`)
+export const apiDeleteBookMark = (id) => request.delete(`bookmark/${id}/`)
 
 /**
  * @returns {Promise<AxiosResponse<unknown>>}
@@ -125,6 +125,11 @@ export const apiDeleteBookMark = (id) => request.delete(`bookmark/${id}`)
 export const apiGetMenuJson = () => request.get(`test/`)
 
 /**
- * @returns {Promise<AxiosResponse<unknown>>}
+ * @returns {Promise<AxiosResponse<ResponseCollection<NewsModel>>>}
  */
-export const apiGetNewsJson = () => request.get(`news/`)
+export const apiGetNewsList = () => request.get(`news/`)
+
+/**
+ * @returns {Promise<AxiosResponse<ResponseCollection<NewsModel>>>}
+ */
+export const apiGetNewsById = (id) => request.get(`news/${id}/`)
