@@ -36,6 +36,7 @@ export default {
     [Actions.FETCH_TAG_LIST]: async function (store) {
       const { commit } = store
       try {
+        commit(Mutations.SET_LOADING, true)
         const res = await apiGetTagList()
         if (res.isAxiosError) {
           throw new HttpError(res)
@@ -44,6 +45,7 @@ export default {
           list.forEach((model) => {
             commit(Mutations.SET_TAG, model)
           })
+          commit(Mutations.SET_LOADING, false)
           return list
         }
       } catch (error) {

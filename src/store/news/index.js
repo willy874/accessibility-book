@@ -1,4 +1,4 @@
-import { apiGetNewsJson } from '@/api/index'
+import { apiGetNewsList, apiGetNewsById } from '@/api/index'
 import { HttpError, handleHttpErrorLog } from '@/utils'
 import { Getters, Mutations, Actions } from '@/consts'
 
@@ -34,9 +34,9 @@ export default {
      * @returns {Promise<NewsModel>}
      */
     [Actions.FETCH_NEWS_LIST]: async function (store) {
-      const { commit } = store
+      const { state, commit } = store
       try {
-        const res = await apiGetNewsJson()
+        const res = await apiGetNewsList()
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
@@ -44,9 +44,33 @@ export default {
           list.forEach((model) => {
             commit(Mutations.SET_NEWS, model)
           })
+          if (state.loading) commit(Mutations.SET_LOADING, false)
           return list
         }
       } catch (error) {
+        return handleHttpErrorLog(error)
+      }
+    },
+    /**
+     * @name fetchBookById
+     * @param {ActionContext<BookState,RootState>} store
+     * @param {number} id
+     * @returns {Promise<BookModel>}
+     */
+    [Actions.FETCH_NEWS_BY_ID]: async function (store, id) {
+      const { commit } = store
+      try {
+        commit(Mutations.SET_LOADING, true)
+        const res = await apiGetNewsById(id)
+        if (res.isAxiosError) {
+          throw new HttpError(res)
+        } else {
+          commit(Mutations.SET_NEWS, res.data)
+          commit(Mutations.SET_LOADING, false)
+          return res.data
+        }
+      } catch (error) {
+        commit(Mutations.SET_LOADING, false)
         return handleHttpErrorLog(error)
       }
     },

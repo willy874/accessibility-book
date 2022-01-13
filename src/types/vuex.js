@@ -39,8 +39,14 @@
  * @property {Record<number,MenuModel>} collection
  */
 /**
+ * @typedef {Object} NewsState
+ * @property {Record<number,NewsModel>} collection
+ */
+/**
  * @typedef {Object} RootState
  * @property {boolean} init
+ * @property {Route} route
+ * @property {boolean} loading
  * @property {UserState} user
  * @property {StorageState} storage
  * @property {ChapterState} chapter

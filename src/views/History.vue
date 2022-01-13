@@ -1,47 +1,49 @@
 <template>
   <div>
     <h2>歷史觀看列表</h2>
-    <template v-if="loading">
-      <div>讀取中</div>
-    </template>
-    <template v-else>
-      <div v-if="listModel.length" class="history-list">
-        <div v-for="(model, index) in listModel" :key="model.id">
-          <li class="history-item">
-            <RouterLink :to="getChapterRoute(model.chapter)">
-              <h4>
-                <span>{{ index + 1 }}.</span>
-                <span>{{ model.chapter_name }}</span>
-              </h4>
-              <p>{{ getDate(model.last_modified) }}</p>
-              <ul>
-                <span>標籤:</span>
-                <li v-for="item in model.tag" :key="item.id">{{ item.name }}</li>
-              </ul>
-            </RouterLink>
-          </li>
-        </div>
+    <div v-if="isLoading">讀取中</div>
+    <div v-else-if="historyList.length" class="history-list">
+      <div v-for="(model, index) in historyListSort" :key="model.id">
+        <li class="history-item">
+          <RouterLink :to="getChapterRoute(model.chapter)">
+            <h4>
+              <span>{{ index + 1 }}.</span>
+              <span>{{ model.chapter_name }}</span>
+            </h4>
+            <p>{{ getDate(model.last_modified) }}</p>
+            <ul>
+              <span>標籤:</span>
+              <li v-for="item in model.tag" :key="item.id">{{ item.name }}</li>
+            </ul>
+          </RouterLink>
+        </li>
       </div>
-      <div v-else>
-        <div>沒有資料</div>
-      </div>
-    </template>
+    </div>
+    <div v-else>無資料</div>
   </div>
 </template>
 
 <script>
-import { RouterName, Actions } from '@/consts'
-import dayjs from 'dayjs'
+import { RouterName, Getters, Actions } from '@/consts'
 
 export default {
   name: 'History',
   data() {
-    return {
-      /** @type {HistoryModel[]} */
-      listModel: null,
-      tagList: null,
-      loading: false,
-    }
+    return {}
+  },
+  computed: {
+    /**
+     * @return {HistoryModel[]}
+     */
+    historyList() {
+      return this.$store.getters[Getters.HISTORY_LIST]
+    },
+    /**
+     * @return {HistoryModel[]}
+     */
+    historyListSort() {
+      return this.historyList.map((p) => p).sort((a, b) => b.last_modified - a.last_modified)
+    },
   },
   methods: {
     /**
@@ -61,24 +63,11 @@ export default {
       }
     },
     /**
-     * @param {string} time
-     * @return {number}
-     */
-    getDate(time) {
-      return dayjs(time).format('YYYY/MM/DD hh:mm:ss')
-    },
-    /**
      * @depend
-     * @param {HistoryModel[]} this.listModel
-     * @param {number} this.active
+     * @param {LifecycleHookEnum} type
      */
-    async effectComponentPage() {
-      this.loading = true
-      const res = await this.fetchHistoryList()
-      this.listModel = res.sort((a, b) => {
-        return b.last_modified - a.last_modified
-      })
-      this.loading = false
+    async effectRoute(type) {
+      await this.fetchHistoryList()
     },
   },
 }

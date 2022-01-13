@@ -70,7 +70,7 @@
  */
 /**
  * @typedef {Object} TagModel
- * @property {string} id
+ * @property {number} id
  * @property {string} name
  */
 /**

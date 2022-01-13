@@ -30,6 +30,9 @@ export default {
         [RouterName.HISTORY]: {
           title: '歷史紀錄',
         },
+        [RouterName.USER]: {
+          title: '使用者管理',
+        },
       },
     }
   },

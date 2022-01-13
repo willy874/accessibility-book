@@ -19,6 +19,7 @@ export default new Vuex.Store({
   state: {
     init: false,
     route: null,
+    loading: false,
   },
   mutations: {
     /**
@@ -34,6 +35,14 @@ export default new Vuex.Store({
      */
     [Mutations.SET_ROUTE]: function (state, route) {
       state.route = route
+    },
+    /**
+     * @name setLoading
+     * @param {RootState} state
+     * @param {boolean} bool
+     */
+    [Mutations.SET_LOADING]: function (state, bool) {
+      state.loading = bool
     },
   },
   actions: {
