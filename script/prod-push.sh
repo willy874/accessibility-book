@@ -1,5 +1,5 @@
 git checkout int
-yard build
+git merge dev
 git add .
 git commit -m "depoly: build."
 git push -u origin int
