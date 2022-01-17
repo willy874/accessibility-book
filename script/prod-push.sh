@@ -1,7 +1,10 @@
-git checkout int
-git merge dev
 git add .
 git commit -m "depoly: build."
-git push -u origin int
+echo "Commit"
+yarn build
+echo "Build"
+git checkout int
+git merge dev
+git push origin int
 git checkout dev
 echo "Success"
