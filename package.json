@@ -6,7 +6,7 @@
     "dev": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "push": "sh ./script/prod-push",
+    "push": "sh ./script/prod-push.sh",
     "serve": "node server"
   },
   "dependencies": {
