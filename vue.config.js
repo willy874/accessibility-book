@@ -41,7 +41,7 @@ module.exports = {
     sourceMap: true,
   },
   pluginOptions: {
-    lintStyleOnBuild: true,
+    lintStyleOnBuild: false,
     stylelint: {
       files: ['src/**/*.{vue,htm,html,css,sss,less,scss}'],
     },
