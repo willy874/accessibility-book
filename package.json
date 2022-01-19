@@ -6,8 +6,10 @@
     "dev": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "push": "sh ./script/prod-push.sh",
-    "serve": "node server"
+    "serve": "node server",
+    "sh:create": "sh ./script/create.sh",
+    "sh:push": "sh ./script/push.sh",
+    "sh:deploy": "sh ./script/deploy.sh"
   },
   "dependencies": {
     "@line/liff": "^2.16.1",

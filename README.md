@@ -12,45 +12,20 @@
 
 
 ### 開發環境啟動
-```sh
-$ yarn install
-
-$ yarn dev
+```bash
+$ yarn sh:create
 ```
 
-新增 .vscode 資料夾，並建立 settings.json，並設定以下參數。
-```json
-{
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.fixAll.stylelint": true
-  },
-  "stylelint.enable": true,
-  "editor.formatOnSave": false,
-  "editor.formatOnPaste": false,
-  "eslint.validate": [
-    "javascript",
-    "vue"
-  ]
-}
-```
-完成以上動作便可實行開發。
-
-### 佈署編譯
-```sh
-$ yarn build
-
-$ yarn serve
+### 本機發布
+```bash
+$ yarn sh:push
 ```
 
-### 測試環境
-```sh
-# https://tpwlliff.3anology.info
-$ ssh kent@kentnas.myds.me -p 22022
+### 佈署
+```bash
+$ yarn sh:deploy
 ```
-
-## 專案技術
+修改 .env
 
 ### 核心
 
