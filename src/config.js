@@ -1,21 +1,21 @@
 import { RouterName } from '@/consts'
 import { isApp } from '@/utils'
 
-const base = 'https://api.pastwind.org'
+const base = location.protocol + '//' + process.env.VUE_APP_API_URL
 
 const config = {
   env: process.env,
   package: JSON.parse(process.env.VUE_APP_PACKAGE),
   lineLoginRequestParam: {
     response_type: 'code',
-    client_id: '1656649897',
+    client_id: process.env.VUE_APP_CLIENT_ID,
     nonce: '09876xyz',
     scope: 'profile openid email',
     redirect_uri: location.origin + '/login',
   },
   isApp: isApp(),
-  liffId: '1656538444-L3wP67PM',
-  liff: location.host === 'tpwlweb.3anology.info',
+  liffId: process.env.VUE_APP_LIFF_ID,
+  liff: location.host === process.env.VUE_APP_LIFF_HOST,
   authorizationHeaderPrefix: 'Token',
   base: {
     baseUrl: base,
