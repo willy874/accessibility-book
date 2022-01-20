@@ -22,5 +22,3 @@ COPY --from=builder /code/dist .
 COPY . .
 
 USER will
-
-CMD ["yarn", "serve"]
