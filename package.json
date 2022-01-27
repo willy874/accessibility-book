@@ -9,7 +9,8 @@
     "serve": "node server",
     "sh:create": "sh ./script/create.sh",
     "sh:push": "sh ./script/push.sh",
-    "sh:deploy": "sh ./script/deploy.sh"
+    "sh:deploy": "sh ./script/deploy.sh",
+    "sh:build": "sh ./script/build.sh"
   },
   "dependencies": {
     "@line/liff": "^2.16.1",
