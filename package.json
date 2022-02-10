@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve --open",
+    "up": "docker-compose up",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "serve": "node server",

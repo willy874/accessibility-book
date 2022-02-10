@@ -3,9 +3,9 @@ version: "3.7"
 services:
   web:
     build: .
-    command: 'npm run dev'
+    command: 'yarn dev'
     ports:
-      - '3010:8001'
+      - '8080:8080'
     env_file: .env
     volumes:
-      - .:/code
+      - .:/app

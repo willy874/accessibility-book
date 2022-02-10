@@ -1,15 +1,14 @@
 FROM node:16.13 as builder
 
-WORKDIR /code
+WORKDIR /app
 COPY . .
-COPY  package.json .
-COPY yarn.lock .
+COPY package.json .
 RUN yarn install
-RUN npm run build
+RUN yarn build
 
 FROM node:16.13
 
-WORKDIR /code
+WORKDIR /app
 
 RUN adduser  --disabled-password --no-create-home will
 
@@ -17,7 +16,7 @@ RUN chown will /usr/local
 
 RUN yarn add express
 
-COPY --from=builder /code/dist .
+COPY --from=builder /app/dist .
 
 COPY . .
 
