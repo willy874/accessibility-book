@@ -94,8 +94,15 @@ export default {
 </script>
 
 <style>
+.section-title {
+  margin-top: 16px;
+}
 .list {
+  margin-bottom: 16px;
+}
+.list-item {
   border: 1px solid #000;
   padding: 16px;
+  margin: 8px 0;
 }
 </style>

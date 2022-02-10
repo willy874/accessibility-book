@@ -4,10 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve --open",
+    "up": "docker-compose up",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "yarn build & yarn serve",
-    "serve": "node server"
+    "serve": "node server",
+    "sh:create": "sh ./script/create.sh",
+    "sh:push": "sh ./script/push.sh",
+    "sh:deploy": "sh ./script/deploy.sh",
+    "sh:build": "sh ./script/build.sh"
   },
   "dependencies": {
     "@line/liff": "^2.16.1",

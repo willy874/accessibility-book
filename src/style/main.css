@@ -313,4 +313,8 @@ template {
 [hidden] {
   display: none !important;
 }
+
+form input.is-valid {
+  border: 1px solid #f00;
+}
 /*# sourceMappingURL=main.css.map */
