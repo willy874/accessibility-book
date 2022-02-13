@@ -1,10 +1,11 @@
 <template>
   <div id="app">
-    <div>{{ hrefData }}</div>
     <template v-if="route">
       <Header v-if="isShow" class="header" />
       <article class="article">
         <div class="main">
+          <div>{{ location }}</div>
+          <div>{{ routeData }}</div>
           <router-view />
         </div>
       </article>
@@ -18,7 +19,7 @@ import Header from './layouts/Header.vue'
 import Footer from './layouts/Footer.vue'
 import { StorageKey, Actions } from '@/consts'
 import Config from './config'
-// import liff from '@line/liff'
+import liff from '@line/liff'
 
 export default {
   name: 'App',
@@ -30,11 +31,12 @@ export default {
     return {
       path: '',
       href: '',
+      location: window.location,
     }
   },
   computed: {
-    hrefData() {
-      return location.href
+    routeData() {
+      return this.$store.state.route
     },
   },
   watch: {
@@ -45,7 +47,7 @@ export default {
   async created() {
     const isLiff = this.$route.query && this.$route.query['liff.state']
     if (Config.value.liff || isLiff) {
-      // await liff.init({ liffId: Config.value.liffId })
+      await liff.init({ liffId: Config.value.liffId })
     }
     if (await this.getStorage(StorageKey.TOKEN)) {
       await this.$store.dispatch(Actions.FETCH_USER_INFO)
