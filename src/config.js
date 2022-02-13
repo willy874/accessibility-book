@@ -56,7 +56,7 @@ class VueConfig {
     const instance = vm || app
     const LiifQuery = instance?.$route?.query?.['liff.state']
     if (LiifQuery) {
-      return instance.$router.resolve(LiifQuery)
+      return instance.$router.resolve(LiifQuery).route
     } else if (instance?.$route) {
       return instance.$route
     } else {
