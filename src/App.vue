@@ -5,7 +5,10 @@
       <article class="article">
         <div class="main">
           <div>{{ location }}</div>
-          <div>{{ routeData }}</div>
+          <div>name {{ routeData.name }}</div>
+          <div>path {{ routeData.path }}</div>
+          <div>params {{ routeData.params }}</div>
+          <div>query {{ routeData.query }}</div>
           <router-view />
         </div>
       </article>
