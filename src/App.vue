@@ -31,6 +31,11 @@ export default {
       href: '',
     }
   },
+  computed: {
+    hrefData() {
+      return location.href
+    },
+  },
   watch: {
     $route() {
       this.changeRoute()
