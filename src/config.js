@@ -57,6 +57,8 @@ class VueConfig {
     const LiifQuery = instance?.$route?.query?.['liff.state']
     if (LiifQuery) {
       const route = instance.$router.resolve(LiifQuery).route
+      console.log(window.location)
+      console.log(instance.$store.state?.route)
       return route
     } else if (instance?.$route) {
       return instance.$route

@@ -11,14 +11,6 @@ Vue.config.productionTip = false
 Vue.use(plugins)
 Vue.mixin(mixin)
 async function main() {
-  console.log(Config.value)
-  // const LiifQuery = new URLSearchParams(location.search.substring(1)).get('liff.state')
-  // if (Config.value.liff || LiifQuery) {
-  //   await liff.init({ liffId: Config.value.liffId })
-  //   const route = router.resolve(LiifQuery).route
-  //   await router.replace(route)
-  // }
-  console.log(router.currentRoute.path)
   const app = new Vue({
     router,
     store,

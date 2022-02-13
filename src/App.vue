@@ -4,11 +4,6 @@
       <Header v-if="isShow" class="header" />
       <article class="article">
         <div class="main">
-          <div>{{ location }}</div>
-          <div>name {{ routeData.name }}</div>
-          <div>path {{ routeData.path }}</div>
-          <div>params {{ routeData.params }}</div>
-          <div>query {{ routeData.query }}</div>
           <router-view />
         </div>
       </article>
@@ -31,16 +26,7 @@ export default {
     Footer,
   },
   data() {
-    return {
-      path: '',
-      href: '',
-      location: window.location,
-    }
-  },
-  computed: {
-    routeData() {
-      return this.$store.state?.route || {}
-    },
+    return {}
   },
   watch: {
     $route() {
