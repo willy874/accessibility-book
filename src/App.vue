@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div>{{ hrefData }}</div>
     <template v-if="route">
       <Header v-if="isShow" class="header" />
       <article class="article">
