@@ -56,12 +56,12 @@ export function handleErrorLog(error, data = {}) {
  * @param {unknown} error
  */
 export function handleHttpErrorLog(error) {
+  if (/login/.test(error.url)) {
+    alert(`HTTP Error ${error.status} ${error.message}`)
+  }
   if (process.env.NODE_ENV === 'development') {
     if (error instanceof HttpError) {
       console.error(`%s [%s] %s\n%s`, error.methods || 'GET', error.status || 0, error.url || '', error.message)
-      if (/login/.test(error.url)) {
-        alert(`HTTP Error ${error.status} ${error.message}`)
-      }
       return
     }
     if (error instanceof Error) {

@@ -19,7 +19,7 @@ const validateHandler = {
   /**
    * @param {unknown} value
    * @param {ValidateOption<{}>} option
-   * @returns {string|null}
+   * @returns {Promise<string|null>}
    */
   [ValidateType.IS_EMPTY]: function (value, option) {
     return isEmpty(value) ? option.message || '輸入資料不得為空' : null
@@ -27,7 +27,7 @@ const validateHandler = {
   /**
    * @param {unknown} value
    * @param {ValidateOption<{}>} option
-   * @returns {string|null}
+   * @returns {Promise<string|null>}
    */
   [ValidateType.EMAIL]: function (value, option) {
     const reg =
@@ -43,7 +43,7 @@ const validateHandler = {
   /**
    * @param {unknown} value
    * @param {ValidateOption<ValidPasswordParams>} option
-   * @returns {string|null}
+   * @returns {Promise<string|null>}
    */
   [ValidateType.PASSWORD]: function (value, option) {
     const min = option.min || 6
@@ -59,7 +59,7 @@ const validateHandler = {
   /**
    * @param {unknown} value
    * @param {ValidateOption<ValidEqualParams>} option
-   * @returns {string|null}
+   * @returns {Promise<string|null>}
    */
   [ValidateType.EQUAL]: function (value, option) {
     return option.equal !== value ? option.message || '輸入資料不相等' : null
@@ -86,7 +86,7 @@ const validateHandler = {
   /**
    * @param {Blob} value
    * @param {ValidateOption<ValidImageParams>} option
-   * @returns {string[]|null}
+   * @returns {Promise<string[]|null>}
    */
   [ValidateType.IMAGE]: async function (value, option) {
     const errors = []
@@ -136,7 +136,7 @@ const validateHandler = {
 /**
  * @param {string} value
  * @param {ValidateField} options
- * @returns {boolean}
+ * @returns {Promise<boolean>}
  */
 export async function validateField(value, options) {
   const errors = []
@@ -177,11 +177,13 @@ export async function validate(form, options) {
     handleWarningLog('utils[function validate]: The options property is all empty.')
   }
   const errors = {}
-  for (const key in options) {
-    if (Object.hasOwnProperty.call(form, key)) {
-      errors[key] = await validateField(form[key], options[key])
-    }
-  }
+  await Promise.all(
+    Object.keys(options).map(async (key) => {
+      if (Object.hasOwnProperty.call(form, key)) {
+        errors[key] = await validateField(form[key], options[key])
+      }
+    })
+  )
   return errors
 }
 

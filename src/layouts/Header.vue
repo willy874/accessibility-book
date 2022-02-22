@@ -1,5 +1,6 @@
 <template>
   <header>
+    <Search />
     <nav>
       <ul v-if="menuList">
         <li v-for="model in sortMenuList" :key="model.uuid">
@@ -12,9 +13,13 @@
 
 <script>
 import { Getters, Actions, RouterName } from '@/consts'
+import Search from '@/layouts/Search.vue'
 
 export default {
   name: 'Header',
+  components: {
+    Search,
+  },
   data() {
     return {}
   },
