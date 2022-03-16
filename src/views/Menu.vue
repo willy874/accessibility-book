@@ -12,6 +12,7 @@
 
 <script>
 import { Actions, RouterName } from '@/consts'
+import { treeEach } from '@/utils'
 
 export default {
   name: 'Menu',
@@ -50,10 +51,12 @@ export default {
       const id = this.route.params.id
       if (id) {
         const listModel = await this.getMenuList(id)
-        const menuModel = listModel.find((item) => item.uuid === id)
-        if (menuModel) {
-          this.childListModel = menuModel.child
-        }
+        treeEach(listModel, (item) => {
+          if (item.uuid === id) {
+            this.childListModel = item.child
+            return true
+          }
+        })
       }
     },
   },

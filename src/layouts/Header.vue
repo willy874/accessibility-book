@@ -3,8 +3,28 @@
     <Search />
     <nav>
       <ul v-if="menuList.length">
-        <li v-for="model in sortMenuList" :key="model.uuid">
-          <RouterLink :to="getMenuRoute(model.uuid)">{{ model.label }}</RouterLink>
+        <li v-for="model in sortMenuList(menuList)" :key="model.uuid">
+          <a
+            :class="{ active: model.uuid === showMenu }"
+            :title="`開關${model.label}選單`"
+            :aria-expanded="String(model.uuid === showMenu)"
+            role="button"
+            target="_top"
+            @click="toggleMenu(model)"
+          >
+            {{ model.label }}
+          </a>
+          <ul v-show="model.child && model.uuid === showMenu">
+            <li v-for="child in sortMenuList(model.child)" :key="child.uuid">
+              <a
+                :class="{ active: isActiveId(child.uuid) }"
+                :title="`前往${model.label}的${child.label}`"
+                @click="pushMenuRouter(child.uuid)"
+              >
+                {{ child.label }}
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
     </nav>
@@ -21,14 +41,16 @@ export default {
     Search,
   },
   data() {
-    return {}
+    return {
+      showMenu: '',
+    }
   },
   computed: {
+    /**
+     * @return {MenuModel[]}
+     */
     menuList() {
       return this.$store.getters[Getters.MENU_LIST]
-    },
-    sortMenuList() {
-      return this.menuList.map((p) => p).sort((a, b) => a.sort - b.sort)
     },
   },
   methods: {
@@ -40,12 +62,35 @@ export default {
     },
     /**
      * @param {string} id
-     * @return {VueRouteLocation}
+     * @return {boolean}
      */
-    getMenuRoute(id) {
-      return {
-        name: RouterName.MENU,
-        params: { id },
+    isActiveId(id) {
+      return id === this.route.params.id
+    },
+    /**
+     * @param {string} id
+     */
+    pushMenuRouter(id) {
+      if (!this.isActiveId(id)) {
+        this.$router.push({
+          name: RouterName.MENU,
+          params: { id },
+        })
+        this.showMenu = ''
+      }
+    },
+    /**
+     * @param {MenuModel[]}
+     * @return {MenuModel[]}
+     */
+    sortMenuList(list) {
+      return list.map((p) => p).sort((a, b) => a.sort - b.sort)
+    },
+    toggleMenu(model) {
+      if (this.showMenu === model.uuid) {
+        this.showMenu = ''
+      } else {
+        this.showMenu = model.uuid
       }
     },
     /**
@@ -65,37 +110,28 @@ header {
   nav {
     display: flex;
     align-items: center;
+    position: relative;
     font-size: 1.25rem;
     font-weight: 500;
     box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.4);
-    ul {
+    > ul {
       display: flex;
-<<<<<<< HEAD
       width: 100%;
       flex-wrap: wrap;
-=======
-      list-style: none;
-      margin: 8px 0;
->>>>>>> a5034daedbe14c450d763a3a01f633a6f7581b07
-      li {
+      > li {
         padding-left: 8px;
         padding-right: 8px;
         flex-shrink: 0;
-        flex-basis: 25%;
+        flex-basis: 50%;
         display: flex;
         align-items: center;
         color: black;
-        a {
+        > a {
           display: block;
           width: 100%;
           padding-top: 16px;
           padding-bottom: 16px;
           text-align: center;
-          &.router-link-exact-active {
-            cursor: auto;
-            background: #42b983;
-            color: white;
-          }
           &:hover {
             cursor: pointer;
             background: #42b983;
@@ -103,6 +139,29 @@ header {
             opacity: 0.8;
           }
         }
+        > ul {
+          position: absolute;
+          width: 100%;
+          top: 100%;
+          left: 0;
+          background-color: white;
+          padding: 8px 0;
+          z-index: 1;
+          box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.4);
+          > li {
+            > a {
+              display: block;
+              padding: 8px 16px;
+              font-weight: normal;
+            }
+          }
+        }
+      }
+
+      a.active {
+        cursor: auto;
+        background: #42b983;
+        color: white;
       }
     }
   }
