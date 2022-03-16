@@ -102,8 +102,10 @@ export default {
   margin-left: -16px;
   margin-right: -16px;
   margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 .tag-item {
-  padding: 0 16px;
+  padding: 4px 16px;
+  white-space: nowrap;
 }
 </style>

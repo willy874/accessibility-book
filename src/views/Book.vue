@@ -8,8 +8,8 @@
         <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
       </div>
     </div>
-    <div v-else-if="bookList && bookList.length">
-      <div v-for="model in bookList" :key="model.id" class="book__list-item">
+    <div v-else-if="bookListByLast && bookListByLast.length">
+      <div v-for="model in bookListByLast" :key="model.id" class="book__list-item">
         <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
       </div>
     </div>
@@ -26,6 +26,7 @@ export default {
     return {
       active: '',
       loading: false,
+      bookListByLast: [],
     }
   },
   computed: {
@@ -36,8 +37,8 @@ export default {
       return this.$store.getters[Getters.BOOK_LIST]
     },
     chapterListSort() {
-      if (this.targetModel) {
-        return this.targetModel.chapter_set.map((p) => p).sort((p, n) => p.no - n.no)
+      if (this.targetModel && this.targetModel.chapter_set) {
+        return this.targetModel.chapter_set?.map((p) => p).sort((p, n) => p.no - n.no)
       }
       return []
     },
@@ -104,10 +105,10 @@ export default {
         await this.fetchBookById(id)
       } else if (query.tag__name) {
         this.active = ''
-        await this.fetchBookListByQuery(query)
+        this.bookListByLast = await this.fetchBookListByQuery(query)
       } else {
         this.active = ''
-        await this.fetchBookList()
+        this.bookListByLast = await this.fetchBookList()
       }
     },
   },

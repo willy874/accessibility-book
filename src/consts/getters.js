@@ -10,6 +10,8 @@ const root = {
  */
 const bookmark = {
   BOOKMARK_LIST: 'bookmarkList',
+  GET_BOOKMARK_BY_ID: 'bookmarkListById',
+  GET_BOOKMARK_LIST_BY_TAG: 'getBookListByTag',
 }
 
 /**
@@ -17,6 +19,7 @@ const bookmark = {
  */
 const chapter = {
   CHAPTER_LIST: 'chapterList',
+  GET_CHAPTER_BY_ID: 'getChapterListById',
 }
 
 /**

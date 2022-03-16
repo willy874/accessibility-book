@@ -55,12 +55,21 @@ export default {
       return this.$store.state.chapter.activeBook
     },
     /**
+     * @return {ChapterModel[]}
+     */
+    activeBookChaptersSort() {
+      if (this.activeBook && this.activeBook.chapter_set) {
+        return this.activeBook.chapter_set.map((p) => p).sort((a, b) => a.no - b.no)
+      }
+      return []
+    },
+    /**
      * @return {number}
      */
     activeChapterIndexOf() {
       const chapterId = Number(this.route.params.id)
-      const chapterList = this.activeBook?.chapter_set
-      if (chapterList) {
+      const chapterList = this.activeBookChaptersSort
+      if (chapterList.length) {
         return chapterList.map((p) => p.id).indexOf(chapterId)
       }
       return -1
@@ -69,8 +78,8 @@ export default {
      * @return {number | false}
      */
     nextChapterRoute() {
-      if (this.activeBook && this.activeChapterIndexOf >= 0) {
-        const nextChapter = this.activeBook.chapter_set[this.activeChapterIndexOf + 1]
+      if (this.activeChapterIndexOf >= 0) {
+        const nextChapter = this.activeBookChaptersSort[this.activeChapterIndexOf + 1]
         if (nextChapter) {
           return {
             name: RouterName.CHAPTER,
@@ -100,7 +109,6 @@ export default {
      * @returns {boolean}
      */
     isBookMark() {
-      console.log(this.bookmarkList)
       return this.bookmarkList.some((item) => item.chapter === this.chapterId)
     },
   },
@@ -113,7 +121,6 @@ export default {
      * @return {Promise<BookMarkModel>}
      */
     addBookmark() {
-      console.log(this.chapterId)
       if (this.chapterId) {
         return this.$store.dispatch(Actions.ADD_BOOKMARK, { chapter: this.chapterId })
       }
