@@ -17,11 +17,11 @@ export default {
      */
     [Mutations.SET_MENULIST]: function (state, model) {
       if (Object.hasOwnProperty.call(state.collection, model)) {
-        state.collection[model.sort] = model
+        state.collection[model.uuid] = model
       } else {
         const collection = {
           ...state.collection,
-          [model.sort]: model,
+          [model.uuid]: model,
         }
         state.collection = collection
       }

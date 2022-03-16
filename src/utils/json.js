@@ -20,3 +20,13 @@ export function storageInit(keys, storage) {
   }
   return data
 }
+
+export function treeEach(tree, func, children = 'child') {
+  const list = [...tree]
+  for (let i = 0; i < list.length; i++) {
+    if (func(list[i])) {
+      return
+    }
+    children && list[i][children] && list.splice(i + 1, 0, ...list[i][children])
+  }
+}
