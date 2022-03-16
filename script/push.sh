@@ -1,3 +1,4 @@
+git pull
 yarn lint
 git commit -am "test" 
 git push origin dev
