@@ -1,7 +1,8 @@
 <template>
   <header>
+    <Search />
     <nav>
-      <ul v-if="menuList">
+      <ul v-if="menuList.length">
         <li v-for="model in sortMenuList" :key="model.uuid">
           <RouterLink :to="getMenuRoute(model.uuid)">{{ model.label }}</RouterLink>
         </li>
@@ -12,9 +13,13 @@
 
 <script>
 import { Getters, Actions, RouterName } from '@/consts'
+import Search from '@/layouts/Search.vue'
 
 export default {
   name: 'Header',
+  components: {
+    Search,
+  },
   data() {
     return {}
   },
@@ -47,7 +52,9 @@ export default {
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      await this.fetchMenuList()
+      if (!this.menuList.length) {
+        await this.fetchMenuList()
+      }
     },
   },
 }

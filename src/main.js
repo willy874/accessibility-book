@@ -5,13 +5,17 @@ import store from './store'
 import plugins from './plugins'
 import Config from './config'
 import mixin from './mixins/app'
+// import liff from '@line/liff'
 
 Vue.config.productionTip = false
 Vue.use(plugins)
 Vue.mixin(mixin)
-const app = new Vue({
-  router,
-  store,
-  render: (h) => h(App),
-}).$mount('#app')
-Config.setApp(app)
+async function main() {
+  const app = new Vue({
+    router,
+    store,
+    render: (h) => h(App),
+  }).$mount('#app')
+  Config.setApp(app)
+}
+main()

@@ -4,12 +4,12 @@
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="targetModel">
       <h3>{{ targetModel.name }}</h3>
-      <div v-for="model in targetModel.chapter_set" :key="model.id" class="book__list-item">
+      <div v-for="model in chapterListSort" :key="model.id" class="book__list-item">
         <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
       </div>
     </div>
-    <div v-else-if="bookList && bookList.length">
-      <div v-for="model in bookList" :key="model.id" class="book__list-item">
+    <div v-else-if="bookListByLast && bookListByLast.length">
+      <div v-for="model in bookListByLast" :key="model.id" class="book__list-item">
         <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
       </div>
     </div>
@@ -26,6 +26,7 @@ export default {
     return {
       active: '',
       loading: false,
+      bookListByLast: [],
     }
   },
   computed: {
@@ -35,8 +36,14 @@ export default {
     bookList() {
       return this.$store.getters[Getters.BOOK_LIST]
     },
+    chapterListSort() {
+      if (this.targetModel && this.targetModel.chapter_set) {
+        return this.targetModel.chapter_set?.map((p) => p).sort((p, n) => p.no - n.no)
+      }
+      return []
+    },
     /**
-     * @returns {ChapterModel}
+     * @returns {BookModel}
      */
     targetModel() {
       return this.bookList.find((p) => p.id === this.active)
@@ -98,10 +105,10 @@ export default {
         await this.fetchBookById(id)
       } else if (query.tag__name) {
         this.active = ''
-        await this.fetchBookListByQuery(query)
+        this.bookListByLast = await this.fetchBookListByQuery(query)
       } else {
         this.active = ''
-        await this.fetchBookList()
+        this.bookListByLast = await this.fetchBookList()
       }
     },
   },

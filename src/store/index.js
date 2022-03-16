@@ -55,6 +55,7 @@ export default new Vuex.Store({
     [Actions.ROUTE_CHANGE]: async function (store, vm) {
       const { commit } = store
       const route = Config.getRoute(vm)
+      // instance.$router.replace(route)
       commit(Mutations.SET_ROUTE, route)
       return route
     },

@@ -25,7 +25,8 @@ export class HttpError extends Error {
    * @param {AxiosError<HttpErrorResponse>} res
    */
   constructor(res = {}) {
-    const message = res.response.data?.message || res.response.data?.detail || ''
+    const message =
+      res.response.data?.message || res.response.data?.detail || res.response.data?.non_field_errors?.join(',') || ''
     super(message)
     this.status = res.response?.status || 0
     this.methods = res.config.method.toUpperCase() || 'GET'
@@ -55,6 +56,9 @@ export function handleErrorLog(error, data = {}) {
  * @param {unknown} error
  */
 export function handleHttpErrorLog(error) {
+  if (/login/.test(error.url)) {
+    alert(`HTTP Error ${error.status} ${error.message}`)
+  }
   if (process.env.NODE_ENV === 'development') {
     if (error instanceof HttpError) {
       console.error(`%s [%s] %s\n%s`, error.methods || 'GET', error.status || 0, error.url || '', error.message)

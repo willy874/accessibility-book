@@ -10,38 +10,14 @@ module.exports = {
     disableHostCheck: true,
     host: '127.0.0.1',
     port: 8000,
-    // proxy: {
-    //   '/root': {
-    //     target: 'https://library.pastwind.org/',
-    //     pathRewrite: {
-    //       '^/root': '/',
-    //     },
-    //   },
-    //   '/auth': {
-    //     target: 'https://library.pastwind.org/',
-    //     pathRewrite: {
-    //       '^/auth': '/dj-rest-auth',
-    //     },
-    //     onProxyReq(proxyReq, req, res) {
-    //       const cookie = req.headers.cookie
-    //       if (cookie) {
-    //         proxyReq.setHeader('cookie', '')
-    //       }
-    //     },
-    //   },
-    //   '/api': {
-    //     target: 'https://library.pastwind.org/',
-    //     pathRewrite: {
-    //       '^/api': '/api/v1',
-    //     },
-    //   },
-    // },
+    https: true,
+    hotOnly: false,
   },
   css: {
     sourceMap: true,
   },
   pluginOptions: {
-    lintStyleOnBuild: true,
+    lintStyleOnBuild: false,
     stylelint: {
       files: ['src/**/*.{vue,htm,html,css,sss,less,scss}'],
     },

@@ -36,7 +36,6 @@ export default {
     [Actions.FETCH_HISTORY_LIST]: async function (store) {
       const { commit } = store
       try {
-        commit(Mutations.SET_LOADING, true)
         const res = await apiGetHistoryList()
         if (res.isAxiosError) {
           throw new HttpError(res)
@@ -45,7 +44,7 @@ export default {
           list.forEach((model) => {
             commit(Mutations.SET_HISTORY, model)
           })
-          commit(Mutations.SET_LOADING, false)
+
           return list
         }
       } catch (error) {

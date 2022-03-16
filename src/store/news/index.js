@@ -44,8 +44,7 @@ export default {
           list.forEach((model) => {
             commit(Mutations.SET_NEWS, model)
           })
-          if (state.loading) commit(Mutations.SET_LOADING, false)
-          return list
+          if (state.loading) return list
         }
       } catch (error) {
         return handleHttpErrorLog(error)
@@ -60,17 +59,15 @@ export default {
     [Actions.FETCH_NEWS_BY_ID]: async function (store, id) {
       const { commit } = store
       try {
-        commit(Mutations.SET_LOADING, true)
         const res = await apiGetNewsById(id)
         if (res.isAxiosError) {
           throw new HttpError(res)
         } else {
           commit(Mutations.SET_NEWS, res.data)
-          commit(Mutations.SET_LOADING, false)
+
           return res.data
         }
       } catch (error) {
-        commit(Mutations.SET_LOADING, false)
         return handleHttpErrorLog(error)
       }
     },

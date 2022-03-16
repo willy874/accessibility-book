@@ -8,7 +8,9 @@ import { Actions, HttpCode, StorageKey } from '@/consts'
 export function getRequestSuccess(options) {
   return (req) => {
     const token = localStorage.getItem(StorageKey.TOKEN)
-    req.headers.Authorization = Config.value.authorizationHeaderPrefix + ' ' + token
+    if (token) {
+      req.headers.Authorization = Config.value.authorizationHeaderPrefix + ' ' + token
+    }
     return req
   }
 }

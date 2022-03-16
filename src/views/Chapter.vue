@@ -1,13 +1,14 @@
 <template>
   <div>
+    <div v-if="activeBook" class="tag-list">
+      <div v-for="tag in activeBook.tag" :key="tag.id" class="tag-item">
+        <RouterLink :to="getTagRoute(tag.id)" title="搜尋該標籤列表">{{ tag.name }}</RouterLink>
+      </div>
+    </div>
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="targetModel">
       <div>
-        <h2>章節列表</h2>
-        <div class="chapter__bookmark">
-          <span v-if="isBookMark">已加入書籤</span>
-          <button v-else type="button" @click="throttleAddBookMark">建立書籤</button>
-        </div>
+        <h2 class="chapter__heading">章節列表</h2>
       </div>
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
     </div>
@@ -18,7 +19,7 @@
 </template>
 
 <script>
-import { transformMarkdownToHtml, throttle } from '@/utils'
+import { transformMarkdownToHtml } from '@/utils'
 import { apiPostHistory } from '@/api/index'
 import { RouterName, Getters, Actions } from '@/consts'
 
@@ -27,7 +28,6 @@ export default {
   data() {
     return {
       active: null,
-      throttleAddBookMark: throttle(this.addBookmark, 400),
     }
   },
   computed: {
@@ -44,25 +44,23 @@ export default {
       return this.chapterList.find((p) => p.id === this.active)
     },
     /**
-     * @returns {BookMarkModel[]}
+     * @return {BookModel}
      */
-    bookmarkList() {
-      return this.$store.getters[Getters.BOOKMARK_LIST]
-    },
-    /**
-     * @returns {boolean}
-     */
-    isBookMark() {
-      return this.bookmarkList.some((item) => item.chapter === this.active)
+    activeBook() {
+      return this.$store.state.chapter.activeBook
     },
   },
   methods: {
     transformMarkdownToHtml,
     /**
-     * @return {Promise<BookMarkModel[]>}
+     * @param {number} id
+     * @return {VueRouteLocation}
      */
-    fetchBookmarkList() {
-      return this.$store.dispatch(Actions.FETCH_BOOKMARK_LIST)
+    getTagRoute(id) {
+      return {
+        name: RouterName.TAG_DETAIL,
+        params: { id },
+      }
     },
     /**
      * @param {number} id
@@ -70,15 +68,6 @@ export default {
      */
     fetchChapterById(id) {
       return this.$store.dispatch(Actions.FETCH_CHAPTER_BY_ID, id)
-    },
-    /**
-     * @param {BookMarkRequestParam}
-     * @return {Promise<BookMarkModel>}
-     */
-    addBookmark() {
-      if (this.active) {
-        return this.$store.dispatch(Actions.ADD_BOOKMARK, { chapter: this.active })
-      }
     },
     /**
      * @depend
@@ -91,7 +80,6 @@ export default {
       const id = Number(this.route.params.id)
       if (id) {
         this.active = id
-        await this.fetchBookmarkList()
         await this.fetchChapterById(id)
         await apiPostHistory({ chapter: id })
       } else {
@@ -103,7 +91,21 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.chapter__heading {
+  margin-bottom: 12px;
+}
 .chapter__bookmark {
   padding: 16px;
+}
+.tag-list {
+  display: flex;
+  margin-left: -16px;
+  margin-right: -16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.tag-item {
+  padding: 4px 16px;
+  white-space: nowrap;
 }
 </style>

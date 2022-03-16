@@ -30,7 +30,7 @@ export default {
     getBookRouteByTagName(tags) {
       return {
         name: RouterName.BOOK,
-        query: { tag__name: tags },
+        query: { tag__name: tags.join(',') },
       }
     },
     /**

@@ -1,9 +1,9 @@
 <template>
   <section>
     <div v-if="isLoading">讀取中</div>
-    <div v-else-if="targetModel">
-      <h2 class="section-title">最新消息</h2>
-      <div class="list-item">
+    <div v-else-if="targetModel" class="article">
+      <h2 class="title">最新消息</h2>
+      <div class="list">
         <h3>{{ targetModel.name }}</h3>
         <div>
           發佈時間:<span>{{ getDate(targetModel.publish_date) }}</span>
@@ -11,8 +11,8 @@
         <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
       </div>
     </div>
-    <div v-else-if="newsList && newsList.length">
-      <h3 class="section-title">最新消息</h3>
+    <div v-else-if="newsList && newsList.length" class="home">
+      <h3 class="title">最新消息</h3>
       <ul class="list">
         <li v-for="model in newsList" :key="model.id" class="list-item">
           <h4>
@@ -93,9 +93,26 @@ export default {
 }
 </script>
 
-<style>
-.list {
-  border: 1px solid #000;
-  padding: 16px;
+<style lang="scss" scoped>
+.article {
+  .list {
+    margin-bottom: 16px;
+  }
+  h2 {
+    margin-bottom: 8px;
+  }
+}
+.home {
+  .title {
+    margin-top: 16px;
+  }
+  .list {
+    margin-bottom: 16px;
+  }
+  .list-item {
+    border: 1px solid #000;
+    padding: 16px;
+    margin: 8px 0;
+  }
 }
 </style>

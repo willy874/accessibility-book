@@ -51,6 +51,7 @@
  * @typedef {Object} Tag
  * @property {number} id
  * @property {string} name
+ * @property {number|null} sort_no
  */
 /**
  * @typedef {Object} BookModel

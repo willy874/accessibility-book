@@ -2,11 +2,11 @@
   <div id="app">
     <template v-if="route">
       <Header v-if="isShow" class="header" />
-      <article class="article">
-        <div class="main">
+      <main class="main">
+        <article class="article">
           <router-view />
-        </div>
-      </article>
+        </article>
+      </main>
       <Footer v-if="isShow" class="footer" />
     </template>
   </div>
@@ -18,7 +18,6 @@ import Footer from './layouts/Footer.vue'
 import { StorageKey, Actions } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
-
 export default {
   name: 'App',
   components: {
@@ -26,10 +25,7 @@ export default {
     Footer,
   },
   data() {
-    return {
-      path: '',
-      href: '',
-    }
+    return {}
   },
   watch: {
     $route() {
@@ -79,11 +75,11 @@ body {
   padding-top: constant(safe-area-inset-top);
   padding-top: env(safe-area-inset-top);
 }
-.article {
+.main {
   flex-grow: 1;
   height: 0;
   position: relative;
-  .main {
+  .article {
     position: absolute;
     top: 0;
     left: 0;

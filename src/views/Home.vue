@@ -3,12 +3,12 @@
     <div v-if="route.name === RouterName.HOME" :key="RouterName.HOME">
       <h2>首頁</h2>
       <section-news />
-      <section id="release_list">
+      <!-- <section id="release_list">
         <h4 class="section-title">最新上架</h4>
       </section>
       <section id="recommend_list">
         <h4 class="section-title">推薦書單</h4>
-      </section>
+      </section> -->
     </div>
     <div v-for="(view, name) in views" :key="name">
       <div :is="view" v-if="route.name === name"></div>
