@@ -33,11 +33,14 @@ export default {
     },
   },
   async created() {
+    /** @type {import('@/mixins/app').AppMixin} */
+    // @ts-ignore
+    const appMixin = this
     const isLiff = this.$route.query && this.$route.query['liff.state']
     if (Config.value.liff || isLiff) {
       await liff.init({ liffId: Config.value.liffId })
     }
-    if (await this.getStorage(StorageKey.TOKEN)) {
+    if (await appMixin.getStorage(StorageKey.TOKEN)) {
       await this.$store.dispatch(Actions.FETCH_USER_INFO)
     }
     this.changeRoute()

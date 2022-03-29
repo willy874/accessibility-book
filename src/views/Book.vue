@@ -19,6 +19,7 @@
 
 <script>
 import { RouterName, Getters, Actions } from '@/consts'
+import VueConfig from '@/config'
 
 export default {
   name: 'Book',
@@ -31,22 +32,25 @@ export default {
   },
   computed: {
     /**
-     * @return {ChapterModel[]}
+     * @return {BookModel[]}
      */
     bookList() {
       return this.$store.getters[Getters.BOOK_LIST]
     },
-    chapterListSort() {
-      if (this.targetModel && this.targetModel.chapter_set) {
-        return this.targetModel.chapter_set?.map((p) => p).sort((p, n) => p.no - n.no)
-      }
-      return []
-    },
     /**
-     * @returns {BookModel}
+     * @return {BookModel|null}
      */
     targetModel() {
-      return this.bookList.find((p) => p.id === this.active)
+      return this.bookList.find((p) => p.id === this.active) || null
+    },
+    /**
+     * @return {ChapterIndex[]}
+     */
+    chapterListSort() {
+      if (this.targetModel && this.targetModel.chapter_set) {
+        return this.targetModel.chapter_set.map((p) => p).sort((p, n) => p.no - n.no)
+      }
+      return []
     },
   },
   methods: {
@@ -71,7 +75,7 @@ export default {
       return this.$store.dispatch(Actions.FETCH_BOOK_LIST_BY_QUERY, query)
     },
     /**
-     * @param {number} id
+     * @param {string} id
      * @return {VueRouteLocation}
      */
     getChapterRoute(id) {
@@ -81,7 +85,7 @@ export default {
       }
     },
     /**
-     * @param {number} id
+     * @param {string} id
      * @return {VueRouteLocation}
      */
     getBookRoute(id) {
@@ -91,15 +95,12 @@ export default {
       }
     },
     /**
-     * @depend
-     * @param {Route} this.route
-     * @param {string} this.active
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      /** @type {string} */
-      const id = this.route.params.id
-      const query = this.route.query
+      const route = VueConfig.getRoute()
+      const id = route.params.id
+      const query = route.query
       if (id) {
         this.active = id
         await this.fetchBookById(id)

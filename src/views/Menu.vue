@@ -47,10 +47,12 @@ export default {
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      /** @type {string} */
-      const id = this.route.params.id
+      /** @type {import('@/mixins/app').AppMixin} */
+      // @ts-ignore
+      const appMixin = this
+      const id = appMixin.route.params.id
       if (id) {
-        const listModel = await this.getMenuList(id)
+        const listModel = await this.getMenuList()
         treeEach(listModel, (item) => {
           if (item.uuid === id) {
             this.childListModel = item.child

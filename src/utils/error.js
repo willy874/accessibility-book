@@ -22,9 +22,20 @@ function messageFormat(message, data = {}) {
 export class HttpError extends Error {
   /**
    * @constructor
-   * @param {AxiosError<HttpErrorResponse>} res
+   * @param {AxiosError<HttpErrorResponse>} args
    */
-  constructor(res = {}) {
+  constructor(args) {
+    const res = args || {
+      response: {
+        data: null,
+        status: 0,
+      },
+      config: {
+        baseURL: '',
+        method: '',
+        url: '',
+      },
+    }
     const message =
       res.response.data?.message || res.response.data?.detail || res.response.data?.non_field_errors?.join(',') || ''
     super(message)
@@ -54,11 +65,9 @@ export function handleErrorLog(error, data = {}) {
 
 /**
  * @param {unknown} error
+ * @return {void}
  */
 export function handleHttpErrorLog(error) {
-  if (/login/.test(error.url)) {
-    alert(`HTTP Error ${error.status} ${error.message}`)
-  }
   if (process.env.NODE_ENV === 'development') {
     if (error instanceof HttpError) {
       console.error(`%s [%s] %s\n%s`, error.methods || 'GET', error.status || 0, error.url || '', error.message)
@@ -67,8 +76,13 @@ export function handleHttpErrorLog(error) {
     if (error instanceof Error) {
       handleErrorLog(error)
     }
+  } else {
+    if (error instanceof HttpError) {
+      if (/login/.test(error.url)) {
+        alert(`HTTP Error ${error.status} ${error.message}`)
+      }
+    }
   }
-  return error
 }
 
 /**

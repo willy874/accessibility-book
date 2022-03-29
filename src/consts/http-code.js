@@ -1,5 +1,5 @@
 /**
- * @enum {string}
+ * @enum {number}
  */
 export const HttpCode = {
   CLIENT_ERROR: 400,

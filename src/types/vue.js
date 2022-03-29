@@ -21,7 +21,7 @@
  */
 /**
  * @template V
- * @typedef {import('vue-router'.NavigationGuard<V>)>} NavigationGuard
+ * @typedef {import('vue-router').NavigationGuard<V>} NavigationGuard
  */
 /**
  * @typedef {Object} VuePluginOptions

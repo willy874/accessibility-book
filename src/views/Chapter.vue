@@ -22,6 +22,7 @@
 import { transformMarkdownToHtml } from '@/utils'
 import { apiPostHistory } from '@/api/index'
 import { RouterName, Getters, Actions } from '@/consts'
+import VueConfig from '@/config'
 
 export default {
   name: 'Chapter',
@@ -53,7 +54,7 @@ export default {
   methods: {
     transformMarkdownToHtml,
     /**
-     * @param {number} id
+     * @param {string} id
      * @return {VueRouteLocation}
      */
     getTagRoute(id) {
@@ -76,8 +77,8 @@ export default {
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      /** @type {number} */
-      const id = Number(this.route.params.id)
+      const route = VueConfig.getRoute()
+      const id = Number(route.params.id)
       if (id) {
         this.active = id
         await this.fetchChapterById(id)

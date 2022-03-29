@@ -1,9 +1,7 @@
 /**
  * @typedef {import('@/store')}
  */
-const root = {
-  IS_LOGIN: 'isLogin',
-}
+const root = {}
 
 /**
  * @typedef {import('@/store/bookmark')}
@@ -11,7 +9,7 @@ const root = {
 const bookmark = {
   BOOKMARK_LIST: 'bookmarkList',
   GET_BOOKMARK_BY_ID: 'bookmarkListById',
-  GET_BOOKMARK_LIST_BY_TAG: 'getBookListByTag',
+  GET_BOOKMARK_LIST_BY_TAG_ID: 'getBookListByTagId',
 }
 
 /**

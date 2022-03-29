@@ -1,5 +1,5 @@
 /**
- * @enum {StorageKeyEnum}
+ * @enum {string}
  */
 export const StorageKey = {
   TOKEN: 'token',

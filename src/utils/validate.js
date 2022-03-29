@@ -3,6 +3,7 @@ import { isEmpty, isTextIncludes } from './condition'
 import { handleWarningLog } from './error'
 import { blobToBase64, urlToImageElement, transformFileSize } from './image'
 import { ValidateType } from '@/consts'
+import { cloneJson } from './json'
 
 /**
  * @typedef {Object} ValidateRules
@@ -13,7 +14,7 @@ import { ValidateType } from '@/consts'
  * @property {ValidateOption<ValidImageParams>} image
  */
 /**
- * @type {{ [x: ValidateTypeEnum]: ValidateHandle }}
+ * @type {{ [K in ValidateType]: ValidateHandle }}
  */
 const validateHandler = {
   /**
@@ -21,7 +22,7 @@ const validateHandler = {
    * @param {ValidateOption<{}>} option
    * @returns {Promise<string|null>}
    */
-  [ValidateType.IS_EMPTY]: function (value, option) {
+  [ValidateType.IS_EMPTY]: async function (value, option) {
     return isEmpty(value) ? option.message || '輸入資料不得為空' : null
   },
   /**
@@ -29,7 +30,7 @@ const validateHandler = {
    * @param {ValidateOption<{}>} option
    * @returns {Promise<string|null>}
    */
-  [ValidateType.EMAIL]: function (value, option) {
+  [ValidateType.EMAIL]: async function (value, option) {
     const reg =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     const result = !reg.test(String(value))
@@ -45,7 +46,7 @@ const validateHandler = {
    * @param {ValidateOption<ValidPasswordParams>} option
    * @returns {Promise<string|null>}
    */
-  [ValidateType.PASSWORD]: function (value, option) {
+  [ValidateType.PASSWORD]: async function (value, option) {
     const min = option.min || 6
     const max = option.max || 30
     const reg = new RegExp(`^(?=.*\\d)(?=.*[a-zA-Z]).{${min},${max}}$`)
@@ -61,7 +62,7 @@ const validateHandler = {
    * @param {ValidateOption<ValidEqualParams>} option
    * @returns {Promise<string|null>}
    */
-  [ValidateType.EQUAL]: function (value, option) {
+  [ValidateType.EQUAL]: async function (value, option) {
     return option.equal !== value ? option.message || '輸入資料不相等' : null
   },
   /**
@@ -91,21 +92,31 @@ const validateHandler = {
   [ValidateType.IMAGE]: async function (value, option) {
     const errors = []
     if (value instanceof Blob) {
-      const messageData = option.messageOption || { default: option.message || null }
+      const messageData = Object.assign(
+        {
+          minWidth: '',
+          maxWidth: '',
+          minHeight: '',
+          maxHeight: '',
+          size: '',
+          type: '',
+        },
+        option.messageOption
+      )
       if (option.minWidth || option.maxWidth || option.minHeight || option.maxHeight) {
         const base64Url = await blobToBase64(value)
         const img = await urlToImageElement(base64Url)
         if (option.minWidth < img.naturalWidth) {
-          errors.push(messageData.minWidth || messageData.default || '圖片長寬大小超出限制')
+          errors.push(messageData.minWidth || '圖片長寬大小超出限制')
         }
         if (option.maxWidth > img.naturalWidth) {
-          errors.push(messageData.maxWidth || messageData.default || '圖片長寬大小超出限制')
+          errors.push(messageData.maxWidth || '圖片長寬大小超出限制')
         }
         if (option.minHeight < img.naturalHeight) {
-          errors.push(messageData.minHeight || messageData.default || '圖片長寬大小超出限制')
+          errors.push(messageData.minHeight || '圖片長寬大小超出限制')
         }
         if (option.maxHeight > img.naturalHeight) {
-          errors.push(messageData.maxHeight || messageData.default || '圖片長寬大小超出限制')
+          errors.push(messageData.maxHeight || '圖片長寬大小超出限制')
         }
       }
       if (option.size) {
@@ -114,7 +125,7 @@ const validateHandler = {
           handleWarningLog('utils[function validImage]: The option property size is not valid variable.')
         } else {
           if (value.size > sizeNumber) {
-            errors.push(messageData.size || messageData.default || '檔案大小超出限制')
+            errors.push(messageData.size || '檔案大小超出限制')
           }
         }
       }
@@ -123,7 +134,7 @@ const validateHandler = {
         const types = allowedTypes.map((v) => String(v).toLocaleLowerCase())
         const isAllowed = isTextIncludes(types, value.type.toLocaleLowerCase())
         if (!isAllowed) {
-          errors.push(messageData.type || messageData.default || '檔案類型錯誤')
+          errors.push(messageData.type || '檔案類型錯誤')
         }
       }
     } else {
@@ -134,9 +145,9 @@ const validateHandler = {
 }
 
 /**
- * @param {string} value
+ * @param {any} value
  * @param {ValidateField} options
- * @returns {Promise<boolean>}
+ * @returns {Promise<string[]|null>}
  */
 export async function validateField(value, options) {
   const errors = []
@@ -162,12 +173,13 @@ export async function validateField(value, options) {
 }
 
 /**
- * @typedef {Pick<ValidateRules,ValidateType>} ValidateField
+ * @typedef {{[key: import('@/consts/validate').ValidateType]: any} & ValidateRules} ValidateField
  */
 /**
- * @param {{ [field: string]: JsonData}} form
- * @param {{ [field: string]: ValidateField }} options
- * @returns {ErrorResult}
+ * @template T
+ * @param {{ [field in keyof T]: JsonData | JsonValue | Blob}} form
+ * @param {T} options
+ * @return {Promise<ErrorResult>}
  */
 export async function validate(form, options) {
   if (isEmpty(form)) {
@@ -176,14 +188,14 @@ export async function validate(form, options) {
   if (isEmpty(options)) {
     handleWarningLog('utils[function validate]: The options property is all empty.')
   }
-  const errors = {}
-  await Promise.all(
-    Object.keys(options).map(async (key) => {
-      if (Object.hasOwnProperty.call(form, key)) {
-        errors[key] = await validateField(form[key], options[key])
-      }
-    })
-  )
+  /** @type {ErrorResult} */
+  const errors = cloneJson({})
+  for (const key in options) {
+    if (Object.hasOwnProperty.call(form, key)) {
+      // @ts-ignore
+      errors[key] = await validateField(form[key], options[key])
+    }
+  }
   return errors
 }
 
@@ -197,7 +209,7 @@ export function errorsToArray(errors) {
 
 /**
  * @param {ErrorResult} errors
- * @param {string} field
+ * @param {string} [field]
  * @return {boolean}
  */
 export function isValid(errors, field) {

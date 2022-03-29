@@ -67,7 +67,7 @@ export default {
       return this.$store.dispatch(Actions.FETCH_NEWS_BY_ID, id)
     },
     /**
-     * @param {number} id
+     * @param {string} id
      * @return {VueRouteLocation}
      */
     getNewsRoute(id) {
@@ -80,8 +80,10 @@ export default {
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      /** @type {number} */
-      const id = Number(this.route.params.id)
+      /** @type {import('@/mixins/app').AppMixin} */
+      // @ts-ignore
+      const appMixin = this
+      const id = Number(appMixin.route.params.id)
       if (id) {
         await this.fetchNewsListById(id)
         this.active = id

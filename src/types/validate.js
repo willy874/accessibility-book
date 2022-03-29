@@ -1,5 +1,5 @@
 /**
- * @typedef {{ [field: string]: string[] }} ErrorResult
+ * @typedef {{ [field: string]: string[] | null }} ErrorResult
  */
 /**
  * @typedef {Object} ValidateOptionBase
@@ -7,11 +7,11 @@
  */
 /**
  * @template P
- * @typedef {Required<P & ValidateOptionBase>} ValidateOption
+ * @typedef {Partial<P & ValidateOptionBase>} ValidateOption
  */
 /**
  * @callback ValidateHandle
  * @param {unknown} value
  * @param {Required<ValidateOptionBase>} option
- * @returns {string|string[]|null}
+ * @returns {Promise<string|string[]|null>}
  */

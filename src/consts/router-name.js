@@ -1,5 +1,5 @@
 /**
- * @enum {RouterNameEnum}
+ * @enum {string}
  */
 export const RouterName = {
   HOME: 'Home',

@@ -36,10 +36,6 @@ const config = {
 let app = null
 
 class VueConfig {
-  static get value() {
-    return config
-  }
-
   static setApp(vm) {
     app = vm
   }
@@ -49,7 +45,7 @@ class VueConfig {
   }
 
   /**
-   * @param {Vue} vm
+   * @param {Vue} [vm]
    * @returns {Route}
    */
   static getRoute(vm) {
@@ -67,5 +63,7 @@ class VueConfig {
     }
   }
 }
+
+VueConfig.value = config
 
 export default VueConfig

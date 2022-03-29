@@ -13,7 +13,7 @@
     </div>
     <div v-if="step === 1">
       <h2 class="form-title">密碼設定</h2>
-      <form @submit="throttleSubmitPassword">
+      <form @submit="submitPassword">
         <div class="form-item">
           <label>密碼</label>
           <input
@@ -40,7 +40,7 @@
     </div>
     <div v-if="step === 2">
       <h2 class="form-title">資料填寫</h2>
-      <form @submit="throttleSubmitUpdateUser">
+      <form @submit="submitUpdateUser">
         <div class="form-item">
           <label>姓氏</label>
           <input
@@ -106,6 +106,7 @@ import {
   handleHttpErrorLog,
   blobToBase64,
   throttle,
+  isAxiosError,
 } from '@/utils'
 import { RouterName, Actions, ValidateType, LifecycleHook } from '@/consts'
 
@@ -149,8 +150,6 @@ export default {
        * @type {string}
        */
       preview: '',
-      throttleSubmitUpdateUser: throttle(this.submitUpdateUser, 400),
-      throttleSubmitPassword: throttle(this.submitPassword, 400),
     }
   },
   computed: {
@@ -160,6 +159,9 @@ export default {
     userInfo() {
       return this.$store.state.user.info
     },
+    /**
+     * @return {boolean}
+     */
     isEmailEmpty() {
       return !this.userInfo?.email
     },
@@ -187,7 +189,7 @@ export default {
       }
     },
     /**
-     * @return {UserModel}
+     * @return {Promise<UserModel>}
      */
     fetchUserInfo() {
       return this.$store.dispatch(Actions.FETCH_USER_INFO)
@@ -197,7 +199,7 @@ export default {
     },
     /**
      * @param {UserUpdateRequestParam} form
-     * @return {UserModel}
+     * @return {Promise<UserModel>}
      */
     async updateUserInfo(form) {
       const data = {
@@ -210,35 +212,40 @@ export default {
     },
     /**
      * @param {PasswordRegisterRequestParam} form
-     * @return {{ detail: string }}
+     * @return {Promise<{ detail: string } | void>}
      */
     async createPassword(form) {
-      const data = {
-        new_password1: form.password1,
-        new_password2: form.password2,
-      }
       try {
-        const res = await apiPostPasswordRegister(data)
-        if (res.isAxiosError) {
+        const res = await apiPostPasswordRegister(form)
+        if (isAxiosError(res)) {
           throw new HttpError(res)
         }
         return res.data
       } catch (error) {
-        return handleHttpErrorLog(error)
+        handleHttpErrorLog(error)
       }
     },
+    throttle: throttle(function () {
+      return true
+    }, 400),
     /**
      * @param {SubmitEvent} e
      */
     async submitPassword(e) {
+      if (!this.throttle()) {
+        return
+      }
       e.preventDefault()
-      this.errors = await this.validatePassword(this.form)
+      this.errors = await this.validatePassword()
       if (isValid(this.errors)) {
         alert('註冊失敗！\n\n' + errorsToArray(this.errors).toString().replace(/,/g, '，\n') + '。')
         return
       }
       try {
-        const errors = await this.createPassword(this.form)
+        const errors = await this.createPassword({
+          new_password1: this.form.password1,
+          new_password2: this.form.password2,
+        })
         if (errors) {
           throw errors
         } else {
@@ -253,6 +260,9 @@ export default {
      * @param {SubmitEvent} e
      */
     async submitUpdateUser(e) {
+      if (!this.throttle()) {
+        return
+      }
       e.preventDefault()
       const form = {
         first_name: this.form.first_name,
@@ -260,7 +270,7 @@ export default {
         email: this.form.email,
         photo: this.form.photo,
       }
-      this.errors = await this.validateUser(form)
+      this.errors = await this.validateUser()
       if (isValid(this.errors)) {
         alert('註冊失敗！\n\n' + errorsToArray(this.errors).toString().replace(/,/g, '，\n') + '。')
         return
@@ -282,6 +292,7 @@ export default {
      */
     async onPhotoUpload(e) {
       /** @type {HTMLInputElement}} */
+      // @ts-ignore
       const input = e.target
       if (input && input.files.length) {
         const file = Array.from(input.files)[0]
@@ -299,11 +310,14 @@ export default {
       }
     },
     /**
-     * @param {RegistrationForm} form
-     * @return {RegistrationError}
+     * @return {Promise<Partial<RegistrationError>>}
      */
-    async validatePassword(form) {
-      return await validate(form, {
+    async validatePassword() {
+      const form = {
+        password1: this.form.password1,
+        password2: this.form.password2,
+      }
+      const result = await validate(form, {
         password1: {
           [ValidateType.IS_EMPTY]: { message: '請填寫密碼' },
           [ValidateType.PASSWORD]: { min: 6, max: 30 },
@@ -313,12 +327,18 @@ export default {
           [ValidateType.EQUAL]: { message: '請確認填寫密碼是否相等', equal: form.password1 },
         },
       })
+      return result
     },
     /**
-     * @param {RegistrationForm} form
-     * @return {RegistrationError}
+     * @return {Promise<Partial<RegistrationError>>}
      */
-    async validateUser(form) {
+    async validateUser() {
+      const form = {
+        first_name: this.form.first_name,
+        last_name: this.form.last_name,
+        email: this.form.email,
+        photo: this.form.photo,
+      }
       return await validate(form, {
         first_name: {
           [ValidateType.IS_EMPTY]: { message: '請填寫名字' },

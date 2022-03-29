@@ -1,14 +1,12 @@
 import dayjs from 'dayjs'
 import Config from '@/config'
-import { Actions, LifecycleHook } from '@/consts'
+import { Actions, LifecycleHook, RouterName } from '@/consts'
 
-/**
- * @type {Vue}
- */
 export default {
   data() {
     return {
       loop: true,
+      RouterName,
     }
   },
   watch: {
@@ -65,6 +63,9 @@ export default {
     }
   },
   computed: {
+    appMixin() {
+      return {}
+    },
     isLoading() {
       return this.$store.state.loading
     },
@@ -81,26 +82,30 @@ export default {
       this.loop = true
     },
     /**
-     * @param {StorageKeyEnum} key
+     * @callback getStorage
+     * @param {import('@/consts').StorageKey} key
      * @return {Promise<string>}
      */
     getStorage(key) {
       return this.$store.dispatch(Actions.GET_STORAGE, key)
     },
     /**
-     * @param {StorageKeyEnum} key
+     * @callback setStorage
+     * @param {import('@/consts').StorageKey} key
      * @param {string} value
      */
     setStorage(key, value) {
       this.$store.dispatch(Actions.SET_STORAGE, { key, value })
     },
     /**
-     * @param {StorageKeyEnum} key
+     * @callback removeStorage
+     * @param {import('@/consts').StorageKey} key
      */
     removeStorage(key) {
       this.$store.dispatch(Actions.REMOVE_STORAGE, key)
     },
     /**
+     * @callback getDate
      * @param {Date} date
      * @param {string} format
      * @return {string}
@@ -110,3 +115,14 @@ export default {
     },
   },
 }
+/**
+ * @typedef {Object} AppMixin
+ * @property {typeof RouterName} RouterName
+ * @property {boolean} isLoading
+ * @property {boolean} isShow
+ * @property {Route} route
+ * @property {getStorage} getStorage
+ * @property {setStorage} setStorage
+ * @property {removeStorage} removeStorage
+ * @property {getDate} getDate
+ */

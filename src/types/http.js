@@ -9,14 +9,11 @@
  * @typedef {import('axios').Method} HttpMethod
  */
 /**
- * @typedef {import('axios').ResponseType} ResponseType
- */
-/**
  * @typedef {import('axios').AxiosRequestConfig} AxiosRequestConfig
  */
 /**
  * @template T
- * @typedef {import('axios').AxiosResponse<T>} AxiosResponse
+ * @typedef {import('axios').AxiosResponse<T>|AxiosError<*>} AxiosResponse
  */
 /**
  * @template T
@@ -24,4 +21,7 @@
  */
 /**
  * @typedef {import('axios').AxiosInstance} AxiosInstance
+ */
+/**
+ * @typedef {Object} InterceptorsOptions
  */

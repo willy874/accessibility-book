@@ -4,12 +4,12 @@
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="tagListById && tagListById.length">
       <div v-for="model in tagListById" :key="model.id" class="tag__list-item">
-        <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
+        <RouterLink :to="{ name: RouterName.CHAPTER, params: { id: model.id } }">{{ model.name }}</RouterLink>
       </div>
     </div>
     <div v-else-if="tagList && tagList.length">
       <div v-for="model in tagList" :key="model.id" class="tag__list-item">
-        <RouterLink :to="getTagRoute(model.id)">{{ model.name }}</RouterLink>
+        <RouterLink :to="{ name: RouterName.TAG_DETAIL, params: { id: model.id } }">{{ model.name }}</RouterLink>
       </div>
     </div>
     <div v-else>沒有資料</div>
@@ -17,25 +17,44 @@
 </template>
 
 <script>
-import { RouterName, Getters, Actions } from '@/consts'
+import { mapActions, mapGetters } from 'vuex'
+import { Getters, Actions } from '@/consts'
+import VueConfig from '@/config'
+
+/**
+ * @type {{
+ *   tagList: () => ChapterModel[];
+ * }}
+ */
+const { tagList } = mapGetters({
+  tagList: Getters.TAG_LIST,
+})
+
+/**
+ * @type {{
+ *   fetchTagList: ActionFunction<import('@/store/tag').fetchTagList>,
+ *   fetchChapterListByTagId: function(number): Promise<ChapterModel>;
+ * }}
+ */
+const { fetchTagList, fetchChapterListByTagId } = mapActions({
+  fetchTagList: Actions.FETCH_TAG_LIST,
+  fetchChapterListByTagId: Actions.FETCH_CHAPTER_LIST_BY_TAG_ID,
+})
 
 export default {
   name: 'Tag',
   data() {
     return {
-      /** @type {TagModel} */
+      /** @type {TagModel | null} */
       tagListById: null,
-      /** @type {number} */
+      /** @type {number | null} */
       active: null,
+      /** @type {TagModel[]} */
+      listModel: [],
     }
   },
   computed: {
-    /**
-     * @return {ChapterModel[]}
-     */
-    tagList() {
-      return this.$store.getters[Getters.TAG_LIST]
-    },
+    tagList,
     /**
      * @returns {ChapterModel}
      */
@@ -44,48 +63,14 @@ export default {
     },
   },
   methods: {
+    fetchTagList,
+    fetchChapterListByTagId,
     /**
-     * @return {Promise<TagModel[]>}
-     */
-    fetchTagList() {
-      return this.$store.dispatch(Actions.FETCH_TAG_LIST)
-    },
-    /**
-     * @param {number} id
-     * @return {Promise<ChapterModel>}
-     */
-    fetchChapterListByTagId(id) {
-      return this.$store.dispatch(Actions.FETCH_CHAPTER_LIST_BY_TAG_ID, id)
-    },
-    /**
-     * @param {number} id
-     * @return {VueRouteLocation}
-     */
-    getChapterRoute(id) {
-      return {
-        name: RouterName.CHAPTER,
-        params: { id },
-      }
-    },
-    /**
-     * @param {number} id
-     * @return {VueRouteLocation}
-     */
-    getTagRoute(id) {
-      return {
-        name: RouterName.TAG_DETAIL,
-        params: { id },
-      }
-    },
-    /**
-     * @depend
-     * @param {Route} this.route
-     * @param {number} this.active
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      /** @type {number} */
-      const id = Number(this.route.params.id)
+      const route = VueConfig.getRoute()
+      const id = Number(route.params.id)
       if (id) {
         this.active = id
         this.tagListById = await this.fetchChapterListByTagId(id)

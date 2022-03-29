@@ -97,7 +97,7 @@ export const apiGetChapterListByTagId = (id) => request.get(`chapter/?tag=${id}`
 export const apiGetHistoryList = () => request.get(`history/`)
 
 /**
- * @param {HistoryRequestParam} data
+ * @param {Partial<HistoryRequestParam>} data
  * @returns {Promise<AxiosResponse<HistoryCreateResponse>>}
  */
 export const apiPostHistory = (data) => request.post(`history/`, data)
@@ -120,7 +120,7 @@ export const apiPostBookMark = (data) => request.post(`bookmark/`, data)
 export const apiDeleteBookMark = (id) => request.delete(`bookmark/${id}/`)
 
 /**
- * @returns {Promise<AxiosResponse<unknown>>}
+ * @returns {Promise<AxiosResponse<any>>}
  */
 export const apiGetMenuJson = () => request.get(`test/`)
 

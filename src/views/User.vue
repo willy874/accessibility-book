@@ -1,25 +1,27 @@
 <template>
   <div>
-    <button class="logout-button" type="button" @click="throttleLogout">登出</button>
+    <button class="logout-button" type="button" @click="logout">登出</button>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { Actions } from '@/consts'
 import { throttle } from '@/utils'
 
+/**
+ * @type {{
+ *   logout: ActionFunction<import('@/store/user/actions').logout>
+ * }}
+ */
+const { logout } = mapActions({
+  logout: Actions.LOGOUT,
+})
+
 export default {
   name: 'User',
-  data() {
-    return {
-      throttleLogout: throttle(this.logout, 400),
-    }
-  },
   methods: {
-    async logout() {
-      await this.$store.dispatch(Actions.LOGOUT)
-      await this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
-    },
+    logout: throttle(logout, 400),
   },
 }
 </script>

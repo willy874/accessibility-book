@@ -17,23 +17,25 @@ export function getRequestSuccess(options) {
 
 /**
  * @param {InterceptorsOptions} options
- * @return {InterceptorsClosure<AxiosError>}
+ * @return {InterceptorsClosure<AxiosError<*>>}
  */
 export function getRequestError(options) {
   return (error) => error
 }
 
 /**
+ * @template T
  * @param {InterceptorsOptions} options
- * @return {InterceptorsClosure<AxiosResponse>}
+ * @return {InterceptorsClosure<AxiosResponse<T>>}
  */
 export function getResponseSuccess(options) {
   return (res) => res
 }
 
 /**
+ * @template T
  * @param {InterceptorsOptions} options
- * @return {InterceptorsClosure<AxiosError>}
+ * @return {InterceptorsClosure<AxiosError<T>>}
  */
 export function getResponseError(options) {
   return (error) => {

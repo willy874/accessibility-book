@@ -1,64 +1,68 @@
 import { apiGetMenuJson } from '@/api/index'
-import { HttpError, handleHttpErrorLog } from '@/utils'
-import { Getters, Mutations, Actions } from '@/consts'
+import { HttpError, handleHttpErrorLog, isAxiosError } from '@/utils'
+import { Mutations } from '@/consts'
 
-export default {
-  state: {
-    /**
-     * @type {Record<number,MenuModel>}
-     */
-    collection: {},
+/** @type {MenuState} */
+export const state = {
+  /**
+   * @type {Record<number,MenuModel>}
+   */
+  collection: {},
+}
+
+/**
+ * @callback menuList
+ * @param {MenuState} state
+ * @returns {MenuModel[]}
+ */
+export const getters = {
+  /** @type {menuList} */
+  menuList(state) {
+    return Object.values(state.collection)
   },
-  mutations: {
-    /**
-     * @name setMenuList
-     * @param {MenuState} state
-     * @param {MenuModel[]} model
-     */
-    [Mutations.SET_MENULIST]: function (state, model) {
-      if (Object.hasOwnProperty.call(state.collection, model)) {
-        state.collection[model.uuid] = model
+}
+
+/**
+ * @callback setMenuList
+ * @param {MenuState} state
+ * @param {MenuModel} model
+ */
+export const mutations = {
+  setMenuList(state, model) {
+    if (Object.hasOwnProperty.call(state.collection, model)) {
+      state.collection[model.uuid] = model
+    } else {
+      const collection = {
+        ...state.collection,
+        [model.uuid]: model,
+      }
+      state.collection = collection
+    }
+  },
+}
+
+/**
+ * @callback fetchMenuList
+ * @param {ActionContext<MenuState,RootState>} store
+ * @param {void} payload
+ * @returns {Promise<MenuModel>}
+ */
+export const actions = {
+  async fetchMenuList(store, payload) {
+    const { commit } = store
+    try {
+      const res = await apiGetMenuJson()
+      if (isAxiosError(res)) {
+        throw new HttpError(res)
       } else {
-        const collection = {
-          ...state.collection,
-          [model.uuid]: model,
-        }
-        state.collection = collection
+        const list = res.data.content.menu
+        list.forEach((model) => {
+          commit(Mutations.SET_MENULIST, model)
+        })
+        return list
       }
-    },
-  },
-  actions: {
-    /**
-     * @name fetchMenuList
-     * @param {ActionContext<MenuState,RootState>} store
-     * @returns {Promise<MenuModel>}
-     */
-    [Actions.FETCH_MENU_LIST]: async function (store) {
-      const { commit } = store
-      try {
-        const res = await apiGetMenuJson()
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        } else {
-          const list = res.data.content.menu
-          list.forEach((model) => {
-            commit(Mutations.SET_MENULIST, model)
-          })
-          return list
-        }
-      } catch (error) {
-        return handleHttpErrorLog(error)
-      }
-    },
-  },
-  getters: {
-    /**
-     * @name menuList
-     * @param {MenuState} state
-     * @returns {MenuModel[]}
-     */
-    [Getters.MENU_LIST]: function (state) {
-      return Object.values(state.collection)
-    },
+    } catch (error) {
+      handleHttpErrorLog(error)
+    }
   },
 }

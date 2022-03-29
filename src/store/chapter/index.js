@@ -1,105 +1,113 @@
 import { apiGetChapterById, apiGetChapterListByTagId } from '@/api/index'
-import { HttpError, handleHttpErrorLog } from '@/utils'
-import { Getters, Mutations, Actions } from '@/consts'
+import { HttpError, handleHttpErrorLog, isAxiosError } from '@/utils'
+import { Mutations, Actions } from '@/consts'
 
-export default {
-  state: {
-    /**
-     * @type {Record<number,ChapterModel>}
-     */
-    collection: {},
-    activeBook: null,
+/** @type {ChapterState} */
+export const state = {
+  /**
+   * @type {Record<number,ChapterModel>}
+   */
+  collection: {},
+  activeBook: null,
+}
+
+/**
+ * @callback chapterList
+ * @param {ChapterState} state
+ * @returns {ChapterModel[]}
+ */
+/**
+ * @callback getChapterListById
+ * @param {ChapterState} state
+ * @returns {(id: number) => ChapterModel}
+ */
+export const getters = {
+  /** @type {chapterList} */
+  chapterList(state) {
+    return Object.values(state.collection)
   },
-  mutations: {
-    /**
-     * @name setChapter
-     * @param {ChapterState} state
-     * @param {ChapterModel} model
-     */
-    [Mutations.SET_CHAPTER]: function (state, model) {
-      if (Object.hasOwnProperty.call(state.collection, model)) {
-        state.collection[model.id] = model
+  /** @type {getChapterListById} */
+  getChapterListById(state) {
+    return (id) => state.collection[id]
+  },
+}
+
+/**
+ * @callback setChapter
+ * @param {ChapterState} state
+ * @param {ChapterModel} model
+ */
+/**
+ * @callback setChapterActiveBook
+ * @param {ChapterState} state
+ * @param {BookModel} model
+ */
+export const mutations = {
+  /** @type {setChapter} */
+  setChapter(state, model) {
+    if (Object.hasOwnProperty.call(state.collection, model)) {
+      state.collection[model.id] = model
+    } else {
+      const collection = {
+        ...state.collection,
+        [model.id]: model,
+      }
+      state.collection = collection
+    }
+  },
+  /** @type {setChapterActiveBook} */
+  setChapterActiveBook(state, model) {
+    state.activeBook = model
+  },
+}
+
+/**
+ * @callback fetchChapterById
+ * @param {ActionContext<ChapterState,RootState>} store
+ * @param {number} id
+ * @returns {Promise<ChapterModel>}
+ */
+/**
+ * @callback fetchChapterListByTagId
+ * @param {ActionContext<ChapterState,RootState>} store
+ * @param {number} id
+ * @returns {Promise<ChapterModel[]>}
+ */
+export const actions = {
+  /** @type {fetchChapterById} */
+  async fetchChapterById(store, id) {
+    const { commit, dispatch } = store
+    try {
+      const res = await apiGetChapterById(id)
+      if (isAxiosError(res)) {
+        throw new HttpError(res)
       } else {
-        const collection = {
-          ...state.collection,
-          [model.id]: model,
-        }
-        state.collection = collection
+        const chapter = res.data
+        const book = await dispatch(Actions.FETCH_BOOK_BY_ID, chapter.book)
+        commit(Mutations.SET_CHAPTER_ACTIVE_BOOK, book)
+        commit(Mutations.SET_CHAPTER, chapter)
+        return res.data
       }
-    },
-    /**
-     * @name setChapterActiveBook
-     * @param {ChapterState} state
-     * @param {BookModel} model
-     */
-    [Mutations.SET_CHAPTER_ACTIVE_BOOK]: function (state, model) {
-      state.activeBook = model
-    },
+    } catch (error) {
+      handleHttpErrorLog(error)
+    }
   },
-  actions: {
-    /**
-     * @name fetchChapterById
-     * @param {ActionContext<ChapterState,RootState>} store
-     * @param {number} id
-     * @returns {Promise<ChapterModel>}
-     */
-    [Actions.FETCH_CHAPTER_BY_ID]: async function (store, id) {
-      const { commit, dispatch } = store
-      try {
-        const res = await apiGetChapterById(id)
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        } else {
-          const chapter = res.data
-          const book = await dispatch(Actions.FETCH_BOOK_BY_ID, chapter.book)
-          commit(Mutations.SET_CHAPTER_ACTIVE_BOOK, book)
-          commit(Mutations.SET_CHAPTER, chapter)
-          return res.data
-        }
-      } catch (error) {
-        return handleHttpErrorLog(error)
+  /** @type {fetchChapterListByTagId} */
+  async fetchChapterListByTagId(store, id) {
+    const { commit } = store
+    try {
+      const res = await apiGetChapterListByTagId(id)
+      if (isAxiosError(res)) {
+        throw new HttpError(res)
+      } else {
+        const list = res.data.results
+        list.forEach((model) => {
+          commit(Mutations.SET_CHAPTER, model)
+        })
+        return list
       }
-    },
-    /**
-     * @name fetchChapterListByTagId
-     * @param {ActionContext<ChapterState,RootState>} store
-     * @param {number} id
-     * @returns {Promise<ChapterModel>}
-     */
-    [Actions.FETCH_CHAPTER_LIST_BY_TAG_ID]: async function (store, id) {
-      const { commit } = store
-      try {
-        const res = await apiGetChapterListByTagId(id)
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        } else {
-          const list = res.data.results
-          list.forEach((model) => {
-            commit(Mutations.SET_CHAPTER, model)
-          })
-          return list
-        }
-      } catch (error) {
-        return handleHttpErrorLog(error)
-      }
-    },
-  },
-  getters: {
-    /**
-     * @name chapterList
-     * @param {ChapterState} state
-     * @returns {ChapterModel[]}
-     */
-    [Getters.CHAPTER_LIST]: function (state) {
-      return Object.values(state.collection)
-    },
-    /**
-     * @name getChapterListById
-     * @param {ChapterState} state
-     * @returns {(id: number) => ChapterState}
-     */
-    [Getters.GET_CHAPTER_BY_ID]: function (state) {
-      return (id) => state.collection[id]
-    },
+    } catch (error) {
+      handleHttpErrorLog(error)
+    }
   },
 }

@@ -43,8 +43,8 @@ import { RouterName, StorageKey, Actions, ValidateType } from '@/consts'
  */
 /**
  * @typedef {Object} LoginError
- * @property {string[]} username
- * @property {string[]} password
+ * @property {string[]} [username]
+ * @property {string[]} [password]
  */
 export default {
   name: 'Login',
@@ -76,14 +76,14 @@ export default {
   methods: {
     isValid,
     /**
-     * @return {UserModel}
+     * @return {Promise<UserModel>}
      */
     fetchUserInfo() {
       return this.$store.dispatch(Actions.FETCH_USER_INFO)
     },
     /**
-     * @param {LoginRequestParam}
-     * @return {string}}
+     * @param {LoginRequestParam} form
+     * @return {Promise<string>}
      */
     async login(form) {
       return await this.$store.dispatch(Actions.LOGIN, form)

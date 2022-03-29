@@ -1,5 +1,5 @@
-import throttle from 'lodash/throttle'
-import debounce from 'lodash/debounce'
+import _debounce from 'lodash/debounce'
+import _throttle from 'lodash/throttle'
 
 export function formDataFormat(data) {
   const format = (value, keys = []) => {
@@ -37,4 +37,24 @@ export function formUrlEncodedFormat(data) {
   return queryParams
 }
 
-export { throttle, debounce }
+/**
+ * @template T
+ * @param {T} fn
+ * @param {number} wait
+ * @returns {T}
+ */
+export function throttle(fn, wait) {
+  // @ts-ignore
+  return _throttle(fn, wait)
+}
+
+/**
+ * @template T
+ * @param {T} fn
+ * @param {number} wait
+ * @returns {T}
+ */
+export function debounce(fn, wait) {
+  // @ts-ignore
+  return _debounce(fn, wait)
+}

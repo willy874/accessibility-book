@@ -4,13 +4,13 @@
       <ul class="footer-nav">
         <!-- 1 -->
         <li>
-          <a href="javascript:;" @click="routerBack">返回</a>
+          <a href="javascript:;" @click="$router.back">返回</a>
         </li>
         <!-- 2 -->
         <li :class="{ disabled: !(chapterId && !isBookMark) }">
           <template v-if="chapterId">
             <a v-if="isBookMark" href="javascript:;">已加入書籤</a>
-            <a v-else href="javascript:;" @click="throttleAddBookMark">建立書籤</a>
+            <a v-else href="javascript:;" @click="addBookmark({ chapter: chapterId })">建立書籤</a>
           </template>
           <template v-else>
             <a href="javascript:;">建立書籤</a>
@@ -38,24 +38,45 @@
 <script>
 import { RouterName, Actions, Getters, LifecycleHook } from '@/consts'
 import { throttle } from '@/utils'
+import VueConfig from '@/config'
+import { mapActions, mapGetters, mapState } from 'vuex'
+
+/**
+ * @type {{
+ *   activeBook: () => BookModel;
+ * }}
+ */
+const { activeBook } = mapState({
+  activeBook: (state) => state.chapter.activeBook,
+})
+
+/**
+ * @type {{
+ *   bookmarkList: () => BookMarkModel[];
+ * }}
+ */
+const { bookmarkList } = mapGetters({
+  bookmarkList: Getters.BOOKMARK_LIST,
+})
+
+/**
+ * @type {{
+ *   fetchBookmarkList: function(): Promise<BookMarkModel[]>;
+ *   addBookmark: function(BookMarkRequestParam): Promise<BookMarkModel>;
+ * }}
+ */
+const { fetchBookmarkList, addBookmark } = mapActions({
+  fetchBookmarkList: Actions.FETCH_BOOKMARK_LIST,
+  addBookmark: Actions.ADD_BOOKMARK,
+})
 
 export default {
   name: 'Footer',
-  data() {
-    return {
-      RouterName,
-      throttleAddBookMark: throttle(this.addBookmark, 400),
-    }
-  },
   computed: {
+    activeBook,
+    bookmarkList,
     /**
-     * @return {BookModel}
-     */
-    activeBook() {
-      return this.$store.state.chapter.activeBook
-    },
-    /**
-     * @return {ChapterModel[]}
+     * @return {ChapterIndex[]}
      */
     activeBookChaptersSort() {
       if (this.activeBook && this.activeBook.chapter_set) {
@@ -67,7 +88,8 @@ export default {
      * @return {number}
      */
     activeChapterIndexOf() {
-      const chapterId = Number(this.route.params.id)
+      const route = VueConfig.getRoute()
+      const chapterId = Number(route.params.id)
       const chapterList = this.activeBookChaptersSort
       if (chapterList.length) {
         return chapterList.map((p) => p.id).indexOf(chapterId)
@@ -75,7 +97,7 @@ export default {
       return -1
     },
     /**
-     * @return {number | false}
+     * @return {VueRouteLocation | false}
      */
     nextChapterRoute() {
       if (this.activeChapterIndexOf >= 0) {
@@ -83,7 +105,7 @@ export default {
         if (nextChapter) {
           return {
             name: RouterName.CHAPTER,
-            params: { id: nextChapter.id },
+            params: { id: String(nextChapter.id) },
           }
         }
       }
@@ -93,17 +115,11 @@ export default {
      * @return {number | false}
      */
     chapterId() {
-      if (this.route.name === RouterName.CHAPTER) {
-        /** @type {number} */
-        return Number(this.route.params.id)
+      const route = VueConfig.getRoute()
+      if (route && route.name === RouterName.CHAPTER) {
+        return Number(route.params.id)
       }
       return false
-    },
-    /**
-     * @returns {BookMarkModel[]}
-     */
-    bookmarkList() {
-      return this.$store.getters[Getters.BOOKMARK_LIST]
     },
     /**
      * @returns {boolean}
@@ -113,26 +129,10 @@ export default {
     },
   },
   methods: {
-    routerBack() {
-      this.$router.back()
-    },
+    fetchBookmarkList,
+    addBookmark: throttle(addBookmark, 400),
     /**
-     * @param {BookMarkRequestParam}
-     * @return {Promise<BookMarkModel>}
-     */
-    addBookmark() {
-      if (this.chapterId) {
-        return this.$store.dispatch(Actions.ADD_BOOKMARK, { chapter: this.chapterId })
-      }
-    },
-    /**
-     * @return {Promise<BookMarkModel[]>}
-     */
-    fetchBookmarkList() {
-      return this.$store.dispatch(Actions.FETCH_BOOKMARK_LIST)
-    },
-    /**
-     * @param {LifecycleHookEnum} type
+     * @param {import('@/consts').LifecycleHook} type
      */
     async effectRoute(type) {
       if (type === LifecycleHook.CREATED) {

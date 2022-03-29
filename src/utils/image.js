@@ -6,7 +6,12 @@ export function blobToBase64(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = (e) => {
-      resolve(e.target.result)
+      const result = e.target.result
+      if (typeof result === 'string') {
+        resolve(result)
+      } else {
+        reject(new Error('The result is not a string.'))
+      }
     }
     reader.onerror = (e) => {
       reject(e)
@@ -39,19 +44,19 @@ export function transformFileSize(value) {
     const size = value.replace(/\s+/g, '').toUpperCase()
     if (/KB$/.test(size)) {
       const num = size.replace(/KB$/, '')
-      return Number(num * 10 ** 3)
+      return Number(num) * 10 ** 3
     }
     if (/MB$/.test(size)) {
       const num = size.replace(/MB$/, '')
-      return Number(num * 10 ** 6)
+      return Number(num) * 10 ** 6
     }
     if (/GB$/.test(size)) {
       const num = size.replace(/GB$/, '')
-      return Number(num * 10 ** 9)
+      return Number(num) * 10 ** 9
     }
     if (/TB$/.test(size)) {
       const num = size.replace(/TB$/, '')
-      return Number(num * 10 ** 12)
+      return Number(num) * 10 ** 12
     }
     return Number(size)
   }

@@ -9,7 +9,7 @@
  */
 /**
  * @template K,T
- * @typedef {{ [key: K]: T }} GenericsData
+ * @typedef {{ [P in keyof K]: T }} GenericsData
  */
 /**
  * @typedef {Object} AppInfo

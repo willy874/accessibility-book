@@ -1,6 +1,25 @@
 /**
+ * @typedef {import('vuex').Store<RootState>} Store
+ */
+/**
+ * @template S,R
+ * @typedef {import('vuex').Module<S,R>} Module
+ */
+/**
  * @template S
- * @typedef {import('vuex').Store<S>} Store
+ * @typedef {import('vuex').GetterTree<S,RootState>} GetterTree
+ */
+/**
+ * @template S
+ * @typedef {import('vuex').MutationTree<S>} MutationTree
+ */
+/**
+ * @template S,R
+ * @typedef {{ [key: string]: import('vuex').ActionHandler<S,R> }} ActionTree
+ */
+/**
+ * @template S,R
+ * @typedef {import('vuex').ActionHandler<S,R>} ActionHandler
  */
 /**
  * @template S,R
@@ -12,11 +31,12 @@
  */
 /**
  * @typedef {Object} StorageState
- * @property {Record<StorageKey,string>} local
+ * @property {Record<import('@/consts').StorageKey,string>} local
  */
 /**
  * @typedef {Object} ChapterState
  * @property {Record<number,ChapterModel>} collection
+ * @property {BookModel} activeBook
  */
 /**
  * @typedef {Object} BookMarkState
@@ -47,12 +67,8 @@
  * @property {boolean} init
  * @property {Route} route
  * @property {boolean} loading
- * @property {UserState} user
- * @property {StorageState} storage
- * @property {ChapterState} chapter
- * @property {BookMarkState} bookmark
- * @property {BookState} book
- * @property {TagState} tag
- * @property {HistoryState} history
- * @property {MenuState} menu
+ */
+/**
+ * @template {(...args: any) => any} F
+ * @typedef {function(Parameters<F>[1]): ReturnType<F>} ActionFunction
  */

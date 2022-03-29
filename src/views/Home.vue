@@ -38,7 +38,6 @@ export default {
   },
   data() {
     return {
-      RouterName,
       views: {
         [RouterName.BOOK]: Book,
         [RouterName.BOOK_MARK]: BookMark,

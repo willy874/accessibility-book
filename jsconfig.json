@@ -3,10 +3,13 @@
     "./src/**/*"
   ],
   "compilerOptions": {
+    "checkJs": true,
+    "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "lib": ["es2021", "dom"]
   },
   "exclude": ["./node_modules","**/node_modules/*"]
 }

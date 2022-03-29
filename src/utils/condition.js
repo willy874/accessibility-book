@@ -8,7 +8,11 @@ export function isDarkMode() {
  * @returns {value is Function}
  */
 export function isClass(value) {
-  return Object.prototype.toString.call(value) === '[object Function]' && 'constructor' in value
+  return (
+    typeof value === 'function' &&
+    Object.prototype.toString.call(value) === '[object Function]' &&
+    'constructor' in value
+  )
 }
 
 /**
@@ -99,4 +103,13 @@ export function isTextExcludes(data, text) {
     }
   }
   return true
+}
+
+/**
+ * @template T
+ * @param {AxiosResponse<T> | AxiosError<any>} res
+ * @returns {res is AxiosError<any>}
+ */
+export function isAxiosError(res) {
+  return res && '' in res
 }

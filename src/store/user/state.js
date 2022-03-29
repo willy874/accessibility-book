@@ -1,6 +1,6 @@
+/**
+ * @type {UserState}
+ */
 export default {
-  /**
-   * @type {UserModel}
-   */
   info: null,
 }

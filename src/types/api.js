@@ -56,7 +56,7 @@
 /**
  * @typedef {Object} BookModel
  * @property {string} id
- * @property {ChapterIndex} chapter_set
+ * @property {ChapterIndex[]} chapter_set
  * @property {string} name
  * @property {null} cover
  * @property {boolean} is_hide

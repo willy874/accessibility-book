@@ -1,65 +1,73 @@
 import { apiGetTagList } from '@/api/index'
-import { HttpError, handleHttpErrorLog } from '@/utils'
-import { Getters, Mutations, Actions } from '@/consts'
+import { HttpError, handleHttpErrorLog, isAxiosError } from '@/utils'
+import { Mutations } from '@/consts'
 
-export default {
-  state: {
-    /**
-     * @type {Record<number,TagModel>}
-     */
-    collection: {},
+export const state = {
+  /**
+   * @type {Record<number,TagModel>}
+   */
+  collection: {},
+}
+
+/**
+ * @callback tagList
+ * @param {TagState} state
+ * @returns {TagModel[]}
+ */
+/** @type {GetterTree<TagState>} */
+export const getters = {
+  /** @type {tagList} */
+  tagList(state) {
+    return Object.values(state.collection)
   },
-  mutations: {
-    /**
-     * @name setTag
-     * @param {TagState} state
-     * @param {TagModel} tag
-     */
-    [Mutations.SET_TAG]: function (state, model) {
-      if (Object.hasOwnProperty.call(state.collection, model)) {
-        state.collection[model.id] = model
+}
+
+/**
+ * @callback setTag
+ * @param {TagState} state
+ * @param {TagModel} model
+ */
+/** @type {MutationTree<TagState>} */
+export const mutations = {
+  /** @type {setTag} */
+  setTag(state, model) {
+    if (Object.hasOwnProperty.call(state.collection, model)) {
+      state.collection[model.id] = model
+    } else {
+      const collection = {
+        ...state.collection,
+        [model.id]: model,
+      }
+      state.collection = collection
+    }
+  },
+}
+
+/**
+ * @callback fetchTagList
+ * @param {ActionContext<TagState,RootState>} store
+ * @param {void} payload
+ * @returns {Promise<TagModel[]>}
+ */
+/** @type {ActionTree<TagState,RootState>} */
+export const actions = {
+  /** @type {fetchTagList} */
+  async fetchTagList(store, payload) {
+    const { commit } = store
+    try {
+      const res = await apiGetTagList()
+      if (isAxiosError(res)) {
+        throw new HttpError(res)
       } else {
-        const collection = {
-          ...state.collection,
-          [model.id]: model,
-        }
-        state.collection = collection
-      }
-    },
-  },
-  actions: {
-    /**
-     * @name fetchTagList
-     * @param {ActionContext<TagState,RootState>} store
-     * @returns {Promise<TagModel>}
-     */
-    [Actions.FETCH_TAG_LIST]: async function (store) {
-      const { commit } = store
-      try {
-        const res = await apiGetTagList()
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        } else {
-          const list = res.data.results
-          list.forEach((model) => {
-            commit(Mutations.SET_TAG, model)
-          })
+        const list = res.data.results
+        list.forEach((model) => {
+          commit(Mutations.SET_TAG, model)
+        })
 
-          return list
-        }
-      } catch (error) {
-        return handleHttpErrorLog(error)
+        return list
       }
-    },
-  },
-  getters: {
-    /**
-     * @name tagList
-     * @param {TagState} state
-     * @returns {TagModel[]}
-     */
-    [Getters.TAG_LIST]: function (state) {
-      return Object.values(state.collection)
-    },
+    } catch (error) {
+      handleHttpErrorLog(error)
+    }
   },
 }

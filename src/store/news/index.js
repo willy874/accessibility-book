@@ -1,85 +1,90 @@
 import { apiGetNewsList, apiGetNewsById } from '@/api/index'
-import { HttpError, handleHttpErrorLog } from '@/utils'
-import { Getters, Mutations, Actions } from '@/consts'
+import { HttpError, handleHttpErrorLog, isAxiosError } from '@/utils'
+import { Mutations } from '@/consts'
 
-export default {
-  state: {
-    /**
-     * @type {Record<number,BookModel>}
-     */
-    collection: {},
+export const state = {
+  /**
+   * @type {Record<number,BookModel>}
+   */
+  collection: {},
+}
+
+/**
+ * @callback newsList
+ * @param {NewsState} state
+ * @returns {NewsModel[]}
+ */
+export const getters = {
+  /** @type {newsList} */
+  newsList(state) {
+    return Object.values(state.collection)
   },
-  mutations: {
-    /**
-     * @name setNews
-     * @param {NewsState} state
-     * @param {NewsModel} news
-     */
-    [Mutations.SET_NEWS]: function (state, model) {
-      if (Object.hasOwnProperty.call(state.collection, model)) {
-        state.collection[model.id] = model
+}
+
+/**
+ * @callback setNews
+ * @param {NewsState} state
+ * @param {NewsModel} model
+ */
+export const mutations = {
+  /** @type {setNews} */
+  setNews(state, model) {
+    if (Object.hasOwnProperty.call(state.collection, model)) {
+      state.collection[model.id] = model
+    } else {
+      const collection = {
+        ...state.collection,
+        [model.id]: model,
+      }
+      state.collection = collection
+    }
+  },
+}
+
+/**
+ * @callback fetchNewsList
+ * @param {ActionContext<NewsState,RootState>} store
+ * @param {void} payload
+ * @returns {Promise<NewsModel[]>}
+ */
+/**
+ * @callback fetchBookById
+ * @param {ActionContext<BookState,RootState>} store
+ * @param {number} id
+ * @returns {Promise<ResponseCollection<NewsModel>>}
+ */
+export const actions = {
+  /** @type {fetchNewsList} */
+  async fetchNewsList(store, payload) {
+    const { commit } = store
+    try {
+      const res = await apiGetNewsList()
+      if (isAxiosError(res)) {
+        throw new HttpError(res)
       } else {
-        const collection = {
-          ...state.collection,
-          [model.id]: model,
-        }
-        state.collection = collection
+        const list = res.data.results
+        list.forEach((model) => {
+          commit(Mutations.SET_NEWS, model)
+        })
+        return list
       }
-    },
+    } catch (error) {
+      handleHttpErrorLog(error)
+    }
   },
-  actions: {
-    /**
-     * @name fetchNewsList
-     * @param {ActionContext<NewsState,RootState>} store
-     * @returns {Promise<NewsModel>}
-     */
-    [Actions.FETCH_NEWS_LIST]: async function (store) {
-      const { state, commit } = store
-      try {
-        const res = await apiGetNewsList()
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        } else {
-          const list = res.data.results
-          list.forEach((model) => {
-            commit(Mutations.SET_NEWS, model)
-          })
-          if (state.loading) return list
-        }
-      } catch (error) {
-        return handleHttpErrorLog(error)
+  /** @type {fetchBookById} */
+  async fetchNewsById(store, id) {
+    const { commit } = store
+    try {
+      const res = await apiGetNewsById(id)
+      if (isAxiosError(res)) {
+        throw new HttpError(res)
+      } else {
+        commit(Mutations.SET_NEWS, res.data)
+        return res.data
       }
-    },
-    /**
-     * @name fetchBookById
-     * @param {ActionContext<BookState,RootState>} store
-     * @param {number} id
-     * @returns {Promise<BookModel>}
-     */
-    [Actions.FETCH_NEWS_BY_ID]: async function (store, id) {
-      const { commit } = store
-      try {
-        const res = await apiGetNewsById(id)
-        if (res.isAxiosError) {
-          throw new HttpError(res)
-        } else {
-          commit(Mutations.SET_NEWS, res.data)
-
-          return res.data
-        }
-      } catch (error) {
-        return handleHttpErrorLog(error)
-      }
-    },
-  },
-  getters: {
-    /**
-     * @name newsList
-     * @param {NewsState} state
-     * @returns {NewsModel[]}
-     */
-    [Getters.NEWS_LIST]: function (state) {
-      return Object.values(state.collection)
-    },
+    } catch (error) {
+      handleHttpErrorLog(error)
+    }
   },
 }

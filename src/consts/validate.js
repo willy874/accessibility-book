@@ -1,5 +1,5 @@
 /**
- * @enum {ValidateTypeEnum}
+ * @enum {string}
  */
 export const ValidateType = {
   IS_EMPTY: 'is_empty',

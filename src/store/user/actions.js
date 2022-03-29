@@ -1,19 +1,43 @@
-import { HttpError, handleHttpErrorLog } from '@/utils'
+import { HttpError, handleHttpErrorLog, isAxiosError } from '@/utils'
 import { apiGetUserInfo, apiPatchUserInfo, apiPostUserLogin, apiPostLogout } from '@/api'
 import { RouterName, StorageKey, Mutations, Actions } from '@/consts'
 import Config from '@/config'
 
+/**
+ * @callback fetchUserInfo
+ * @param {ActionContext<UserState,RootState>} store
+ * @returns {Promise<UserModel>}
+ */
+/**
+ * @callback updateUserInfo
+ * @param {ActionContext<UserState,RootState>} store
+ * @param {UserUpdateRequestParam} data
+ * @returns {Promise<UserModel>}
+ */
+/**
+ * @callback checkLoginReplace
+ * @param {ActionContext<UserState,RootState>} store
+ * @returns {Promise<boolean>}
+ */
+/**
+ * @callback login
+ * @param {ActionContext<UserState,RootState>} store
+ * @param {LoginRequestParam} data
+ * @returns {Promise<string>}
+ */
+/**
+ * @callback logout
+ * @param {ActionContext<UserState,RootState>} store
+ * @returns {Promise<void>}
+ */
+/** @type {ActionTree<UserState,RootState>} */
 export default {
-  /**
-   * @name fetchUserInfo
-   * @param {ActionContext<UserState,RootState>} store
-   * @returns {Promise<UserModel>}
-   */
-  [Actions.FETCH_USER_INFO]: async function (store) {
+  /** @type {fetchUserInfo} */
+  async fetchUserInfo(store) {
     const { state, commit } = store
     try {
       const res = await apiGetUserInfo()
-      if (res.isAxiosError) {
+      if (isAxiosError(res)) {
         throw new HttpError(res)
       }
       commit(Mutations.SET_USER_INFO, res.data)
@@ -22,17 +46,13 @@ export default {
       handleHttpErrorLog(error)
     }
   },
-  /**
-   * @name fetchUserInfo
-   * @param {ActionContext<UserState,RootState>} store
-   * @param {UserUpdateRequestParam} data
-   * @returns {Promise<UserModel>}
-   */
-  [Actions.UPDATED_USER_INFO]: async function (store, data) {
+
+  /** @type {updateUserInfo} */
+  async updateUserInfo(store, data) {
     const { state, commit } = store
     try {
       const res = await apiPatchUserInfo(data)
-      if (res.isAxiosError) {
+      if (isAxiosError(res)) {
         throw new HttpError(res)
       }
       commit(Mutations.SET_USER_INFO, res.data)
@@ -41,12 +61,9 @@ export default {
       handleHttpErrorLog(error)
     }
   },
-  /**
-   * @name checkLoginReplace
-   * @param {ActionContext<UserState,RootState>} store
-   * @returns {Promise<boolean>}
-   */
-  [Actions.CHECK_LOGIN_REPLACE]: async function (store) {
+
+  /** @type {checkLoginReplace} */
+  async checkLoginReplace(store) {
     const { dispatch } = store
     try {
       /** @type {Vue} */
@@ -80,17 +97,13 @@ export default {
       return false
     }
   },
-  /**
-   * @name login
-   * @param {ActionContext<UserState,RootState>} store
-   * @param {LoginRequestParam} data
-   * @returns {Promise<LoginResponseData>}
-   */
-  [Actions.LOGIN]: async function (store, data) {
+
+  /** @type {login} */
+  async login(store, data) {
     const { dispatch } = store
     try {
       const res = await apiPostUserLogin(data)
-      if (res.isAxiosError) {
+      if (isAxiosError(res)) {
         throw new HttpError(res)
       }
       const token = res.data.key
@@ -100,20 +113,18 @@ export default {
       handleHttpErrorLog(error)
     }
   },
-  /**
-   * @name logout
-   * @param {ActionContext<UserState,RootState>} store
-   * @returns {Promise<null>}
-   */
-  [Actions.LOGOUT]: async function (store) {
+
+  /** @type {logout} */
+  async logout(store) {
     const { commit, dispatch } = store
     try {
       const res = await apiPostLogout()
-      if (res.isAxiosError) {
+      if (isAxiosError(res)) {
         throw new HttpError(res)
       }
       commit(Mutations.REMOVE_USER_INFO)
       await dispatch(Actions.REMOVE_STORAGE, StorageKey.TOKEN)
+      await dispatch(Actions.CHECK_LOGIN_REPLACE)
     } catch (error) {
       handleHttpErrorLog(error)
     }

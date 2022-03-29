@@ -34,6 +34,17 @@
 <script>
 import { Getters, Actions, RouterName } from '@/consts'
 import Search from '@/layouts/Search.vue'
+import { mapActions } from 'vuex'
+import VueConfig from '@/config'
+
+/**
+ * @type {{
+ *   fetchMenuList: function(): Promise<MenuModel[]>
+ * }}
+ */
+const { fetchMenuList } = mapActions({
+  fetchMenuList: Actions.FETCH_MENU_LIST,
+})
 
 export default {
   name: 'Header',
@@ -54,18 +65,14 @@ export default {
     },
   },
   methods: {
-    /**
-     * @return {Promise<MenuModel[]>}
-     */
-    fetchMenuList() {
-      return this.$store.dispatch(Actions.FETCH_MENU_LIST)
-    },
+    fetchMenuList,
     /**
      * @param {string} id
      * @return {boolean}
      */
     isActiveId(id) {
-      return id === this.route.params.id
+      const route = VueConfig.getRoute()
+      return id === route.params.id
     },
     /**
      * @param {string} id
@@ -80,7 +87,7 @@ export default {
       }
     },
     /**
-     * @param {MenuModel[]}
+     * @param {MenuModel[]} list
      * @return {MenuModel[]}
      */
     sortMenuList(list) {

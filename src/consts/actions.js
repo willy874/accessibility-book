@@ -1,28 +1,9 @@
-/**
- * @typedef {import('@/store')}
- */
+import { actions as storageActions } from '@/store/storage'
+import { actions as tagActions } from '@/store/tag'
+import { actions as userActions } from '@/store/user'
+
 const root = {
   ROUTE_CHANGE: 'routeChange',
-}
-
-/**
- * @typedef {import('@/store/storage').actions}
- */
-const storage = {
-  SET_STORAGE: 'setStorage',
-  REMOVE_STORAGE: 'removeStorage',
-  GET_STORAGE: 'getStorage',
-}
-
-/**
- * @typedef {import('@/store/user/actions')}
- */
-const user = {
-  FETCH_USER_INFO: 'fetchUserInfo',
-  CHECK_LOGIN_REPLACE: 'checkLoginReplace',
-  UPDATED_USER_INFO: 'updateUserInfo',
-  LOGIN: 'login',
-  LOGOUT: 'logout',
 }
 
 /**
@@ -52,13 +33,6 @@ const book = {
 }
 
 /**
- * @typedef {import('@/store/tag')}
- */
-const tag = {
-  FETCH_TAG_LIST: 'fetchTagList',
-}
-
-/**
  * @typedef {import('@/store/history')}
  */
 const history = {
@@ -81,18 +55,39 @@ const news = {
   FETCH_NEWS_BY_ID: 'fetchNewsById',
 }
 
+const { setStorage, removeStorage, getStorage } = storageActions
+const storage = {
+  SET_STORAGE: setStorage.name,
+  REMOVE_STORAGE: removeStorage.name,
+  GET_STORAGE: getStorage.name,
+}
+
+const { fetchTagList } = tagActions
+const tag = {
+  FETCH_TAG_LIST: fetchTagList.name, // 'fetchTagList'
+}
+
+const { fetchUserInfo, checkLoginReplace, updateUserInfo, login, logout } = userActions
+const user = {
+  FETCH_USER_INFO: fetchUserInfo.name,
+  CHECK_LOGIN_REPLACE: checkLoginReplace.name,
+  UPDATED_USER_INFO: updateUserInfo.name,
+  LOGIN: login.name,
+  LOGOUT: logout.name,
+}
+
 /**
  * @enum {string}
  */
 export const Actions = {
   ...root,
-  ...user,
-  ...storage,
   ...chapter,
   ...bookmark,
   ...book,
-  ...tag,
   ...history,
   ...menu,
   ...news,
+  ...user,
+  ...tag,
+  ...storage,
 }
