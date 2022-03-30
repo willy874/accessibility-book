@@ -246,15 +246,11 @@ export default {
         return
       }
       try {
-        const errors = await this.createPassword({
+        await this.createPassword({
           new_password1: this.form.password1,
           new_password2: this.form.password2,
         })
-        if (errors) {
-          throw errors
-        } else {
-          this.step = 2
-        }
+        this.step = 2
       } catch (error) {
         handleHttpErrorLog(error)
         this.$router.replace({ name: RouterName.LOGIN })
