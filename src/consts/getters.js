@@ -11,11 +11,9 @@ import { getters as tagGetters } from '@/store/tag'
 
 const root = {}
 
-const { bookmarkList, bookmarkListById, getBookListByTagId } = bookmarkGetters
+const { bookmarkList } = bookmarkGetters
 const bookmark = {
   BOOKMARK_LIST: bookmarkList.name,
-  GET_BOOKMARK_BY_ID: bookmarkListById.name,
-  GET_BOOKMARK_LIST_BY_TAG_ID: getBookListByTagId.name,
 }
 
 const { chapterList, getChapterListById } = chapterGetters

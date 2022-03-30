@@ -4,7 +4,7 @@
       <ul class="footer-nav">
         <!-- 1 -->
         <li>
-          <a href="javascript:;" @click="$router.back">返回</a>
+          <a href="javascript:;" @click="backRouter">返回</a>
         </li>
         <!-- 2 -->
         <li :class="{ disabled: !(chapterId && !isBookMark) }">
@@ -88,7 +88,7 @@ export default {
      * @return {number}
      */
     activeChapterIndexOf() {
-      const route = VueConfig.getRoute()
+      const route = VueConfig.getRoute(this)
       const chapterId = Number(route.params.id)
       const chapterList = this.activeBookChaptersSort
       if (chapterList.length) {
@@ -115,7 +115,7 @@ export default {
      * @return {number | false}
      */
     chapterId() {
-      const route = VueConfig.getRoute()
+      const route = VueConfig.getRoute(this)
       if (route && route.name === RouterName.CHAPTER) {
         return Number(route.params.id)
       }
@@ -131,6 +131,11 @@ export default {
   methods: {
     fetchBookmarkList,
     addBookmark: throttle(addBookmark, 400),
+    backRouter() {
+      if (this.$router) {
+        this.$router.back()
+      }
+    },
     /**
      * @param {import('@/consts').LifecycleHook} type
      */

@@ -71,7 +71,7 @@ export default {
      * @return {boolean}
      */
     isActiveId(id) {
-      const route = VueConfig.getRoute()
+      const route = VueConfig.getRoute(this)
       return id === route.params.id
     },
     /**

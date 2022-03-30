@@ -27,17 +27,17 @@ const bookmark = {
   DELETE_BOOKMARK: deleteBookmark.name,
 }
 
-const { fetchBookList, fetchBookListByQuery, fetchBookById } = bookActions
+const { fetchBookList, fetchBookByQuery, fetchBookById } = bookActions
 const book = {
   FETCH_BOOK_LIST: fetchBookList.name,
-  FETCH_BOOK_LIST_BY_QUERY: fetchBookListByQuery.name,
+  FETCH_BOOK_BY_QUERY: fetchBookByQuery.name,
   FETCH_BOOK_BY_ID: fetchBookById.name,
 }
 
-const { fetchHistoryList, addHistory } = historyActions
+const { fetchHistoryList } = historyActions
 const history = {
   FETCH_HISTORY_LIST: fetchHistoryList.name,
-  ADD_HISTORY: addHistory.name,
+  // ADD_HISTORY: addHistory.name,
 }
 
 const { fetchMenuList } = menuActions

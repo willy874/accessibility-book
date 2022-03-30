@@ -28,19 +28,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import { transformMarkdownToHtml } from '@/utils'
-import { RouterName, Getters, Actions } from '@/consts'
+import { RouterName, Actions } from '@/consts'
 import VueConfig from '@/config'
-
-/**
- * @type {{
- *   newsList: GetterFunction<import('@/store/news').newsList>
- * }}
- */
-const { newsList } = mapGetters({
-  newsList: Getters.NEWS_LIST,
-})
 
 /**
  * @type {{
@@ -57,10 +48,10 @@ export default {
   data() {
     return {
       active: null,
+      newsList: [],
     }
   },
   computed: {
-    newsList,
     /**
      * @returns {NewsModel}
      */
@@ -86,13 +77,13 @@ export default {
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      const route = VueConfig.getRoute()
+      const route = VueConfig.getRoute(this)
       const id = Number(route.params.id)
       if (id) {
         await this.fetchNewsById(id)
         this.active = id
       } else {
-        await this.fetchNewsList()
+        this.newsList = await this.fetchNewsList()
       }
     },
   },

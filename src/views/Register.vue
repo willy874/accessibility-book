@@ -36,6 +36,9 @@
             placeholder="請輸入確認密碼"
           />
         </div>
+        <div class="submit-btn-container">
+          <button type="submit">送出</button>
+        </div>
       </form>
     </div>
     <div v-if="step === 2">

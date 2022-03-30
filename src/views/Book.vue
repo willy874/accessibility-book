@@ -72,7 +72,7 @@ export default {
      * @return {Promise<BookModel[]>}
      */
     fetchBookListByQuery(query) {
-      return this.$store.dispatch(Actions.FETCH_BOOK_LIST_BY_QUERY, query)
+      return this.$store.dispatch(Actions.FETCH_BOOK_BY_QUERY, query)
     },
     /**
      * @param {string} id
@@ -98,7 +98,7 @@ export default {
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      const route = VueConfig.getRoute()
+      const route = VueConfig.getRoute(this)
       const id = route.params.id
       const query = route.query
       if (id) {

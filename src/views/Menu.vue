@@ -50,7 +50,7 @@ export default {
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      const route = VueConfig.getRoute()
+      const route = VueConfig.getRoute(this)
       const id = route.params.id
       if (id) {
         const listModel = await this.fetchMenuList()

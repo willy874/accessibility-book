@@ -4,7 +4,6 @@ import { handleWarningLog } from './error'
 import { blobToBase64, urlToImageElement, transformFileSize } from './image'
 import { ValidateType } from '@/consts'
 import { cloneJson } from './json'
-
 /**
  * @typedef {Object} ValidateRules
  * @property {ValidateOption<null>} is_empty

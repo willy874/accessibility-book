@@ -66,6 +66,12 @@ h2 {
   padding: 8px;
   font-size: 18px;
   display: flex;
-  justify-content: space-between;
+  align-items: flex-start;
+  a {
+    flex-grow: 1;
+  }
+  button {
+    flex-shrink: 0;
+  }
 }
 </style>
