@@ -73,6 +73,7 @@ export default {
       const loginRoutes = Config.value.loginRoutes
       const token = await dispatch(Actions.GET_STORAGE, StorageKey.TOKEN)
       if (token) {
+        console.log('checkLoginReplace')
         if (loginRoutes.includes(route.name)) {
           const replaceRoute = await dispatch(Actions.GET_STORAGE, StorageKey.REPLACE_ROUTE)
           if (replaceRoute) {

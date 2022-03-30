@@ -41,7 +41,10 @@ export default {
       await liff.init({ liffId: Config.value.liffId })
     }
     if (await appMixin.getStorage(StorageKey.TOKEN)) {
-      await this.$store.dispatch(Actions.FETCH_USER_INFO)
+      const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
+      if (userInfo) {
+        this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
+      }
     }
     this.changeRoute()
   },
