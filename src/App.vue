@@ -15,7 +15,7 @@
 import 'markdown-it-latex/dist/index.css'
 import Header from './layouts/Header.vue'
 import Footer from './layouts/Footer.vue'
-import { StorageKey, Actions } from '@/consts'
+import { StorageKey, Actions, RouterName } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
 export default {
@@ -41,9 +41,14 @@ export default {
       await liff.init({ liffId: Config.value.liffId })
     }
     if (await appMixin.getStorage(StorageKey.TOKEN)) {
+      /** @type {UserModel} */
       const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
       if (userInfo) {
-        this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
+        if (userInfo.is_password_set && userInfo.is_authorized) {
+          this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
+        } else {
+          this.$router.replace({ name: RouterName.REGISTER })
+        }
       }
     }
     this.changeRoute()

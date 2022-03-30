@@ -73,7 +73,6 @@ export default {
       const loginRoutes = Config.value.loginRoutes
       const token = await dispatch(Actions.GET_STORAGE, StorageKey.TOKEN)
       if (token) {
-        console.log('checkLoginReplace')
         if (loginRoutes.includes(route.name)) {
           const replaceRoute = await dispatch(Actions.GET_STORAGE, StorageKey.REPLACE_ROUTE)
           if (replaceRoute) {
@@ -85,7 +84,8 @@ export default {
         }
         return true
       } else {
-        if (!loginRoutes.includes(route.name)) {
+        if (loginRoutes.includes(route.name)) {
+        } else {
           await dispatch(Actions.SET_STORAGE, { key: StorageKey.REPLACE_ROUTE, value: route.name })
         }
         await dispatch(Actions.REMOVE_STORAGE, StorageKey.TOKEN)

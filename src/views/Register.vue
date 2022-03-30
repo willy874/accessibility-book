@@ -209,8 +209,10 @@ export default {
     async effectRoute(type) {
       if (type === LifecycleHook.CREATED) {
         await this.fetchUserInfo()
-        if (!this.userInfo.is_password_set) {
+        if (this.userInfo.is_password_set === false) {
           this.step = 1
+        } else if (this.userInfo.is_authorized === false) {
+          this.step = 2
         }
       }
     },

@@ -32,7 +32,7 @@
 
 <script>
 import { apiPostLineLogin } from '@/api'
-import { HttpError, handleHttpErrorLog, validate, isValid, errorsToArray, throttle } from '@/utils'
+import { HttpError, handleHttpErrorLog, validate, isValid, errorsToArray, throttle, isAxiosError } from '@/utils'
 import Config from '@/config'
 import { RouterName, StorageKey, Actions, ValidateType } from '@/consts'
 
@@ -115,7 +115,7 @@ export default {
           code,
           return_url: Config.value.lineLoginRequestParam.redirect_uri,
         })
-        if (res.isAxiosError) {
+        if (isAxiosError(res)) {
           throw new HttpError(res)
         } else {
           const token = res.data.key
