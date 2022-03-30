@@ -45,11 +45,11 @@ export const mutations = {
 
 /**
  * @callback fetchTagList
- * @param {ActionContext<TagState,RootState>} store
+ * @param {ActionContext<TagState>} store
  * @param {void} payload
  * @returns {Promise<TagModel[]>}
  */
-/** @type {ActionTree<TagState,RootState>} */
+/** @type {ActionTree<TagState>} */
 export const actions = {
   /** @type {fetchTagList} */
   async fetchTagList(store, payload) {

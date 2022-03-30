@@ -28,8 +28,30 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import { transformMarkdownToHtml } from '@/utils'
 import { RouterName, Getters, Actions } from '@/consts'
+import VueConfig from '@/config'
+
+/**
+ * @type {{
+ *   newsList: GetterFunction<import('@/store/news').newsList>
+ * }}
+ */
+const { newsList } = mapGetters({
+  newsList: Getters.NEWS_LIST,
+})
+
+/**
+ * @type {{
+ *   fetchNewsList: ActionFunction<import('@/store/news').fetchNewsList>
+ *   fetchNewsById: ActionFunction<import('@/store/news').fetchNewsById>
+ * }}
+ */
+const { fetchNewsList, fetchNewsById } = mapActions({
+  fetchNewsList: Actions.FETCH_NEWS_LIST,
+  fetchNewsById: Actions.FETCH_NEWS_BY_ID,
+})
 
 export default {
   data() {
@@ -38,12 +60,7 @@ export default {
     }
   },
   computed: {
-    /**
-     * @return {NewsModel[]}
-     */
-    newsList() {
-      return this.$store.getters[Getters.NEWS_LIST]
-    },
+    newsList,
     /**
      * @returns {NewsModel}
      */
@@ -53,19 +70,8 @@ export default {
   },
   methods: {
     transformMarkdownToHtml,
-    /**
-     * @return {Promise<NewsModel[]>}
-     */
-    fetchNewsList() {
-      return this.$store.dispatch(Actions.FETCH_NEWS_LIST)
-    },
-    /**
-     * @param {number} id
-     * @return {Promise<ChapterModel>}
-     */
-    fetchNewsListById(id) {
-      return this.$store.dispatch(Actions.FETCH_NEWS_BY_ID, id)
-    },
+    fetchNewsList,
+    fetchNewsById,
     /**
      * @param {string} id
      * @return {VueRouteLocation}
@@ -80,12 +86,10 @@ export default {
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      /** @type {import('@/mixins/app').AppMixin} */
-      // @ts-ignore
-      const appMixin = this
-      const id = Number(appMixin.route.params.id)
+      const route = VueConfig.getRoute()
+      const id = Number(route.params.id)
       if (id) {
-        await this.fetchNewsListById(id)
+        await this.fetchNewsById(id)
         this.active = id
       } else {
         await this.fetchNewsList()

@@ -25,6 +25,7 @@ export const state = {
  * @param {BookState} state
  * @returns {(id: number) => BookModel[]}
  */
+/** @type {GetterTree<BookState>} */
 export const getters = {
   bookList(state) {
     return Object.values(state.collection)
@@ -42,6 +43,7 @@ export const getters = {
  * @param {BookState} state
  * @param {BookModel} model
  */
+/** @type {MutationTree<BookState>} */
 export const mutations = {
   setBook(state, model) {
     if (Object.hasOwnProperty.call(state.collection, model)) {
@@ -58,21 +60,22 @@ export const mutations = {
 
 /**
  * @callback fetchBookList
- * @param {ActionContext<BookState,RootState>} store
+ * @param {ActionContext<BookState>} store
  * @returns {Promise<BookModel[]>}
  */
 /**
  * @callback fetchBookById
- * @param {ActionContext<BookState,RootState>} store
+ * @param {ActionContext<BookState>} store
  * @param {number} id
  * @returns {Promise<BookModel>}
  */
 /**
  * @callback fetchBookByQuery
- * @param {ActionContext<BookState,RootState>} store
+ * @param {ActionContext<BookState>} store
  * @param {StringData} query
  * @returns {Promise<BookModel[]>}
  */
+/** @type {ActionTree<BookState>} */
 export const actions = {
   async fetchBookList(store) {
     const { commit } = store

@@ -1,58 +1,52 @@
-/**
- * @typedef {import('@/store')}
- */
+// import { getters as rootGetters } from '@/store/root'
+import { getters as chapterGetters } from '@/store/chapter'
+import { getters as bookmarkGetters } from '@/store/bookmark'
+import { getters as bookGetters } from '@/store/book'
+import { getters as historyGetters } from '@/store/history'
+import { getters as menuGetters } from '@/store/menu'
+import { getters as newsGetters } from '@/store/news'
+// import { getters as storageGetters } from '@/store/storage'
+import { getters as tagGetters } from '@/store/tag'
+// import { getters as userGetters } from '@/store/user'
+
 const root = {}
 
-/**
- * @typedef {import('@/store/bookmark')}
- */
+const { bookmarkList, bookmarkListById, getBookListByTagId } = bookmarkGetters
 const bookmark = {
-  BOOKMARK_LIST: 'bookmarkList',
-  GET_BOOKMARK_BY_ID: 'bookmarkListById',
-  GET_BOOKMARK_LIST_BY_TAG_ID: 'getBookListByTagId',
+  BOOKMARK_LIST: bookmarkList.name,
+  GET_BOOKMARK_BY_ID: bookmarkListById.name,
+  GET_BOOKMARK_LIST_BY_TAG_ID: getBookListByTagId.name,
 }
 
-/**
- * @typedef {import('@/store/chapter')}
- */
+const { chapterList, getChapterListById } = chapterGetters
 const chapter = {
-  CHAPTER_LIST: 'chapterList',
-  GET_CHAPTER_BY_ID: 'getChapterListById',
+  CHAPTER_LIST: chapterList.name,
+  GET_CHAPTER_BY_ID: getChapterListById.name,
 }
 
-/**
- * @typedef {import('@/store/storage')}
- */
+const { bookList } = bookGetters
 const book = {
-  BOOK_LIST: 'bookList',
+  BOOK_LIST: bookList.name,
 }
 
-/**
- * @typedef {import('@/store/tag')}
- */
+const { tagList } = tagGetters
 const tag = {
-  TAG_LIST: 'tagList',
+  TAG_LIST: tagList.name,
 }
 
-/**
- * @typedef {import('@/store/history')}
- */
+const { historyList } = historyGetters
 const history = {
-  HISTORY_LIST: 'historyList',
+  HISTORY_LIST: historyList.name,
 }
 
-/**
- * @typedef {import('@/store/menu')}
- */
+const { menuList } = menuGetters
 const menu = {
-  MENU_LIST: 'menuList',
+  MENU_LIST: menuList.name,
 }
 
-/**
- * @typedef {import('@/store/news')}
- */
+const { newsList } = newsGetters
 const news = {
-  NEWS_LIST: 'newsList',
+  NEWS_LIST: newsList.name,
 }
 
 /**

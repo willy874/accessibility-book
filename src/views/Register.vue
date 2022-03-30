@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 import { apiPostPasswordRegister } from '@/api'
 import {
   validate,
@@ -119,6 +120,38 @@ import { RouterName, Actions, ValidateType, LifecycleHook } from '@/consts'
  * @property {string} password1
  * @property {string} password2
  */
+/** @type {RegistrationForm} **/
+const form = {
+  first_name: '',
+  last_name: '',
+  email: '',
+  photo: null,
+  password1: '',
+  password2: '',
+}
+
+/**
+ * @type {{
+ *   userInfo: () => UserModel
+ * }}
+ */
+const { userInfo } = mapState({
+  userInfo: (state) => state.user.info,
+})
+
+/**
+ * @type {{
+ *   fetchUserInfo: ActionFunction<import('@/store/user/actions').fetchUserInfo>
+ *   updateUserInfo: ActionFunction<import('@/store/user/actions').updateUserInfo>
+ *   checkLoginReplace: ActionFunction<import('@/store/user/actions').checkLoginReplace>
+ * }}
+ */
+const { fetchUserInfo, updateUserInfo, checkLoginReplace } = mapActions({
+  fetchUserInfo: Actions.FETCH_USER_INFO,
+  updateUserInfo: Actions.UPDATED_USER_INFO,
+  checkLoginReplace: Actions.CHECK_LOGIN_REPLACE,
+})
+
 /**
  * @typedef {Object} RegistrationError
  * @property {string[]} first_name
@@ -132,38 +165,25 @@ export default {
   name: 'Register',
   data() {
     return {
+      form,
+      /** @type {number} */
       step: 0,
-      /** @type {RegistrationForm} **/
-      form: {
-        first_name: '',
-        last_name: '',
-        email: '',
-        photo: null,
-        password1: '',
-        password2: '',
-      },
-      /**
-       * @type {RegistrationError|{}}
-       */
+      /** @type {Partial<RegistrationError>} */
       errors: {},
-      /**
-       * @type {string}
-       */
+      /** @type {string} */
       preview: '',
     }
   },
   computed: {
-    /**
-     * @return {UserModel}
-     */
-    userInfo() {
-      return this.$store.state.user.info
-    },
+    userInfo,
     /**
      * @return {boolean}
      */
     isEmailEmpty() {
-      return !this.userInfo?.email
+      if (this.userInfo) {
+        return !this.userInfo.email
+      }
+      return false
     },
     /**
      * @return {string[]}
@@ -174,6 +194,9 @@ export default {
   },
   methods: {
     isValid,
+    fetchUserInfo,
+    checkLoginReplace,
+    updateUserInfo,
     toHome() {
       this.$router.push({ name: RouterName.HOME })
     },
@@ -187,28 +210,6 @@ export default {
           this.step = 1
         }
       }
-    },
-    /**
-     * @return {Promise<UserModel>}
-     */
-    fetchUserInfo() {
-      return this.$store.dispatch(Actions.FETCH_USER_INFO)
-    },
-    checkLoginReplace() {
-      this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
-    },
-    /**
-     * @param {UserUpdateRequestParam} form
-     * @return {Promise<UserModel>}
-     */
-    async updateUserInfo(form) {
-      const data = {
-        first_name: form.first_name,
-        last_name: form.last_name,
-        photo: form.photo,
-        email: !this.isEmailEmpty ? form.email : undefined,
-      }
-      return this.$store.dispatch(Actions.UPDATED_USER_INFO, data)
     },
     /**
      * @param {PasswordRegisterRequestParam} form
@@ -276,7 +277,12 @@ export default {
         return
       }
       try {
-        const errors = await this.updateUserInfo(form)
+        const errors = await this.updateUserInfo({
+          first_name: form.first_name,
+          last_name: form.last_name,
+          photo: form.photo,
+          email: !this.isEmailEmpty ? form.email : undefined,
+        })
         if (errors) {
           throw errors
         } else {

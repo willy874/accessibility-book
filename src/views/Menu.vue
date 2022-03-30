@@ -11,8 +11,19 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { Actions, RouterName } from '@/consts'
 import { treeEach } from '@/utils'
+import VueConfig from '@/config'
+
+/**
+ * @type {{
+ *   fetchMenuList: ActionFunction<import('@/store/menu').fetchMenuList>
+ * }}
+ */
+const { fetchMenuList } = mapActions({
+  fetchMenuList: Actions.FETCH_MENU_LIST,
+})
 
 export default {
   name: 'Menu',
@@ -24,6 +35,7 @@ export default {
     }
   },
   methods: {
+    fetchMenuList,
     /**
      * @param {string[]} tags
      * @returns {VueRouteLocation}
@@ -35,24 +47,13 @@ export default {
       }
     },
     /**
-     * @return {Promise<MenuModel[]>}
-     */
-    async getMenuList() {
-      return this.$store.dispatch(Actions.FETCH_MENU_LIST)
-    },
-    /**
-     * @depend
-     * @param {Route} this.route
-     * @param {MenuModel[]} this.childListModel
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {
-      /** @type {import('@/mixins/app').AppMixin} */
-      // @ts-ignore
-      const appMixin = this
-      const id = appMixin.route.params.id
+      const route = VueConfig.getRoute()
+      const id = route.params.id
       if (id) {
-        const listModel = await this.getMenuList()
+        const listModel = await this.fetchMenuList()
         treeEach(listModel, (item) => {
           if (item.uuid === id) {
             this.childListModel = item.child

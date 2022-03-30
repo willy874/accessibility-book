@@ -14,6 +14,7 @@ export const state = {
  * @param {NewsState} state
  * @returns {NewsModel[]}
  */
+/** @type {GetterTree<NewsState>} */
 export const getters = {
   /** @type {newsList} */
   newsList(state) {
@@ -26,6 +27,7 @@ export const getters = {
  * @param {NewsState} state
  * @param {NewsModel} model
  */
+/** @type {MutationTree<NewsState>} */
 export const mutations = {
   /** @type {setNews} */
   setNews(state, model) {
@@ -43,16 +45,17 @@ export const mutations = {
 
 /**
  * @callback fetchNewsList
- * @param {ActionContext<NewsState,RootState>} store
+ * @param {ActionContext<NewsState>} store
  * @param {void} payload
  * @returns {Promise<NewsModel[]>}
  */
 /**
- * @callback fetchBookById
- * @param {ActionContext<BookState,RootState>} store
+ * @callback fetchNewsById
+ * @param {ActionContext<NewsState>} store
  * @param {number} id
  * @returns {Promise<ResponseCollection<NewsModel>>}
  */
+/** @type {ActionTree<NewsState>} */
 export const actions = {
   /** @type {fetchNewsList} */
   async fetchNewsList(store, payload) {
@@ -72,7 +75,7 @@ export const actions = {
       handleHttpErrorLog(error)
     }
   },
-  /** @type {fetchBookById} */
+  /** @type {fetchNewsById} */
   async fetchNewsById(store, id) {
     const { commit } = store
     try {

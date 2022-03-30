@@ -14,6 +14,7 @@ export const state = {
  * @param {HistoryState} state
  * @returns {HistoryModel[]}
  */
+/** @type {GetterTree<HistoryState>} */
 export const getters = {
   /** @type {historyList} */
   historyList(state) {
@@ -26,6 +27,7 @@ export const getters = {
  * @param {HistoryState} state
  * @param {HistoryModel} model
  */
+/** @type {MutationTree<HistoryState>} */
 export const mutations = {
   /** @type {setHistory} */
   setHistory(state, model) {
@@ -43,10 +45,11 @@ export const mutations = {
 
 /**
  * @callback fetchHistoryList
- * @param {ActionContext<HistoryState,RootState>} store
+ * @param {ActionContext<HistoryState>} store
  * @param {void} payload
  * @returns {Promise<HistoryModel[]>}
  */
+/** @type {ActionTree<HistoryState>} */
 export const actions = {
   /** @type {fetchHistoryList} */
   async fetchHistoryList(store, payload) {

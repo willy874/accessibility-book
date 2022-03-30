@@ -14,16 +14,16 @@
  * @typedef {import('vuex').MutationTree<S>} MutationTree
  */
 /**
- * @template S,R
- * @typedef {{ [key: string]: import('vuex').ActionHandler<S,R> }} ActionTree
+ * @template S
+ * @typedef {{ [key: string]: import('vuex').ActionHandler<S,RootState> }} ActionTree
  */
 /**
- * @template S,R
- * @typedef {import('vuex').ActionHandler<S,R>} ActionHandler
+ * @template S
+ * @typedef {import('vuex').ActionHandler<S,RootState>} ActionHandler
  */
 /**
- * @template S,R
- * @typedef {import('vuex').ActionContext<S,R>} ActionContext
+ * @template S
+ * @typedef {import('vuex').ActionContext<S,RootState>} ActionContext
  */
 /**
  * @typedef {Object} UserState
@@ -67,6 +67,14 @@
  * @property {boolean} init
  * @property {Route} route
  * @property {boolean} loading
+ */
+/**
+ * @template {(...args: any) => any} F
+ * @typedef {function(): ReturnType<F>} GetterFunction
+ */
+/**
+ * @template {(...args: any) => any} F
+ * @typedef {function(Parameters<F>[1]): void} MutationFunction
  */
 /**
  * @template {(...args: any) => any} F

@@ -57,21 +57,21 @@ export const mutations = {
 
 /**
  * @callback getStorage
- * @param {ActionContext<StorageState,RootState>} store
+ * @param {ActionContext<StorageState>} store
  * @param {string} key
  * @return {Promise<string>}
  */
 /**
  * @callback setStorage
- * @param {ActionContext<StorageState,RootState>} store
+ * @param {ActionContext<StorageState>} store
  * @param {{ key: string, value: string }} data
  */
 /**
  * @callback removeStorage
- * @param {ActionContext<StorageState,RootState>} store
+ * @param {ActionContext<StorageState>} store
  * @param {string} key
  */
-/** @type {ActionTree<StorageState,RootState>} */
+/** @type {ActionTree<StorageState>} */
 export const actions = {
   /** @type {getStorage} */
   async getStorage(store, key) {

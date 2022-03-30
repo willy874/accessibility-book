@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Config from '@/config'
-import { Mutations, Actions } from '@/consts'
+import { state, mutations, actions } from './root'
 import * as book from './book/index'
 import * as bookmark from './bookmark/index'
 import * as chapter from './chapter/index'
@@ -19,44 +18,10 @@ Vue.use(Vuex)
  */
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
-  state: {
-    init: false,
-    route: null,
-    loading: false,
-  },
-  mutations: {
-    /**
-     * @param {RootState} state
-     * @param {boolean} bool
-     */
-    [Mutations.SET_INIT]: function (state, bool) {
-      state.init = bool
-    },
-    /**
-     * @param {RootState} state
-     * @param {Route} route
-     */
-    [Mutations.SET_ROUTE]: function (state, route) {
-      state.route = route
-    },
-    /**
-     * @name setLoading
-     * @param {RootState} state
-     * @param {boolean} bool
-     */
-    [Mutations.SET_LOADING]: function (state, bool) {
-      state.loading = bool
-    },
-  },
-  actions: {
-    [Actions.ROUTE_CHANGE]: async function (store, vm) {
-      const { commit } = store
-      const route = Config.getRoute(vm)
-      commit(Mutations.SET_ROUTE, route)
-      return route
-    },
-  },
-  getters: {},
+  state,
+  // getters,
+  mutations,
+  actions,
   /**
    * @typedef {Object} ModuleTree
    * @property {typeof book} book

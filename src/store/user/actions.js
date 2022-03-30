@@ -5,32 +5,32 @@ import Config from '@/config'
 
 /**
  * @callback fetchUserInfo
- * @param {ActionContext<UserState,RootState>} store
+ * @param {ActionContext<UserState>} store
  * @returns {Promise<UserModel>}
  */
 /**
  * @callback updateUserInfo
- * @param {ActionContext<UserState,RootState>} store
+ * @param {ActionContext<UserState>} store
  * @param {UserUpdateRequestParam} data
  * @returns {Promise<UserModel>}
  */
 /**
  * @callback checkLoginReplace
- * @param {ActionContext<UserState,RootState>} store
+ * @param {ActionContext<UserState>} store
  * @returns {Promise<boolean>}
  */
 /**
  * @callback login
- * @param {ActionContext<UserState,RootState>} store
+ * @param {ActionContext<UserState>} store
  * @param {LoginRequestParam} data
  * @returns {Promise<string>}
  */
 /**
  * @callback logout
- * @param {ActionContext<UserState,RootState>} store
+ * @param {ActionContext<UserState>} store
  * @returns {Promise<void>}
  */
-/** @type {ActionTree<UserState,RootState>} */
+/** @type {ActionTree<UserState>} */
 export default {
   /** @type {fetchUserInfo} */
   async fetchUserInfo(store) {

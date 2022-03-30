@@ -23,7 +23,7 @@ import VueConfig from '@/config'
 
 /**
  * @type {{
- *   tagList: () => ChapterModel[];
+ *   tagList: GetterFunction<import('@/store/tag').tagList>
  * }}
  */
 const { tagList } = mapGetters({
@@ -56,9 +56,9 @@ export default {
   computed: {
     tagList,
     /**
-     * @returns {ChapterModel}
+     * @returns {TagModel}
      */
-    targetModel() {
+    activeTagModel() {
       return this.tagList.find((p) => p.id === this.active)
     },
   },

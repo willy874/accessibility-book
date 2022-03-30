@@ -15,6 +15,7 @@ export const state = {
  * @param {MenuState} state
  * @returns {MenuModel[]}
  */
+/** @type {GetterTree<MenuState>} */
 export const getters = {
   /** @type {menuList} */
   menuList(state) {
@@ -27,6 +28,7 @@ export const getters = {
  * @param {MenuState} state
  * @param {MenuModel} model
  */
+/** @type {MutationTree<MenuState>} */
 export const mutations = {
   setMenuList(state, model) {
     if (Object.hasOwnProperty.call(state.collection, model)) {
@@ -43,10 +45,11 @@ export const mutations = {
 
 /**
  * @callback fetchMenuList
- * @param {ActionContext<MenuState,RootState>} store
+ * @param {ActionContext<MenuState>} store
  * @param {void} payload
  * @returns {Promise<MenuModel>}
  */
+/** @type {ActionTree<MenuState>} */
 export const actions = {
   async fetchMenuList(store, payload) {
     const { commit } = store

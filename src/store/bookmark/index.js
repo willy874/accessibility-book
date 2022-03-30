@@ -17,6 +17,7 @@ export const state = {
  * @param {BookMarkState} state
  * @returns {BookMarkModel[]}
  */
+/** @type {GetterTree<BookMarkState>} */
 export const getters = {
   bookmarkList(state) {
     return Object.values(state.collection)
@@ -33,6 +34,7 @@ export const getters = {
  * @param {BookMarkState} state
  * @param {number} id
  */
+/** @type {MutationTree<BookMarkState>} */
 export const mutations = {
   /** @type {setBookmark} */
   setBookmark(state, model) {
@@ -57,22 +59,23 @@ export const mutations = {
 
 /**
  * @callback fetchBookmarkList
- * @param {ActionContext<BookMarkState,RootState>} store
+ * @param {ActionContext<BookMarkState>} store
  * @param {void} payload
  * @returns {Promise<BookMarkModel[]>}
  */
 /**
  * @callback addBookmark
- * @param {ActionContext<BookMarkState,RootState>} store
+ * @param {ActionContext<BookMarkState>} store
  * @param {BookMarkRequestParam} params
  * @returns {Promise<ResponseCollection<BookMarkModel>>}
  */
 /**
  * @callback deleteBookmark
- * @param {ActionContext<BookMarkState,RootState>} store
+ * @param {ActionContext<BookMarkState>} store
  * @param {number} id
  * @returns {Promise<BookMarkModel>}
  */
+/** @type {ActionTree<BookMarkState>} */
 export const actions = {
   /** @type {fetchBookmarkList} */
   async fetchBookmarkList(store, payload) {

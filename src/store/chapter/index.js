@@ -21,6 +21,7 @@ export const state = {
  * @param {ChapterState} state
  * @returns {(id: number) => ChapterModel}
  */
+/** @type {GetterTree<ChapterState>} */
 export const getters = {
   /** @type {chapterList} */
   chapterList(state) {
@@ -42,6 +43,7 @@ export const getters = {
  * @param {ChapterState} state
  * @param {BookModel} model
  */
+/** @type {MutationTree<ChapterState>} */
 export const mutations = {
   /** @type {setChapter} */
   setChapter(state, model) {
@@ -63,16 +65,17 @@ export const mutations = {
 
 /**
  * @callback fetchChapterById
- * @param {ActionContext<ChapterState,RootState>} store
+ * @param {ActionContext<ChapterState>} store
  * @param {number} id
  * @returns {Promise<ChapterModel>}
  */
 /**
  * @callback fetchChapterListByTagId
- * @param {ActionContext<ChapterState,RootState>} store
+ * @param {ActionContext<ChapterState>} store
  * @param {number} id
  * @returns {Promise<ChapterModel[]>}
  */
+/** @type {ActionTree<ChapterState>} */
 export const actions = {
   /** @type {fetchChapterById} */
   async fetchChapterById(store, id) {
