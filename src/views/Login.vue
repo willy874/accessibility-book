@@ -133,6 +133,10 @@ export default {
           await this.$router.replace({ name: RouterName.REGISTER })
           return
         }
+        if (!userInfo.last_name) {
+          await this.$router.replace({ name: RouterName.REGISTER })
+          return
+        }
         if (!userInfo.is_authorized) {
           await this.$router.replace({ name: RouterName.NO_AUTHORIZED })
           return

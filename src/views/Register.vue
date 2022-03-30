@@ -211,8 +211,10 @@ export default {
         await this.fetchUserInfo()
         if (this.userInfo.is_password_set === false) {
           this.step = 1
-        } else if (this.userInfo.is_authorized === false) {
+        } else if (this.userInfo.last_name === '') {
           this.step = 2
+        } else if (this.userInfo.is_authorized === false) {
+          this.loginHandler()
         }
       }
     },
