@@ -29,7 +29,6 @@ const config = {
     baseUrl: base + '/dj-rest-auth/',
     headers: {},
   },
-  storage: localStorage,
   loginRoutes: [RouterName.LOGIN, RouterName.REGISTER, RouterName.NO_AUTHORIZED],
 }
 

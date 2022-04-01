@@ -2,8 +2,8 @@
   <div>
     <h2>書籤列表</h2>
     <div v-if="isLoading">讀取中</div>
-    <div v-else-if="bookMarkList.length">
-      <div v-for="model in bookMarkList" :key="model.id">
+    <div v-else-if="bookmarkList.length">
+      <div v-for="model in bookmarkList" :key="model.id">
         <div class="bookmark__list-item">
           <RouterLink :to="getChapterRoute(model.chapter)">{{ model.chapter_name }}</RouterLink>
           <button @click="deleteBookmark(model.id)">刪除</button>
@@ -17,28 +17,36 @@
 <script>
 import { throttle } from '@/utils'
 import { RouterName, Getters, Actions } from '@/consts'
+import { mapActions, mapGetters } from 'vuex'
+
+/**
+ * @type {{
+ *   bookmarkList: GetterFunction<import('@/store/bookmark').bookmarkList>
+ * }}
+ */
+const { bookmarkList } = mapGetters({
+  bookmarkList: Getters.BOOKMARK_LIST,
+})
+
+/**
+ * @type {{
+ *   fetchBookmarkList: ActionFunction<import('@/store/bookmark').fetchBookmarkList>,
+ *   deleteBookmark: ActionFunction<import('@/store/bookmark').deleteBookmark>,
+ * }}
+ */
+const { deleteBookmark, fetchBookmarkList } = mapActions({
+  fetchBookmarkList: Actions.FETCH_BOOKMARK_LIST,
+  deleteBookmark: Actions.DELETE_BOOKMARK,
+})
 
 export default {
   name: 'BookMark',
   computed: {
-    bookMarkList() {
-      return this.$store.getters[Getters.BOOKMARK_LIST]
-    },
+    bookmarkList,
   },
   methods: {
-    /**
-     * @param {number} id
-     * @return {Promise<BookMarkModel>}
-     */
-    deleteBookmark: throttle(function (id) {
-      return this.$store.dispatch(Actions.DELETE_BOOKMARK, id)
-    }, 400),
-    /**
-     * @return {Promise<BookMarkModel[]>}
-     */
-    fetchBookmarkList() {
-      return this.$store.dispatch(Actions.FETCH_BOOKMARK_LIST)
-    },
+    fetchBookmarkList,
+    deleteBookmark: throttle(deleteBookmark, 400),
     /**
      * @param {string} id
      * @return {VueRouteLocation}

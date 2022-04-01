@@ -6,7 +6,7 @@
       <div class="list">
         <h3>{{ targetModel.name }}</h3>
         <div>
-          發佈時間:<span>{{ getDate(targetModel.publish_date) }}</span>
+          發佈時間:<span>{{ formatDate(targetModel.publish_date) }}</span>
         </div>
         <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
       </div>
@@ -19,7 +19,7 @@
             <RouterLink :to="getNewsRoute(model.id)">{{ model.name }}</RouterLink>
           </h4>
           <div>
-            發佈時間:<span>{{ getDate(model.publish_date) }}</span>
+            發佈時間:<span>{{ formatDate(model.publish_date) }}</span>
           </div>
         </li>
       </ul>
@@ -29,7 +29,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { transformMarkdownToHtml } from '@/utils'
+import { transformMarkdownToHtml, formatDate } from '@/utils'
 import { RouterName, Actions } from '@/consts'
 import VueConfig from '@/config'
 
@@ -63,6 +63,7 @@ export default {
     transformMarkdownToHtml,
     fetchNewsList,
     fetchNewsById,
+    formatDate,
     /**
      * @param {string} id
      * @return {VueRouteLocation}

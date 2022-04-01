@@ -30,8 +30,8 @@ const bookmark = {
 const { fetchBookList, fetchBookByQuery, fetchBookById } = bookActions
 const book = {
   FETCH_BOOK_LIST: fetchBookList.name,
-  FETCH_BOOK_BY_QUERY: fetchBookByQuery.name,
   FETCH_BOOK_BY_ID: fetchBookById.name,
+  FETCH_BOOK_BY_QUERY: fetchBookByQuery.name,
 }
 
 const { fetchHistoryList } = historyActions

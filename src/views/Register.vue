@@ -233,9 +233,7 @@ export default {
         handleHttpErrorLog(error)
       }
     },
-    throttle: throttle(function () {
-      return true
-    }, 400),
+    throttle: throttle(() => true, 400),
     /**
      * @param {SubmitEvent} e
      */

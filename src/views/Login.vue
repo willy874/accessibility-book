@@ -1,6 +1,6 @@
 <template>
   <main>
-    <form class="form" title="帳號登入的表單" @submit="throttleSubmit">
+    <form class="form" title="帳號登入的表單" @submit="submit">
       <h2 class="form-title" title="這裡是登入頁面">登入</h2>
       <div class="form-item">
         <label class="form-label" title="帳號信箱">帳號信箱</label>
@@ -31,10 +31,33 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { apiPostLineLogin } from '@/api'
-import { HttpError, handleHttpErrorLog, validate, isValid, errorsToArray, throttle, isAxiosError } from '@/utils'
+import {
+  HttpError,
+  handleHttpErrorLog,
+  validate,
+  isValid,
+  errorsToArray,
+  throttle,
+  isAxiosError,
+  setStorage,
+} from '@/utils'
 import Config from '@/config'
 import { RouterName, StorageKey, Actions, ValidateType } from '@/consts'
+
+/**
+ * @type {{
+ *   fetchUserInfo: ActionFunction<import('@/store/user/actions').fetchUserInfo>,
+ *   login: ActionFunction<import('@/store/user/actions').login>
+ *   checkLoginReplace: ActionFunction<import('@/store/user/actions').checkLoginReplace>
+ * }}
+ */
+const { fetchUserInfo, login, checkLoginReplace } = mapActions({
+  fetchUserInfo: Actions.FETCH_USER_INFO,
+  login: Actions.LOGIN,
+  checkLoginReplace: Actions.CHECK_LOGIN_REPLACE,
+})
 
 /**
  * @typedef {Object} LoginForm
@@ -55,7 +78,6 @@ export default {
        * @type {LoginError}
        */
       errors: {},
-      throttleSubmit: throttle(this.submit, 400),
     }
   },
   computed: {
@@ -75,23 +97,17 @@ export default {
   },
   methods: {
     isValid,
+    fetchUserInfo,
+    login,
+    checkLoginReplace,
+    throttle: throttle(() => true, 400),
     /**
-     * @return {Promise<UserModel>}
+     * @param {SubmitEvent} e
      */
-    fetchUserInfo() {
-      return this.$store.dispatch(Actions.FETCH_USER_INFO)
-    },
-    /**
-     * @param {LoginRequestParam} form
-     * @return {Promise<string>}
-     */
-    async login(form) {
-      return await this.$store.dispatch(Actions.LOGIN, form)
-    },
-    checkLoginReplace() {
-      this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
-    },
     async submit(e) {
+      if (!this.throttle()) {
+        return
+      }
       e.preventDefault()
       this.errors = await this.validate(this.form)
       if (isValid(this.errors)) {
@@ -119,7 +135,7 @@ export default {
           throw new HttpError(res)
         } else {
           const token = res.data.key
-          await this.setStorage(StorageKey.TOKEN, token)
+          await setStorage(StorageKey.TOKEN, token)
           this.loginHandler()
         }
       } catch (error) {
@@ -146,7 +162,7 @@ export default {
     },
     /**
      * @param {LoginForm} form
-     * @return {LoginError}
+     * @return {Promise<LoginError>}
      */
     async validate(form) {
       return await validate(form, {

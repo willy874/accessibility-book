@@ -5,7 +5,7 @@
  * @typedef {{ [key: string]: JsonValue | JsonValue[] | JsonData}} JsonData
  */
 /**
- * @typedef {{ [key: string]: string}} StringData
+ * @typedef {{ [key: string]: string | string[] }} StringData
  */
 /**
  * @template K,T

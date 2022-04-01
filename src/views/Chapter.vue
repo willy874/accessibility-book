@@ -23,6 +23,34 @@ import { transformMarkdownToHtml } from '@/utils'
 import { apiPostHistory } from '@/api/index'
 import { RouterName, Getters, Actions } from '@/consts'
 import VueConfig from '@/config'
+import { mapActions, mapGetters, mapState } from 'vuex'
+
+/**
+ * @type {{
+ *   activeBook: () => BookModel
+ * }}
+ */
+const { activeBook } = mapState({
+  activeBook: (state) => state.chapter.activeBook,
+})
+
+/**
+ * @type {{
+ *   chapterList: GetterFunction<import('@/store/chapter').chapterList>
+ * }}
+ */
+const { chapterList } = mapGetters({
+  chapterList: Getters.CHAPTER_LIST,
+})
+
+/**
+ * @type {{
+ *   fetchChapterById: ActionFunction<import('@/store/chapter').fetchChapterById>,
+ * }}
+ */
+const { fetchChapterById } = mapActions({
+  fetchChapterById: Actions.FETCH_CHAPTER_BY_ID,
+})
 
 export default {
   name: 'Chapter',
@@ -32,27 +60,18 @@ export default {
     }
   },
   computed: {
-    /**
-     * @return {ChapterModel[]}
-     */
-    chapterList() {
-      return this.$store.getters[Getters.CHAPTER_LIST]
-    },
+    chapterList,
+    activeBook,
     /**
      * @returns {ChapterModel}
      */
     targetModel() {
       return this.chapterList.find((p) => p.id === this.active)
     },
-    /**
-     * @return {BookModel}
-     */
-    activeBook() {
-      return this.$store.state.chapter.activeBook
-    },
   },
   methods: {
     transformMarkdownToHtml,
+    fetchChapterById,
     /**
      * @param {string} id
      * @return {VueRouteLocation}
@@ -64,16 +83,6 @@ export default {
       }
     },
     /**
-     * @param {number} id
-     * @return {Promise<ChapterModel>}
-     */
-    fetchChapterById(id) {
-      return this.$store.dispatch(Actions.FETCH_CHAPTER_BY_ID, id)
-    },
-    /**
-     * @depend
-     * @param {Route} this.route
-     * @param {number} this.active
      * @param {LifecycleHookEnum} type
      */
     async effectRoute(type) {

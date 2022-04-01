@@ -18,6 +18,8 @@ import Footer from './layouts/Footer.vue'
 import { StorageKey, Actions, RouterName } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
+import { getStorage } from './utils'
+
 export default {
   name: 'App',
   components: {
@@ -25,7 +27,9 @@ export default {
     Footer,
   },
   data() {
-    return {}
+    return {
+      route: Config.getRoute(this),
+    }
   },
   watch: {
     $route() {
@@ -33,14 +37,11 @@ export default {
     },
   },
   async created() {
-    /** @type {import('@/mixins/app').AppMixin} */
-    // @ts-ignore
-    const appMixin = this
     const isLiff = this.$route.query && this.$route.query['liff.state']
     if (Config.value.liff || isLiff) {
       await liff.init({ liffId: Config.value.liffId })
     }
-    if (await appMixin.getStorage(StorageKey.TOKEN)) {
+    if (await getStorage(StorageKey.TOKEN)) {
       /** @type {UserModel} */
       const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
       if (userInfo) {

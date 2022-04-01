@@ -20,6 +20,29 @@
 <script>
 import { RouterName, Getters, Actions } from '@/consts'
 import VueConfig from '@/config'
+import { mapActions, mapGetters } from 'vuex'
+
+/**
+ * @type {{
+ *   bookList: GetterFunction<import('@/store/book').bookList>
+ * }}
+ */
+const { bookList } = mapGetters({
+  bookList: Getters.BOOK_LIST,
+})
+
+/**
+ * @type {{
+ *   fetchBookList: ActionFunction<import('@/store/book').fetchBookList>,
+ *   fetchBookByQuery: ActionFunction<import('@/store/book').fetchBookByQuery>,
+ *   fetchBookById: ActionFunction<import('@/store/book').fetchBookById>,
+ * }}
+ */
+const { fetchBookList, fetchBookByQuery, fetchBookById } = mapActions({
+  fetchBookList: Actions.FETCH_BOOK_LIST,
+  fetchBookByQuery: Actions.FETCH_BOOK_BY_ID,
+  fetchBookById: Actions.FETCH_BOOK_BY_QUERY,
+})
 
 export default {
   name: 'Book',
@@ -31,12 +54,7 @@ export default {
     }
   },
   computed: {
-    /**
-     * @return {BookModel[]}
-     */
-    bookList() {
-      return this.$store.getters[Getters.BOOK_LIST]
-    },
+    bookList,
     /**
      * @return {BookModel|null}
      */
@@ -54,26 +72,9 @@ export default {
     },
   },
   methods: {
-    /**
-     * @return {Promise<BookModel[]>}
-     */
-    fetchBookList() {
-      return this.$store.dispatch(Actions.FETCH_BOOK_LIST)
-    },
-    /**
-     * @param {string} id
-     * @return {Promise<BookModel>}
-     */
-    fetchBookById(id) {
-      return this.$store.dispatch(Actions.FETCH_BOOK_BY_ID, id)
-    },
-    /**
-     * @param {JsonData} query
-     * @return {Promise<BookModel[]>}
-     */
-    fetchBookListByQuery(query) {
-      return this.$store.dispatch(Actions.FETCH_BOOK_BY_QUERY, query)
-    },
+    fetchBookList,
+    fetchBookById,
+    fetchBookByQuery,
     /**
      * @param {string} id
      * @return {VueRouteLocation}
@@ -103,10 +104,10 @@ export default {
       const query = route.query
       if (id) {
         this.active = id
-        await this.fetchBookById(id)
+        await this.fetchBookById(Number(id))
       } else if (query.tag__name) {
         this.active = ''
-        this.bookListByLast = await this.fetchBookListByQuery(query)
+        this.bookListByLast = await this.fetchBookByQuery(query)
       } else {
         this.active = ''
         this.bookListByLast = await this.fetchBookList()

@@ -2,13 +2,7 @@
   <div>
     <div v-if="route.name === RouterName.HOME" :key="RouterName.HOME">
       <h2>首頁</h2>
-      <section-news />
-      <!-- <section id="release_list">
-        <h4 class="section-title">最新上架</h4>
-      </section>
-      <section id="recommend_list">
-        <h4 class="section-title">推薦書單</h4>
-      </section> -->
+      <SectionNews />
     </div>
     <div v-for="(view, name) in views" :key="name">
       <div :is="view" v-if="route.name === name"></div>
@@ -30,14 +24,16 @@ import NoAuthorized from './NoAuthorized.vue'
 import Register from './Register.vue'
 import Tag from './Tag.vue'
 import User from './User.vue'
+import Config from '@/config'
 
 export default {
   name: 'Home',
   components: {
-    'section-news': News,
+    SectionNews: News,
   },
   data() {
     return {
+      route: Config.getRoute(this),
       views: {
         [RouterName.BOOK]: Book,
         [RouterName.BOOK_MARK]: BookMark,

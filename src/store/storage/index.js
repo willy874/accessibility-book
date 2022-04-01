@@ -1,8 +1,7 @@
 import { StorageKey, Mutations } from '@/consts'
-import Config from '@/config'
 import { storageInit, cloneJson } from '@/utils'
 
-const storage = Config.value.storage
+const storage = localStorage
 
 /** @type {StorageState} */
 export const state = {

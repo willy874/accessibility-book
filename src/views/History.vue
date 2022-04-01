@@ -10,7 +10,7 @@
               <span>{{ index + 1 }}.</span>
               <span>{{ model.chapter_name }}</span>
             </h4>
-            <p>{{ getDate(model.last_modified) }}</p>
+            <p>{{ formatDate(model.last_modified) }}</p>
             <ul>
               <span>標籤:</span>
               <li v-for="item in model.tag" :key="item.id">{{ item.name }}</li>
@@ -24,7 +24,27 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import { RouterName, Getters, Actions } from '@/consts'
+import { formatDate } from '@/utils'
+
+/**
+ * @type {{
+ *   historyList: GetterFunction<import('@/store/history').historyList>
+ * }}
+ */
+const { historyList } = mapGetters({
+  historyList: Getters.HISTORY_LIST,
+})
+
+/**
+ * @type {{
+ *   fetchHistoryList: ActionFunction<import('@/store/history').fetchHistoryList>,
+ * }}
+ */
+const { fetchHistoryList } = mapActions({
+  fetchHistoryList: Actions.FETCH_HISTORY_LIST,
+})
 
 export default {
   name: 'History',
@@ -32,12 +52,7 @@ export default {
     return {}
   },
   computed: {
-    /**
-     * @return {HistoryModel[]}
-     */
-    historyList() {
-      return this.$store.getters[Getters.HISTORY_LIST]
-    },
+    historyList,
     /**
      * @return {HistoryModel[]}
      */
@@ -46,14 +61,10 @@ export default {
     },
   },
   methods: {
+    formatDate,
+    fetchHistoryList,
     /**
-     * @return {Promise<BookModel[]>}
-     */
-    fetchHistoryList() {
-      return this.$store.dispatch(Actions.FETCH_HISTORY_LIST)
-    },
-    /**
-     * @param {number} id
+     * @param {string} id
      * @return {VueRouteLocation}
      */
     getChapterRoute(id) {

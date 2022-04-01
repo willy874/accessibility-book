@@ -104,7 +104,7 @@
  * @property {number} chapter
  * @property {string} chapter_name
  * @property {string[]} tag
- * @property {string} last_modified
+ * @property {number} last_modified
  */
 /**
  * @typedef {Object} UserUpdateRequestParam
