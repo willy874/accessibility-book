@@ -13,12 +13,26 @@
 </template>
 <script>
 import 'markdown-it-latex/dist/index.css'
+import { mapActions } from 'vuex'
 import Header from './layouts/Header.vue'
 import Footer from './layouts/Footer.vue'
 import { StorageKey, Actions, RouterName } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
 import { getStorage } from './utils'
+
+/**
+ * @type {{
+ *   fetchUserInfo: ActionFunction<import('@/store/user/actions').fetchUserInfo>
+ *   routeChange: ActionFunction<import('@/store/root').routeChange>
+ *   checkLoginReplace: ActionFunction<import('@/store/user/actions').checkLoginReplace>
+ * }}
+ */
+const { fetchUserInfo, routeChange, checkLoginReplace } = mapActions({
+  fetchUserInfo: Actions.FETCH_USER_INFO,
+  routeChange: Actions.ROUTE_CHANGE,
+  checkLoginReplace: Actions.CHECK_LOGIN_REPLACE,
+})
 
 export default {
   name: 'App',
@@ -28,6 +42,7 @@ export default {
   },
   data() {
     return {
+      config: Config.value,
       route: Config.getRoute(this),
     }
   },
@@ -38,15 +53,14 @@ export default {
   },
   async created() {
     const isLiff = this.$route.query && this.$route.query['liff.state']
-    if (Config.value.liff || isLiff) {
-      await liff.init({ liffId: Config.value.liffId })
+    if (this.config.liff || isLiff) {
+      await liff.init({ liffId: this.config.liffId })
     }
     if (await getStorage(StorageKey.TOKEN)) {
-      /** @type {UserModel} */
-      const userInfo = await this.$store.dispatch(Actions.FETCH_USER_INFO)
+      const userInfo = await this.fetchUserInfo()
       if (userInfo) {
         if (userInfo.is_password_set && userInfo.is_authorized) {
-          this.$store.dispatch(Actions.CHECK_LOGIN_REPLACE)
+          this.checkLoginReplace()
         } else {
           this.$router.replace({ name: RouterName.REGISTER })
         }
@@ -55,11 +69,14 @@ export default {
     this.changeRoute()
   },
   methods: {
+    fetchUserInfo,
+    routeChange,
+    checkLoginReplace,
     /**
      * @return {Promise<Route>}
      */
     changeRoute() {
-      return this.$store.dispatch(Actions.ROUTE_CHANGE, this)
+      return this.routeChange(this)
     },
   },
 }

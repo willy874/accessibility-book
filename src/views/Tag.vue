@@ -4,12 +4,12 @@
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="tagListById && tagListById.length">
       <div v-for="model in tagListById" :key="model.id" class="tag__list-item">
-        <RouterLink :to="{ name: RouterName.CHAPTER, params: { id: model.id } }">{{ model.name }}</RouterLink>
+        <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
       </div>
     </div>
     <div v-else-if="tagList && tagList.length">
       <div v-for="model in tagList" :key="model.id" class="tag__list-item">
-        <RouterLink :to="{ name: RouterName.TAG_DETAIL, params: { id: model.id } }">{{ model.name }}</RouterLink>
+        <RouterLink :to="getTagDetailRoute(model.id)">{{ model.name }}</RouterLink>
       </div>
     </div>
     <div v-else>沒有資料</div>
@@ -18,7 +18,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { Getters, Actions } from '@/consts'
+import { Getters, Actions, RouterName } from '@/consts'
 import VueConfig from '@/config'
 
 /**
@@ -65,6 +65,20 @@ export default {
   methods: {
     fetchTagList,
     fetchChapterListByTagId,
+    /**
+     * @param {string} id
+     * @return {VueRouteLocation}
+     */
+    getChapterRoute(id) {
+      return { name: RouterName.CHAPTER, params: { id } }
+    },
+    /**
+     * @param {string} id
+     * @return {VueRouteLocation}
+     */
+    getTagDetailRoute(id) {
+      return { name: RouterName.TAG_DETAIL, params: { id } }
+    },
     /**
      * @param {LifecycleHookEnum} type
      */

@@ -61,6 +61,14 @@ class VueConfig {
       return null
     }
   }
+
+  /**
+   * @param {(callback: typeof config) => unknown | Promise<unknown>} callback
+   * @return {Promise<void>}
+   */
+  static async setConfig(callback) {
+    await callback(config)
+  }
 }
 
 VueConfig.value = config
