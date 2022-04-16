@@ -1,17 +1,17 @@
 <template>
   <div>
-    <h2>書籍列表</h2>
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="targetModel">
-      <h3>{{ targetModel.name }}</h3>
-      <div v-for="model in chapterListSort" :key="model.id" class="book__list-item">
+      <h2>{{ targetModel.name }} - 章節列表</h2>
+      <h3 v-for="model in chapterListSort" :key="model.id" class="book__list-item">
         <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
-      </div>
+      </h3>
     </div>
     <div v-else-if="bookListByLast && bookListByLast.length">
-      <div v-for="model in bookListByLast" :key="model.id" class="book__list-item">
+      <h2>書籍列表</h2>
+      <h3 v-for="model in bookListByLast" :key="model.id" class="book__list-item">
         <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
-      </div>
+      </h3>
     </div>
     <div v-else>無資料</div>
   </div>

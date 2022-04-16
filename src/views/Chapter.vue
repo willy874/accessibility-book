@@ -1,14 +1,18 @@
 <template>
   <div>
-    <div v-if="activeBook" class="tag-list">
-      <div v-for="tag in activeBook.tag" :key="tag.id" class="tag-item">
-        <RouterLink :to="getTagRoute(tag.id)" title="搜尋該標籤列表">{{ tag.name }}</RouterLink>
-      </div>
-    </div>
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="targetModel">
       <div>
-        <h2 class="chapter__heading">章節列表</h2>
+        <h2 class="chapter__heading">
+          <RouterLink :to="getBookRoute(targetModel.book)">
+            {{ targetModel.name }}
+          </RouterLink>
+        </h2>
+        <div v-if="activeBook" class="tag-list">
+          <h3 v-for="tag in activeBook.tag" :key="tag.id" class="tag-item">
+            <RouterLink :to="getTagRoute(tag.id)" title="搜尋該標籤列表">{{ tag.name }}</RouterLink>
+          </h3>
+        </div>
       </div>
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
     </div>
@@ -79,6 +83,16 @@ export default {
     getTagRoute(id) {
       return {
         name: RouterName.TAG_DETAIL,
+        params: { id },
+      }
+    },
+    /**
+     * @param {string} id
+     * @return {VueRouteLocation}
+     */
+    getBookRoute(id) {
+      return {
+        name: RouterName.BOOK_DETAIL,
         params: { id },
       }
     },
