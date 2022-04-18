@@ -13,7 +13,7 @@
 import { RouterName } from '@/consts'
 
 export default {
-  name: 'Search',
+  name: 'SearchBar',
   data() {
     return {
       RouterName,
