@@ -1,23 +1,85 @@
 <template>
   <div class="search-bar">
-    <div class="title">
-      <router-link title="回到首頁" :to="{ name: RouterName.HOME }">首頁</router-link>
-    </div>
+    <div class="title"><slot name="default" /></div>
     <div class="input">
-      <input type="text" />
+      <input v-model="inputText" type="text" @input="onInput" @keydown="onKeydown" />
+      <TipList ref="tip" @change="onChange" @enter="onEnter" />
     </div>
   </div>
 </template>
 
 <script>
-import { RouterName } from '@/consts'
+import { Getters } from '@/consts'
+import TipList from '@/components/Dialog/TipList.vue'
+import { mapGetters } from 'vuex'
+
+/**
+ * @type {{
+ *   tagList: GetterFunction<import('@/store/tag').tagList>
+ * }}
+ */
+const { tagList } = mapGetters({
+  tagList: Getters.TAG_LIST,
+})
 
 export default {
   name: 'SearchBar',
+  components: {
+    TipList,
+  },
   data() {
     return {
-      RouterName,
+      inputText: '',
     }
+  },
+  computed: {
+    tagList,
+    /**
+     * 取出 TipList 該 Component
+     * @return {any}
+     */
+    TipList() {
+      return this.$refs.tip || null
+    },
+  },
+  methods: {
+    onInput() {
+      if (/^\//.test(this.inputText)) {
+        const infoTagList = this.tagList.filter((tag) => new RegExp(this.inputText.replace(/^\//, '')).test(tag.name))
+        this.TipList.update(infoTagList.map((tag) => ({ id: tag.id, value: tag.id, text: tag.name })))
+      } else {
+        this.TipList.update()
+      }
+    },
+    /**
+     * @param {KeyboardEvent} e
+     */
+    onKeydown(e) {
+      switch (e.key) {
+        case 'Enter':
+          this.TipList.onEnter()
+          break
+        case 'ArrowUp':
+          this.TipList.onPrev()
+          break
+        case 'ArrowDown':
+          this.TipList.onNext()
+          break
+      }
+    },
+    /**
+     * @param {SelectData} data
+     */
+    onChange(data) {
+      // console.log('onChange', data)
+    },
+    /**
+     * @param {SelectData} data
+     */
+    onEnter(data) {
+      this.inputText = '/' + data.text
+      this.TipList.update()
+    },
   },
 }
 </script>
