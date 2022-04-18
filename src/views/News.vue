@@ -48,16 +48,9 @@ export default {
   data() {
     return {
       active: null,
+      targetModel: null,
       newsList: [],
     }
-  },
-  computed: {
-    /**
-     * @returns {NewsModel}
-     */
-    targetModel() {
-      return this.newsList.find((p) => p.id === this.active)
-    },
   },
   methods: {
     transformMarkdownToHtml,
@@ -81,7 +74,7 @@ export default {
       const route = VueConfig.getRoute(this)
       const id = Number(route.params.id)
       if (id) {
-        await this.fetchNewsById(id)
+        this.targetModel = await this.fetchNewsById(id)
         this.active = id
       } else {
         this.newsList = await this.fetchNewsList()

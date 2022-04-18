@@ -33,6 +33,14 @@ export function isObjectEmpty(value) {
 
 /**
  * @param {unknown} value
+ * @returns {value is Object}
+ */
+export function isObject(value) {
+  return typeof value === 'object' && value && value.constructor === Object && JSON.stringify(value) !== '{}'
+}
+
+/**
+ * @param {unknown} value
  * @returns {value is Blob}
  */
 export function isBlobEmpty(value) {
