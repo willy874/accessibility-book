@@ -1,6 +1,8 @@
 <template>
   <header>
-    <Search />
+    <SearchBar>
+      <router-link title="回到首頁" :to="{ name: RouterName.HOME }">首頁</router-link>
+    </SearchBar>
     <nav>
       <ul v-if="menuList.length">
         <li v-for="model in sortMenuList(menuList)" :key="model.uuid">
@@ -33,7 +35,7 @@
 
 <script>
 import { Getters, Actions, RouterName } from '@/consts'
-import Search from '@/layouts/Search.vue'
+import SearchBar from '@/layouts/SearchBar.vue'
 import { mapActions } from 'vuex'
 import VueConfig from '@/config'
 
@@ -49,7 +51,7 @@ const { fetchMenuList } = mapActions({
 export default {
   name: 'Header',
   components: {
-    Search,
+    SearchBar,
   },
   data() {
     return {

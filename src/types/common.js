@@ -18,3 +18,9 @@
  * @property {string} version
  * @property {string} platform
  */
+/**
+ * @typedef {Object} SelectData
+ * @property {string|number} id
+ * @property {string} text
+ * @property {*} value
+ */

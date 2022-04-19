@@ -26,12 +26,14 @@ import { getStorage } from './utils'
  *   fetchUserInfo: ActionFunction<import('@/store/user/actions').fetchUserInfo>
  *   routeChange: ActionFunction<import('@/store/root').routeChange>
  *   checkLoginReplace: ActionFunction<import('@/store/user/actions').checkLoginReplace>
+ *   fetchTagList: ActionFunction<import('@/store/tag').fetchTagList>
  * }}
  */
-const { fetchUserInfo, routeChange, checkLoginReplace } = mapActions({
+const { fetchUserInfo, routeChange, checkLoginReplace, fetchTagList } = mapActions({
   fetchUserInfo: Actions.FETCH_USER_INFO,
   routeChange: Actions.ROUTE_CHANGE,
   checkLoginReplace: Actions.CHECK_LOGIN_REPLACE,
+  fetchTagList: Actions.FETCH_TAG_LIST,
 })
 
 export default {
@@ -66,17 +68,25 @@ export default {
         }
       }
     }
+    this.init()
     this.changeRoute()
   },
   methods: {
     fetchUserInfo,
     routeChange,
     checkLoginReplace,
+    fetchTagList,
     /**
      * @return {Promise<Route>}
      */
     changeRoute() {
       return this.routeChange(this)
+    },
+    /**
+     * @return {Promise<any[]>}
+     */
+    init() {
+      return Promise.all([this.fetchTagList()])
     },
   },
 }
