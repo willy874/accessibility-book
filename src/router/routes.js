@@ -12,6 +12,7 @@ import Navigation from '../views/Navigation.vue'
 import Menu from '../views/Menu.vue'
 import User from '../views/User.vue'
 import NEWS from '../views/News.vue'
+import Search from '../views/Search.vue'
 
 export default [
   {
@@ -93,5 +94,10 @@ export default [
     path: '/news/:id',
     name: RouterName.NEWS_DETAIL,
     component: NEWS,
+  },
+  {
+    path: '/search',
+    name: RouterName.SEARCH,
+    component: Search,
   },
 ]

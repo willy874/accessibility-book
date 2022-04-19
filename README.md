@@ -1,61 +1,63 @@
 # 無障礙電子書 **AccessibilityBook**
 
-
 ## 專案環境
 
 ### 環境套件
 
-* Nodejs v16.12.0  
-* NPM v8.1.0  
-* Yarn 1.22.10  
-* Vue-Cli v4.5.11  
-
+- Nodejs v16.12.0
+- NPM v8.1.0
+- Yarn 1.22.10
+- Vue-Cli v4.5.11
 
 ### 開發環境啟動
+
 ```bash
 $ yarn sh:create
 ```
 
 ### 本機發布
+
 ```bash
 $ yarn sh:push
 ```
 
 ### 佈署
+
 ```bash
 $ yarn sh:deploy
 ```
+
 修改 .env
 
 ### 核心
 
-* Vue ^2.6.11
-* line-liff ^2.16.1
-* sass ^1.26.5
+- Vue ^2.6.11
+- line-liff ^2.16.1
+- sass ^1.26.5
 
 ### 專案管理
 
-* eslint
-* stylelint
-* prettier
-* postcss
-* sass-loader
-* babel
-* vue-cli
+- eslint
+- stylelint
+- prettier
+- postcss
+- sass-loader
+- babel
+- vue-cli
 
 ### 伺服器
 
-* express ^4.17.1
+- express ^4.17.1
 
 ### 其他
 
-* axios ^0.21.1
-* lodash 4.17.21
-* dayjs ^1.10.7
-* markdown-it ^12.2.0
-* vue-router ^3.2.0
-* vuex ^3.4.0
-* JSDoc ^3.6.7
+- axios ^0.21.1
+- lodash 4.17.21
+- dayjs ^1.10.7
+- markdown-it ^12.2.0
+- vue-router ^3.2.0
+- vuex ^3.4.0
+- JSDoc ^3.6.7
 
 ## 專案目錄結構
 

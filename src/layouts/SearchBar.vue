@@ -2,17 +2,19 @@
   <div class="search-bar">
     <div class="title"><slot name="default" /></div>
     <div class="input">
-      <input v-model="inputText" type="text" @input="onInput" @keydown="onKeydown" />
+      <form @submit.prevent="submitHandler">
+        <input v-model="inputText" type="text" @input="onInput" @keydown="onKeydown" />
+      </form>
       <TipList ref="tip" @change="onChange" @enter="onEnter" />
     </div>
   </div>
 </template>
 
 <script>
-import { Getters } from '@/consts'
+import { Getters, RouterName } from '@/consts'
 import TipList from '@/components/Dialog/TipList.vue'
 import { mapGetters } from 'vuex'
-
+import Config from '@/config'
 /**
  * @type {{
  *   tagList: GetterFunction<import('@/store/tag').tagList>
@@ -43,6 +45,17 @@ export default {
     },
   },
   methods: {
+    async submitHandler() {
+      const route = Config.getRoute().query.content
+      if (this.inputText && route !== this.inputText) {
+        this.$router.push({
+          name: RouterName.SEARCH,
+          query: {
+            content: this.inputText,
+          },
+        })
+      }
+    },
     onInput() {
       if (/^\//.test(this.inputText)) {
         const infoTagList = this.tagList.filter((tag) => new RegExp(this.inputText.replace(/^\//, '')).test(tag.name))

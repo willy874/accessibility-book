@@ -133,3 +133,5 @@ export const apiGetNewsList = () => request.get(`news/`)
  * @returns {Promise<AxiosResponse<ResponseCollection<NewsModel>>>}
  */
 export const apiGetNewsById = (id) => request.get(`news/${id}/`)
+
+export const apiPostSearch = (data) => request.post(`search/`, data)
