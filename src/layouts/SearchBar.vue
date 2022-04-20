@@ -54,6 +54,7 @@ export default {
             content: this.inputText,
           },
         })
+        this.inputText = ''
       }
     },
     onInput() {
