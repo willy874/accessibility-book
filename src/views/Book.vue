@@ -40,7 +40,7 @@ const { bookList } = mapGetters({
  */
 const { fetchBookList, fetchBookByQuery, fetchBookById } = mapActions({
   fetchBookList: Actions.FETCH_BOOK_LIST,
-  fetchBookByQuery: Actions.FETCH_BOOK_BY_ID,
+  fetchBookByQuery: Actions.FETCH_BOOK_BY_QUERY,
   fetchBookById: Actions.FETCH_BOOK_BY_QUERY,
 })
 
@@ -105,7 +105,7 @@ export default {
       if (id) {
         this.active = id
         await this.fetchBookById(Number(id))
-      } else if (query.tag__name) {
+      } else if (query.tag_name) {
         this.active = ''
         this.bookListByLast = await this.fetchBookByQuery(query)
       } else {
