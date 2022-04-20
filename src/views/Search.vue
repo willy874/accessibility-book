@@ -5,6 +5,7 @@
       <li v-for="searchList in resData" :key="searchList.id" class="serch-list" @click="linkTo(searchList.id)">
         {{ searchList.name }}
       </li>
+      <li v-if="errText" class="serch-list">{{ errText }}</li>
     </ul>
   </div>
 </template>
@@ -18,6 +19,7 @@ export default {
   data() {
     return {
       resData: null,
+      errText: '',
     }
   },
   methods: {
@@ -27,8 +29,13 @@ export default {
     async effectRoute() {
       const body = Config.getRoute(this).query
       try {
+        this.errText = ''
         const res = await apiPostSearch(body)
         this.resData = res.data.results
+        if (!this.resData.length) {
+          this.errText = '查無結果'
+          console.log(this.resData)
+        }
       } catch (error) {
         handleHttpErrorLog(error)
       }
