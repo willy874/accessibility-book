@@ -105,7 +105,7 @@ export default {
       if (id) {
         this.active = id
         await this.fetchBookById(Number(id))
-      } else if (query.tag_name) {
+      } else if (query.tag__name) {
         this.active = ''
         this.bookListByLast = await this.fetchBookByQuery(query)
       } else {
