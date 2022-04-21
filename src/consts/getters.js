@@ -1,50 +1,32 @@
-// import { getters as rootGetters } from '@/store/root'
-import { getters as chapterGetters } from '@/store/chapter'
-import { getters as bookmarkGetters } from '@/store/bookmark'
-import { getters as bookGetters } from '@/store/book'
-import { getters as historyGetters } from '@/store/history'
-import { getters as menuGetters } from '@/store/menu'
-import { getters as newsGetters } from '@/store/news'
-// import { getters as storageGetters } from '@/store/storage'
-import { getters as tagGetters } from '@/store/tag'
-// import { getters as userGetters } from '@/store/user'
-
 const root = {}
 
-const { bookmarkList } = bookmarkGetters
 const bookmark = {
-  BOOKMARK_LIST: bookmarkList.name,
+  BOOKMARK_LIST: 'bookmarkList',
 }
 
-const { chapterList, getChapterListById } = chapterGetters
 const chapter = {
-  CHAPTER_LIST: chapterList.name,
-  GET_CHAPTER_BY_ID: getChapterListById.name,
+  CHAPTER_LIST: 'chapterList',
+  GET_CHAPTER_BY_ID: 'getChapterListById',
 }
 
-const { bookList } = bookGetters
 const book = {
-  BOOK_LIST: bookList.name,
+  BOOK_LIST: 'bookList',
 }
 
-const { tagList } = tagGetters
 const tag = {
-  TAG_LIST: tagList.name,
+  TAG_LIST: 'tagList',
 }
 
-const { historyList } = historyGetters
 const history = {
-  HISTORY_LIST: historyList.name,
+  HISTORY_LIST: 'historyList',
 }
 
-const { menuList } = menuGetters
 const menu = {
-  MENU_LIST: menuList.name,
+  MENU_LIST: 'menuList',
 }
 
-const { newsList } = newsGetters
 const news = {
-  NEWS_LIST: newsList.name,
+  NEWS_LIST: 'newsList',
 }
 
 /**
