@@ -66,7 +66,7 @@ export const mutations = {
 /**
  * @callback fetchBookById
  * @param {ActionContext<BookState>} store
- * @param {number} id
+ * @param {string} id
  * @returns {Promise<BookModel>}
  */
 /**

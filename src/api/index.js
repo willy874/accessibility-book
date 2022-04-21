@@ -69,7 +69,7 @@ export const apiGetBookList = () => request.get(`book/`)
 export const apiGetBookListByQuery = (query) => request.get(`book/`, { params: formUrlEncodedFormat(query) })
 
 /**
- * @param {number} id
+ * @param {string} id
  * @returns {Promise<AxiosResponse<BookModel>>  }
  */
 export const apiGetBookById = (id) => request.get(`book/${id}/`)

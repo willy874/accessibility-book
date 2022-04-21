@@ -40,8 +40,8 @@ const { bookList } = mapGetters({
  */
 const { fetchBookList, fetchBookByQuery, fetchBookById } = mapActions({
   fetchBookList: Actions.FETCH_BOOK_LIST,
-  fetchBookByQuery: Actions.FETCH_BOOK_BY_ID,
-  fetchBookById: Actions.FETCH_BOOK_BY_QUERY,
+  fetchBookByQuery: Actions.FETCH_BOOK_BY_QUERY,
+  fetchBookById: Actions.FETCH_BOOK_BY_ID,
 })
 
 export default {
@@ -104,7 +104,7 @@ export default {
       const query = route.query
       if (id) {
         this.active = id
-        await this.fetchBookById(Number(id))
+        await this.fetchBookById(id)
       } else if (query.tag__name) {
         this.active = ''
         this.bookListByLast = await this.fetchBookByQuery(query)

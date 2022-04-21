@@ -7,12 +7,9 @@ export function formDataFormat(data) {
       const formName = [...keys, key].map((k, i) => (i ? `[${k}]` : k)).join('')
       if (value[key] instanceof Blob) {
         formData.append(formName, value[key], value[key].name)
-      } else if (typeof value[key] === 'object') {
+      } else if (value[key] && typeof value[key] === 'object') {
         format(value[key], [...keys, key])
-      } else if (value[key] !== undefined && value[key] !== '') {
-        if (/base64/.test(formName)) {
-          return
-        }
+      } else if (value[key] !== undefined) {
         formData.append(formName, value[key])
       }
     })
