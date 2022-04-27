@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h2>目錄列表</h2>
     <div v-if="isLoading">讀取中</div>
-    <div v-else-if="childListModel && childListModel.length">
+    <div v-else-if="activeModel && activeModel.child && activeModel.child.length">
+      <h2>{{ activeModel.label }} - 列表</h2>
       <ul>
-        <li v-for="model in childListModel" :key="model.id" class="menu__list-item">
+        <li v-for="model in activeModel.child" :key="model.id" class="menu__list-item">
           <RouterLink :to="getBookRouteByTagName(model.targetTag)">{{ model.label }} </RouterLink>
         </li>
       </ul>
@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       /** @type {MenuModel} */
-      childListModel: null,
+      activeModel: null,
       title: '',
     }
   },
@@ -59,7 +59,7 @@ export default {
         const listModel = await this.fetchMenuList()
         treeEach(listModel, (item) => {
           if (item.uuid === id) {
-            this.childListModel = item.child
+            this.activeModel = item
             return true
           }
         })

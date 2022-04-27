@@ -10,7 +10,8 @@
       </ul>
     </div>
     <div v-else-if="bookListByLast && bookListByLast.length">
-      <h2>書籍列表</h2>
+      <h2 v-if="queryTagName">{{ queryTagName }} - 書籍列表</h2>
+      <h2 v-else>書籍列表</h2>
       <ul role="list">
         <li v-for="model in bookListByLast" :key="model.id" class="book__list-item">
           <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
@@ -74,6 +75,20 @@ export default {
       }
       return []
     },
+    /**
+     * @return {string}
+     */
+    queryTagName() {
+      const { query } = VueConfig.getRoute(this)
+      if (query.tag__name) {
+        if (Array.isArray(query.tag__name)) {
+          return query.tag__name.join(',')
+        } else {
+          return query.tag__name
+        }
+      }
+      return ''
+    },
   },
   methods: {
     fetchBookList,
@@ -105,13 +120,12 @@ export default {
     async effectRoute(type) {
       const route = VueConfig.getRoute(this)
       const id = route.params.id
-      const query = route.query
       if (id) {
         this.active = id
         await this.fetchBookById(id)
-      } else if (query.tag__name) {
+      } else if (this.queryTagName) {
         this.active = ''
-        this.bookListByLast = await this.fetchBookByQuery(query)
+        this.bookListByLast = await this.fetchBookByQuery(route.query)
       } else {
         this.active = ''
         this.bookListByLast = await this.fetchBookList()
