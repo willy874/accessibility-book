@@ -70,7 +70,6 @@ export default {
   },
   created() {
     this.update()
-    document.addEventListener('click', this.closeList)
   },
   mounted() {
     if (this.listElement) document.body.appendChild(this.listElement)
@@ -79,6 +78,7 @@ export default {
       const { top, left } = getViewportOffset(this.$el)
       this.position = [top, left]
     }
+    document.addEventListener('click', this.closeList)
   },
   destroyed() {
     if (this.listElement && this.listElement.parentNode) {
@@ -90,12 +90,12 @@ export default {
     document.removeEventListener('click', this.closeList)
   },
   methods: {
-    /**
-     * @param {SelectData[]} [list]
-     */
     closeList() {
       this.listData = []
     },
+    /**
+     * @param {SelectData[]} [list]
+     */
     update(list) {
       if (list) {
         this.listData = list.map((item) => ({ id: uuid(), ...item }))
