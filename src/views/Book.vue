@@ -3,15 +3,19 @@
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="targetModel">
       <h2>{{ targetModel.name }} - 章節列表</h2>
-      <h3 v-for="model in chapterListSort" :key="model.id" class="book__list-item">
-        <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
-      </h3>
+      <ul role="list">
+        <li v-for="model in chapterListSort" :key="model.id" class="book__list-item">
+          <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
+        </li>
+      </ul>
     </div>
     <div v-else-if="bookListByLast && bookListByLast.length">
       <h2>書籍列表</h2>
-      <h3 v-for="model in bookListByLast" :key="model.id" class="book__list-item">
-        <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
-      </h3>
+      <ul role="list">
+        <li v-for="model in bookListByLast" :key="model.id" class="book__list-item">
+          <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
+        </li>
+      </ul>
     </div>
     <div v-else>無資料</div>
   </div>

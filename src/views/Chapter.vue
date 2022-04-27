@@ -4,20 +4,22 @@
     <div v-else-if="targetModel">
       <div>
         <h2 class="chapter__heading">
-          <RouterLink :to="getBookRoute(targetModel.book)">
+          <RouterLink :to="getBookRoute(targetModel.book)" :title="'連結到' + targetModel.name">
             {{ targetModel.name }}
           </RouterLink>
         </h2>
-        <div v-if="activeBook" class="tag-list">
-          <h3 v-for="tag in activeBook.tag" :key="tag.id" class="tag-item">
-            <RouterLink :to="getTagRoute(tag.id)" title="搜尋該標籤列表">{{ tag.name }}</RouterLink>
-          </h3>
-        </div>
+        <h3>目錄列表</h3>
+        <ul v-if="activeBook" class="tag-list">
+          <li v-for="tag in activeBook.tag" :key="tag.id" class="tag-item">
+            <RouterLink :to="getTagRoute(tag.name)" :title="'搜尋關鍵字' + tag.name">{{ tag.name }}</RouterLink>
+          </li>
+        </ul>
       </div>
+      <h3>章節內文</h3>
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
     </div>
     <div v-else>
-      <div>無資料</div>
+      <div>無此資料</div>
     </div>
   </div>
 </template>
@@ -80,10 +82,10 @@ export default {
      * @param {string} id
      * @return {VueRouteLocation}
      */
-    getTagRoute(id) {
+    getTagRoute(content) {
       return {
-        name: RouterName.TAG_DETAIL,
-        params: { id },
+        name: RouterName.SEARCH,
+        query: { content },
       }
     },
     /**

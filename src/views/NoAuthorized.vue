@@ -1,5 +1,5 @@
 <template>
-  <div>尚未審核通過</div>
+  <h2>尚未審核通過</h2>
 </template>
 
 <script>

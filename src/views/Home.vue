@@ -24,6 +24,7 @@ import NoAuthorized from './NoAuthorized.vue'
 import Register from './Register.vue'
 import Tag from './Tag.vue'
 import User from './User.vue'
+import Search from './Search.vue'
 import Config from '@/config'
 
 export default {
@@ -47,6 +48,7 @@ export default {
         [RouterName.REGISTER]: Register,
         [RouterName.TAG]: Tag,
         [RouterName.USER]: User,
+        [RouterName.SEARCH]: Search,
       },
     }
   },

@@ -18,4 +18,5 @@ export const RouterName = {
   TAG: 'Tag',
   TAG_DETAIL: 'TagDetail',
   USER: 'User',
+  SEARCH: 'Search',
 }

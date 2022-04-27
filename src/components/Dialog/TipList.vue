@@ -78,6 +78,7 @@ export default {
       const { top, left } = getViewportOffset(this.$el)
       this.position = [top, left]
     }
+    document.addEventListener('click', this.closeList)
   },
   destroyed() {
     if (this.listElement && this.listElement.parentNode) {
@@ -86,8 +87,12 @@ export default {
     if (this.statusElement && this.statusElement.parentNode) {
       this.statusElement.parentNode.removeChild(this.statusElement)
     }
+    document.removeEventListener('click', this.closeList)
   },
   methods: {
+    closeList() {
+      this.listData = []
+    },
     /**
      * @param {SelectData[]} [list]
      */
