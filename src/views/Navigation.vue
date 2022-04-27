@@ -1,5 +1,6 @@
 <template>
   <nav>
+    <h2>選單列表</h2>
     <ul>
       <li v-for="(nav, name) in navigation" :key="name">
         <RouterLink :to="{ name }">{{ nav.title }}</RouterLink>
