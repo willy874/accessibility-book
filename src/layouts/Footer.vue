@@ -28,7 +28,7 @@
         </li>
         <!-- 4 -->
         <li>
-          <RouterLink :to="{ name: RouterName.NAVIGATION }">目錄</RouterLink>
+          <RouterLink :to="{ name: RouterName.NAVIGATION }">選單</RouterLink>
         </li>
       </ul>
     </nav>

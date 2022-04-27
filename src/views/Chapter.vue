@@ -5,10 +5,10 @@
       <div>
         <h2 class="chapter__heading">
           <RouterLink :to="getBookRoute(targetModel.book)" :title="'連結到' + targetModel.name">
-            {{ targetModel.name }}
+            {{ activeBook.name }} - {{ targetModel.name }}
           </RouterLink>
         </h2>
-        <h3>目錄列表</h3>
+        <h3>標籤列表</h3>
         <ul v-if="activeBook" class="tag-list">
           <li v-for="tag in activeBook.tag" :key="tag.id" class="tag-item">
             <RouterLink :to="getTagRoute(tag.name)" :title="'搜尋關鍵字' + tag.name">{{ tag.name }}</RouterLink>
