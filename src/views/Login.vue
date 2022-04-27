@@ -73,7 +73,7 @@ export default {
   name: 'Login',
   data() {
     return {
-      form: { username: 'user', password: 'zY7bSBgk' },
+      form: { username: '', password: '' },
       /**
        * @type {LoginError}
        */
@@ -86,10 +86,13 @@ export default {
         ...Config.value.lineLoginRequestParam,
         state: 'state=12345abcde',
       })
-      return `https://access.line.me/oauth2/v2.1/authorize?${qs.toString()}`
+      return `https://access.line.me/oauth2/v2.1/authorize?${qs}`
     },
   },
   created() {
+    if (process.env.NODE_ENV === 'development') {
+      this.form = { username: 'user', password: 'zY7bSBgk' }
+    }
     const responseType = Config.value.lineLoginRequestParam.response_type
     if (this.$route.query[responseType]) {
       this.fetchLineLogin(this.$route.query[responseType])

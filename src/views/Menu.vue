@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="isLoading">讀取中</div>
-    <div v-else-if="activeModel.child && activeModel.child.length">
+    <div v-else-if="activeModel && activeModel.child && activeModel.child.length">
       <h2>{{ activeModel.label }} - 列表</h2>
       <ul>
         <li v-for="model in activeModel.child" :key="model.id" class="menu__list-item">
