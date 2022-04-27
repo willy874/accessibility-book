@@ -8,11 +8,12 @@
             {{ targetModel.name }}
           </RouterLink>
         </h2>
-        <div v-if="activeBook" class="tag-list">
-          <h3 v-for="tag in activeBook.tag" :key="tag.id" class="tag-item">
-            <RouterLink :to="getTagRoute(tag.id)" title="搜尋該標籤列表">{{ tag.name }}</RouterLink>
-          </h3>
-        </div>
+        <h3>目錄列表</h3>
+        <ul v-if="activeBook" class="tag-list">
+          <li v-for="tag in activeBook.tag" :key="tag.id" class="tag-item">
+            <RouterLink :to="getTagRoute(tag.name)" title="搜尋該標籤列表">{{ tag.name }}</RouterLink>
+          </li>
+        </ul>
       </div>
       <div v-html="transformMarkdownToHtml(targetModel.content)"></div>
     </div>
@@ -80,10 +81,10 @@ export default {
      * @param {string} id
      * @return {VueRouteLocation}
      */
-    getTagRoute(id) {
+    getTagRoute(content) {
       return {
-        name: RouterName.TAG_DETAIL,
-        params: { id },
+        name: RouterName.SEARCH,
+        query: { content },
       }
     },
     /**

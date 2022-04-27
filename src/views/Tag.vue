@@ -3,14 +3,18 @@
     <h2>標籤列表</h2>
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="tagListById && tagListById.length">
-      <div v-for="model in tagListById" :key="model.id" class="tag__list-item">
-        <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
-      </div>
+      <ul>
+        <li v-for="model in tagListById" :key="model.id" class="tag__list-item">
+          <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
+        </li>
+      </ul>
     </div>
     <div v-else-if="tagList && tagList.length">
-      <div v-for="model in tagList" :key="model.id" class="tag__list-item">
-        <RouterLink :to="getTagDetailRoute(model.id)">{{ model.name }}</RouterLink>
-      </div>
+      <ul>
+        <li v-for="model in tagList" :key="model.id" class="tag__list-item">
+          <RouterLink :to="getTagDetailRoute(model.id)">{{ model.name }}</RouterLink>
+        </li>
+      </ul>
     </div>
     <div v-else>沒有資料</div>
   </div>

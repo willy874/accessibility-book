@@ -70,6 +70,7 @@ export default {
   },
   created() {
     this.update()
+    document.addEventListener('click', this.closeList)
   },
   mounted() {
     if (this.listElement) document.body.appendChild(this.listElement)
@@ -86,11 +87,15 @@ export default {
     if (this.statusElement && this.statusElement.parentNode) {
       this.statusElement.parentNode.removeChild(this.statusElement)
     }
+    document.removeEventListener('click', this.closeList)
   },
   methods: {
     /**
      * @param {SelectData[]} [list]
      */
+    closeList() {
+      this.listData = []
+    },
     update(list) {
       if (list) {
         this.listData = list.map((item) => ({ id: uuid(), ...item }))

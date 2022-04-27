@@ -1,11 +1,12 @@
 <template>
   <div>
+    <h2>目錄列表</h2>
     <div v-if="isLoading">讀取中</div>
-    <div v-else-if="childListModel && childListModel.length">
-      <div v-for="model in childListModel" :key="model.id" class="menu__list-item">
+    <ul v-else-if="childListModel && childListModel.length">
+      <li v-for="model in childListModel" :key="model.id" class="menu__list-item">
         <RouterLink :to="getBookRouteByTagName(model.targetTag)">{{ model.label }} </RouterLink>
-      </div>
-    </div>
+      </li>
+    </ul>
     <div v-else>無資料</div>
   </div>
 </template>

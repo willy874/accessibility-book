@@ -45,7 +45,7 @@ export default {
     },
   },
   methods: {
-    async submitHandler() {
+    submitHandler() {
       const route = Config.getRoute().query.content
       if (this.inputText && route !== this.inputText) {
         this.$router.push({

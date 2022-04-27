@@ -2,8 +2,8 @@
   <div>
     <h2>搜尋列表</h2>
     <ul v-if="resData">
-      <li v-for="searchList in resData" :key="searchList.id" class="serch-list" @click="linkTo(searchList.id)">
-        {{ searchList.name }}
+      <li v-for="searchList in resData" :key="searchList.id" class="serch-list">
+        <RouterLink :to="`book/${searchList.id}`" title="前往該標籤">{{ searchList.name }}</RouterLink>
       </li>
       <li v-if="errText" class="serch-list">{{ errText }}</li>
     </ul>
@@ -34,7 +34,6 @@ export default {
         this.resData = res.data.results
         if (!this.resData.length) {
           this.errText = '查無結果'
-          console.log(this.resData)
         }
       } catch (error) {
         handleHttpErrorLog(error)
@@ -46,7 +45,6 @@ export default {
 
 <style lang="scss" scoped>
 .serch-list {
-  cursor: pointer;
   font-size: 18px;
   padding: 8px;
 }
