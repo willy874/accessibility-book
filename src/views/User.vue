@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>使用者管理</h2>
+    <!-- <h2>使用者管理</h2> -->
     <button class="logout-button" type="button" @click="logout">登出</button>
   </div>
 </template>

@@ -20,7 +20,6 @@ import { StorageKey, Actions, RouterName } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
 import { getStorage } from './utils'
-
 /**
  * @type {{
  *   fetchUserInfo: ActionFunction<import('@/store/user/actions').fetchUserInfo>
@@ -62,13 +61,15 @@ export default {
       const userInfo = await this.fetchUserInfo()
       if (userInfo) {
         if (userInfo.is_password_set && userInfo.is_authorized) {
-          this.checkLoginReplace()
+          const isLogin = await this.checkLoginReplace()
+          if (isLogin) {
+            this.loginInit()
+          }
         } else {
           this.$router.replace({ name: RouterName.REGISTER })
         }
       }
     }
-    this.init()
     this.changeRoute()
   },
   methods: {
@@ -85,7 +86,7 @@ export default {
     /**
      * @return {Promise<any[]>}
      */
-    init() {
+    loginInit() {
       return Promise.all([this.fetchTagList()])
     },
   },

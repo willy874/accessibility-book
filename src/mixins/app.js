@@ -1,5 +1,5 @@
-import Config from '@/config'
 import { LifecycleHook, RouterName } from '@/consts'
+import Config from '@/config'
 
 export default {
   data() {
@@ -66,7 +66,11 @@ export default {
       return this.$store.state.loading
     },
     isShow() {
-      return !Config.value.loginRoutes.includes(this.route.name)
+      // @ts-ignore
+      if (this.$store.state.storage.local.token && !Config.value.loginRoutes.includes(Config.getRoute(this).name)) {
+        return true
+      }
+      return false
     },
   },
 }

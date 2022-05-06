@@ -5,12 +5,27 @@
       <li v-for="(nav, name) in navigation" :key="name">
         <RouterLink :to="{ name }">{{ nav.title }}</RouterLink>
       </li>
+      <li>
+        <button class="logout-button" type="button" @click="logout">登出</button>
+      </li>
     </ul>
   </nav>
 </template>
 
 <script>
-import { RouterName } from '@/consts'
+import { RouterName, Actions } from '@/consts'
+import { mapActions } from 'vuex'
+
+import { throttle } from '@/utils'
+/**
+ * @type {{
+ *   logout: ActionFunction<import('@/store/user/actions').logout>
+ * }}
+ */
+const { logout } = mapActions({
+  logout: Actions.LOGOUT,
+})
+
 export default {
   name: 'Navigation',
   data() {
@@ -31,11 +46,14 @@ export default {
         [RouterName.HISTORY]: {
           title: '歷史紀錄',
         },
-        [RouterName.USER]: {
-          title: '使用者管理',
-        },
+        // [RouterName.USER]: {
+        //   title: '使用者管理',
+        // },
       },
     }
+  },
+  methods: {
+    logout: throttle(logout, 400),
   },
 }
 </script>
@@ -48,5 +66,10 @@ nav {
       font-size: 20px;
     }
   }
+}
+.logout-button {
+  padding: 1rem;
+  background: gray;
+  color: white;
 }
 </style>

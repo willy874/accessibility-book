@@ -4,7 +4,7 @@
     <div v-else-if="targetModel">
       <div>
         <h2 class="chapter__heading">
-          <RouterLink :to="getBookRoute(targetModel.book)" :title="'連結到' + targetModel.name">
+          <RouterLink :to="getBookRoute(targetModel.book)" title="連結到章節列表">
             {{ activeBook.name }} - {{ targetModel.name }}
           </RouterLink>
         </h2>

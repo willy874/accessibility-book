@@ -10,7 +10,7 @@ import BookMark from '../views/BookMark.vue'
 import History from '../views/History.vue'
 import Navigation from '../views/Navigation.vue'
 import Menu from '../views/Menu.vue'
-import User from '../views/User.vue'
+// import User from '../views/User.vue'
 import NEWS from '../views/News.vue'
 import Search from '../views/Search.vue'
 
@@ -40,11 +40,11 @@ export default [
     name: RouterName.NAVIGATION,
     component: Navigation,
   },
-  {
-    path: '/user',
-    name: RouterName.USER,
-    component: User,
-  },
+  // {
+  //   path: '/user',
+  //   name: RouterName.USER,
+  //   component: User,
+  // },
   {
     path: '/book/',
     name: RouterName.BOOK,

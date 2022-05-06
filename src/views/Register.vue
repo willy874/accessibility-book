@@ -269,7 +269,7 @@ export default {
       const form = {
         first_name: this.form.first_name,
         last_name: this.form.last_name,
-        email: this.form.email,
+        email: this.userInfo.email,
         photo: this.form.photo,
       }
       this.errors = await this.validateUser()
@@ -360,13 +360,13 @@ export default {
             }
           : undefined,
         photo: {
-          [ValidateType.IS_EMPTY]: { message: '請上傳盲胞證或志工證' },
+          [ValidateType.IS_EMPTY]: { message: '請上傳證件影本或相關證明' },
           [ValidateType.IMAGE]: {
             size: '2MB',
-            type: 'jpg,jpeg,png',
+            type: 'jpg,jpeg,png,pdf',
             messageOption: {
               size: '檔案大小上限不可超過 2MB',
-              type: '檔案類型僅允許 jpg、png',
+              type: '檔案類型僅允許 jpg、png、pdf',
             },
           },
         },
