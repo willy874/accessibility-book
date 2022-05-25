@@ -46,6 +46,9 @@ export default {
         [RouterName.HISTORY]: {
           title: '歷史紀錄',
         },
+        [RouterName.REVICE_PASSWORD]: {
+          title: '變更密碼',
+        },
         // [RouterName.USER]: {
         //   title: '使用者管理',
         // },

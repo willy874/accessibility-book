@@ -19,4 +19,5 @@ export const RouterName = {
   TAG_DETAIL: 'TagDetail',
   USER: 'User',
   SEARCH: 'Search',
+  REVICE_PASSWORD: 'RevicePassword',
 }

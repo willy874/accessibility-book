@@ -13,6 +13,7 @@ import Menu from '../views/Menu.vue'
 // import User from '../views/User.vue'
 import NEWS from '../views/News.vue'
 import Search from '../views/Search.vue'
+import RevisePassword from '../views/RevisePassword.vue'
 
 export default [
   {
@@ -99,5 +100,10 @@ export default [
     path: '/search',
     name: RouterName.SEARCH,
     component: Search,
+  },
+  {
+    path: '/revisepassword',
+    name: RouterName.REVICE_PASSWORD,
+    component: RevisePassword,
   },
 ]
