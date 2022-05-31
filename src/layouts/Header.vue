@@ -1,7 +1,9 @@
 <template>
   <header>
     <SearchBar>
-      <router-link title="回到首頁" :to="{ name: RouterName.HOME }">首頁</router-link>
+      <router-link title="回到首頁" :to="{ name: RouterName.HOME }">
+        <img class="header-logo" src="https://eyestudy.org/media/static/Logo.jpg" alt="" />
+      </router-link>
     </SearchBar>
     <nav>
       <ul v-if="menuList.length">
@@ -173,6 +175,9 @@ header {
         color: white;
       }
     }
+  }
+  .header-logo {
+    width: 30px;
   }
 }
 </style>
