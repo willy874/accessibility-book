@@ -135,3 +135,5 @@ export const apiGetNewsList = () => request.get(`news/`)
 export const apiGetNewsById = (id) => request.get(`news/${id}/`)
 
 export const apiPostSearch = (data) => request.post(`search/`, data)
+
+export const apiGetsiteConf = () => request.get(`site_conf/`)

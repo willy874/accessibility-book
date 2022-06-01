@@ -22,4 +22,9 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
+router.afterEach((to, from, next) => {
+  console.log('from', from.meta.title)
+  document.querySelector('title').innerHTML = to.query.siteName + to.meta.title
+})
+
 export default router

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <template v-if="route">
-      <Header v-if="isShow" class="header" />
+      <Header v-if="isShow" :header-logo="headerLogo" class="header" />
       <main class="main">
         <article class="article">
           <router-view />
@@ -20,6 +20,7 @@ import { StorageKey, Actions, RouterName } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
 import { getStorage } from './utils'
+import { apiGetsiteConf } from '@/api/index'
 /**
  * @type {{
  *   fetchUserInfo: ActionFunction<import('@/store/user/actions').fetchUserInfo>
@@ -45,6 +46,7 @@ export default {
     return {
       config: Config.value,
       route: Config.getRoute(this),
+      headerLogo: '',
     }
   },
   watch: {
@@ -71,6 +73,7 @@ export default {
       }
     }
     this.changeRoute()
+    this.fetchApiGetsiteConf()
   },
   methods: {
     fetchUserInfo,
@@ -88,6 +91,21 @@ export default {
      */
     loginInit() {
       return Promise.all([this.fetchTagList()])
+    },
+    async fetchApiGetsiteConf() {
+      const res = await apiGetsiteConf()
+      // const res = await fetch('https://api.eyestudy.org/api/v1/site_conf/')
+      // const result = res.json()
+      console.log(res)
+      document.querySelector('link').href =
+        'https://eyestudy.org' + res.data.favicon
+          ? 'https://eyestudy.org' + res.data.favicon
+          : 'https://eyestudy.org/media/static/eyestudy.ico'
+      this.headerLogo = 'https://eyestudy.org' + res.data.logo1
+
+      if (res.data.site_name !== Config.getRoute(this).query.siteName) {
+        this.$router.push({ query: { siteName: res.data.site_name } })
+      }
     },
   },
 }
