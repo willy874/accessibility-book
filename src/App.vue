@@ -94,7 +94,7 @@ export default {
           })
         )
       })
-      return Promise.all([this.setHeadIcon(), this.setTitle(), this.setLogo()])
+      return Promise.all([this.setHeadIcon(data.favicon), this.setTitle(), this.setLogo(data.logo1)])
     },
     /**
      * @return {Promise<Route>}
@@ -128,8 +128,17 @@ export default {
       const title = `${Config.value.site_conf.site_name} - ${route.meta.title}`
       document.querySelector('title').innerHTML = title
     },
-    setLogo() {
-      this.headerLogo = Config.value.site_conf.logo1
+    setLogo(url) {
+      return new Promise((resolve, reject) => {
+        useImage(url)
+          .then(() => {
+            this.headerLogo = url
+            resolve()
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      })
     },
   },
 }

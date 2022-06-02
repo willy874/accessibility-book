@@ -2,7 +2,7 @@
   <header>
     <SearchBar>
       <router-link title="回到首頁" :to="{ name: RouterName.HOME }">
-        <img class="header-logo" :src="headerLogo ? headerLogo : 'https://eyestudy.org/media/static/Logo.jpg'" alt="" />
+        <img class="header-logo" src="https://eyestudy.org/media/static/Logo.jpg" alt="" />
       </router-link>
     </SearchBar>
     <nav>
