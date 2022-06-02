@@ -14,6 +14,7 @@ import Menu from '../views/Menu.vue'
 import NEWS from '../views/News.vue'
 import Search from '../views/Search.vue'
 import RevisePassword from '../views/RevisePassword.vue'
+import About from '../views/About.vue'
 
 export default [
   {
@@ -22,6 +23,14 @@ export default [
     component: Home,
     meta: {
       title: '首頁',
+    },
+  },
+  {
+    path: '/about',
+    name: RouterName.ABOUT,
+    component: About,
+    meta: {
+      title: '關於',
     },
   },
   {

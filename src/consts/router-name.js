@@ -20,4 +20,5 @@ export const RouterName = {
   USER: 'User',
   SEARCH: 'Search',
   REVICE_PASSWORD: 'RevicePassword',
+  ABOUT: 'About',
 }

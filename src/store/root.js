@@ -7,6 +7,7 @@ export const state = {
   init: false,
   route: null,
   loading: false,
+  aboutText: '',
 }
 
 /** @type {GetterTree<RootState>} */
@@ -27,6 +28,11 @@ export const getters = {}
  * @param {RootState} state
  * @param {boolean} bool
  */
+/**
+ * @callback aboutText
+ * @param {RootState} state
+ * @param {string} str
+ */
 /** @type {MutationTree<RootState>} */
 export const mutations = {
   /** @type {setInit} */
@@ -40,6 +46,10 @@ export const mutations = {
   /** @type {setLoading} */
   setLoading(state, bool) {
     state.loading = bool
+  },
+  /** @type {aboutText} */
+  setAboutText(state, str) {
+    state.aboutText = str
   },
 }
 
@@ -67,6 +77,7 @@ export const actions = {
   async fetchSiteConf(store) {
     try {
       const res = await apiGetSiteConf()
+      store.commit('setAboutText', res.data.about)
       if (isAxiosError(res)) {
         throw new HttpError(res)
       } else {
