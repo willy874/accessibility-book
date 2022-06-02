@@ -48,7 +48,7 @@ export default {
     return {
       config: Config.value,
       route: Config.getRoute(this),
-      headerLogo: '',
+      headerLogo: Config.value.site_conf.logo1,
     }
   },
   watch: {
@@ -94,7 +94,7 @@ export default {
           })
         )
       })
-      return Promise.all([this.setHeadIcon(data.favicon), this.setTitle(), this.setLogo(data.logo1)])
+      return Promise.all([this.setHeadIcon(data.favicon), this.setTitle(data.site_name), this.setLogo(data.logo1)])
     },
     /**
      * @return {Promise<Route>}
@@ -117,15 +117,12 @@ export default {
             iconLink.href = url
             resolve()
           })
-          .catch((error) => {
-            iconLink.href = Config.value.site_conf.favicon
-            reject(error)
-          })
+          .catch(reject)
       })
     },
-    setTitle() {
+    setTitle(siteName) {
       const route = Config.getRoute(this)
-      const title = `${Config.value.site_conf.site_name} - ${route.meta.title}`
+      const title = `${siteName} - ${route.meta.title}`
       document.querySelector('title').innerHTML = title
     },
     setLogo(url) {
@@ -135,9 +132,7 @@ export default {
             this.headerLogo = url
             resolve()
           })
-          .catch((error) => {
-            reject(error)
-          })
+          .catch(reject)
       })
     },
   },

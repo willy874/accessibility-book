@@ -77,10 +77,10 @@ export const actions = {
   async fetchSiteConf(store) {
     try {
       const res = await apiGetSiteConf()
-      store.commit('setAboutText', res.data.about)
       if (isAxiosError(res)) {
         throw new HttpError(res)
       } else {
+        store.commit(Mutations.SET_ABOUT_TEXT, res.data.about)
         return res.data
       }
     } catch (error) {
