@@ -4,7 +4,7 @@
     <div v-else-if="targetModel">
       <div>
         <h2 class="chapter__heading">
-          <RouterLink :to="getBookRoute(targetModel.book)" :title="'連結到' + targetModel.name">
+          <RouterLink :to="getBookRoute(targetModel.book)" title="連結到章節列表">
             {{ activeBook.name }} - {{ targetModel.name }}
           </RouterLink>
         </h2>
@@ -107,6 +107,8 @@ export default {
       if (id) {
         this.active = id
         await this.fetchChapterById(id)
+        document.querySelector('title').innerHTML =
+          document.querySelector('title').innerHTML + '-' + this.targetModel.name
         await apiPostHistory({ chapter: id })
       } else {
         this.active = null

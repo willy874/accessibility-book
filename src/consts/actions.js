@@ -1,5 +1,6 @@
 const root = {
   ROUTE_CHANGE: 'routeChange',
+  FETCH_SITE_CONF: 'fetchSiteConf',
 }
 
 const chapter = {

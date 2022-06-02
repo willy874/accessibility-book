@@ -155,3 +155,27 @@
  * @property {string} name
  * @property {string} publish_date
  */
+/**
+ * @typedef {Object} SiteConf
+ * @property {string} domain
+ * @property {string} favicon
+ * @property {string} logo1
+ * @property {string} logo2
+ * @property {string} site_name
+ * @property {string} about
+ */
+/**
+ * @typedef {Object} SearchModel
+ * @property {string} id
+ * @property {string} name
+ * @property {null} cover
+ * @property {boolean} is_hide
+ * @property {string} publication_date
+ * @property {string} isbn
+ * @property {string} eisbn
+ * @property {string} store_url
+ * @property {string} created
+ * @property {Publisher} publisher
+ * @property {Author} author
+ * @property {Tag[]} tag
+ */

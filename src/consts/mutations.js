@@ -2,6 +2,7 @@ const root = {
   SET_INIT: 'setInit',
   SET_ROUTE: 'setRoute',
   SET_LOADING: 'setLoading',
+  SET_ABOUT_TEXT: 'setAboutText',
 }
 
 const chapter = {
