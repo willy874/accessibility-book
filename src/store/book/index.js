@@ -102,7 +102,6 @@ export const actions = {
         throw new HttpError(res)
       } else {
         commit(Mutations.SET_BOOK, res.data)
-
         return res.data
       }
     } catch (error) {

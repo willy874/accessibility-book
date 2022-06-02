@@ -122,7 +122,9 @@ export default {
       const id = route.params.id
       if (id) {
         this.active = id
-        await this.fetchBookById(id)
+        const res = await this.fetchBookById(id)
+        const title = document.querySelector('title')
+        title.innerHTML = title.innerHTML + '-' + res.name
       } else if (this.queryTagName) {
         this.active = ''
         this.bookListByLast = await this.fetchBookByQuery(route.query)

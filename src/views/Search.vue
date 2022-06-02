@@ -28,10 +28,13 @@ export default {
     },
     async effectRoute() {
       const body = Config.getRoute(this).query
+
       try {
         this.errText = ''
         const res = await apiPostSearch(body)
         this.resData = res.data.results
+        document.querySelector('title').innerHTML =
+          document.querySelector('title').innerHTML + '-' + body.content.replace(/\//, '')
         if (!this.resData.length) {
           this.errText = '查無結果'
         }

@@ -107,6 +107,8 @@ export default {
       if (id) {
         this.active = id
         await this.fetchChapterById(id)
+        document.querySelector('title').innerHTML =
+          document.querySelector('title').innerHTML + '-' + this.targetModel.name
         await apiPostHistory({ chapter: id })
       } else {
         this.active = null

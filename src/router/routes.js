@@ -82,7 +82,7 @@ export default [
     name: RouterName.CHAPTER,
     component: Chapter,
     meta: {
-      title: '標籤列表',
+      title: '章節內容',
     },
   },
   {
