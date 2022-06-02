@@ -134,6 +134,12 @@ export const apiGetNewsList = () => request.get(`news/`)
  */
 export const apiGetNewsById = (id) => request.get(`news/${id}/`)
 
+/**
+ * @returns {Promise<AxiosResponse<any>>}
+ */
 export const apiPostSearch = (data) => request.post(`search/`, data)
 
-export const apiGetsiteConf = () => request.get(`site_conf/`)
+/**
+ * @returns {Promise<AxiosResponse<SiteConf>>}
+ */
+export const apiGetSiteConf = () => request.get(`site_conf/`)

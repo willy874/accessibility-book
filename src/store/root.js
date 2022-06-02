@@ -1,5 +1,7 @@
 import { Mutations } from '@/consts'
 import Config from '@/config'
+import { HttpError, handleHttpErrorLog, isAxiosError } from '@/utils'
+import { apiGetSiteConf } from '@/api/index'
 
 export const state = {
   init: false,
@@ -47,6 +49,11 @@ export const mutations = {
  * @param {Vue} vm
  * @returns {Promise<Route>}
  */
+/**
+ * @callback fetchSiteConf
+ * @param {ActionContext<RootState>} store
+ * @returns {Promise<SiteConf>}
+ */
 /** @type {ActionTree<RootState>} */
 export const actions = {
   /** @type {routeChange} */
@@ -55,5 +62,18 @@ export const actions = {
     const route = Config.getRoute(vm)
     commit(Mutations.SET_ROUTE, route)
     return route
+  },
+  /** @type {fetchSiteConf} */
+  async fetchSiteConf(store) {
+    try {
+      const res = await apiGetSiteConf()
+      if (isAxiosError(res)) {
+        throw new HttpError(res)
+      } else {
+        return res.data
+      }
+    } catch (error) {
+      handleHttpErrorLog(error)
+    }
   },
 }

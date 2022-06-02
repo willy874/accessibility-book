@@ -155,3 +155,11 @@
  * @property {string} name
  * @property {string} publish_date
  */
+/**
+ * @typedef {Object} SiteConf
+ * @property {string} domain
+ * @property {string} favicon
+ * @property {string} logo1
+ * @property {string} logo2
+ * @property {string} site_name
+ */

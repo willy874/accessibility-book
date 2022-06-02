@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <template v-if="route">
-      <Header v-if="isShow" :header-logo="headerLogo" class="header" />
+      <Header v-if="isShow" :logo="headerLogo" class="header" />
       <main class="main">
         <article class="article">
           <router-view />
@@ -19,19 +19,21 @@ import Footer from './layouts/Footer.vue'
 import { StorageKey, Actions, RouterName } from '@/consts'
 import Config from './config'
 import liff from '@line/liff'
-import { getStorage } from './utils'
-import { apiGetsiteConf } from '@/api/index'
+import { getStorage, useImage } from '@/utils'
+
 /**
  * @type {{
  *   fetchUserInfo: ActionFunction<import('@/store/user/actions').fetchUserInfo>
  *   routeChange: ActionFunction<import('@/store/root').routeChange>
+ *   fetchSiteConf: ActionFunction<import('@/store/root').fetchSiteConf>
  *   checkLoginReplace: ActionFunction<import('@/store/user/actions').checkLoginReplace>
  *   fetchTagList: ActionFunction<import('@/store/tag').fetchTagList>
  * }}
  */
-const { fetchUserInfo, routeChange, checkLoginReplace, fetchTagList } = mapActions({
+const { fetchUserInfo, routeChange, fetchSiteConf, checkLoginReplace, fetchTagList } = mapActions({
   fetchUserInfo: Actions.FETCH_USER_INFO,
   routeChange: Actions.ROUTE_CHANGE,
+  fetchSiteConf: Actions.FETCH_SITE_CONF,
   checkLoginReplace: Actions.CHECK_LOGIN_REPLACE,
   fetchTagList: Actions.FETCH_TAG_LIST,
 })
@@ -73,13 +75,27 @@ export default {
       }
     }
     this.changeRoute()
-    this.fetchApiGetsiteConf()
+    this.setSiteConf()
   },
   methods: {
     fetchUserInfo,
     routeChange,
     checkLoginReplace,
     fetchTagList,
+    fetchSiteConf,
+    async setSiteConf() {
+      const data = await this.fetchSiteConf()
+      Config.setConfig((config) => {
+        Object.assign(
+          config,
+          Config.assignConfig({
+            baseUrl: data.domain,
+            site_conf: data,
+          })
+        )
+      })
+      return Promise.all([this.setHeadIcon(), this.setTitle(), this.setLogo()])
+    },
     /**
      * @return {Promise<Route>}
      */
@@ -92,20 +108,28 @@ export default {
     loginInit() {
       return Promise.all([this.fetchTagList()])
     },
-    async fetchApiGetsiteConf() {
-      const res = await apiGetsiteConf()
-      // const res = await fetch('https://api.eyestudy.org/api/v1/site_conf/')
-      // const result = res.json()
-      console.log(res)
-      document.querySelector('link').href =
-        'https://eyestudy.org' + res.data.favicon
-          ? 'https://eyestudy.org' + res.data.favicon
-          : 'https://eyestudy.org/media/static/eyestudy.ico'
-      this.headerLogo = 'https://eyestudy.org' + res.data.logo1
-
-      if (res.data.site_name !== Config.getRoute(this).query.siteName) {
-        this.$router.push({ query: { siteName: res.data.site_name } })
-      }
+    setHeadIcon(url) {
+      /** @type {HTMLLinkElement} */
+      const iconLink = document.querySelector('link[rel=icon]')
+      return new Promise((resolve, reject) => {
+        useImage(url)
+          .then(() => {
+            iconLink.href = url
+            resolve()
+          })
+          .catch((error) => {
+            iconLink.href = Config.value.site_conf.favicon
+            reject(error)
+          })
+      })
+    },
+    setTitle() {
+      const route = Config.getRoute(this)
+      const title = `${Config.value.site_conf.site_name} - ${route.meta.title}`
+      document.querySelector('title').innerHTML = title
+    },
+    setLogo() {
+      this.headerLogo = Config.value.site_conf.logo1
     },
   },
 }

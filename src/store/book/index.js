@@ -120,7 +120,6 @@ export const actions = {
         list.forEach((model) => {
           commit(Mutations.SET_BOOK, model)
         })
-
         return list
       }
     } catch (error) {

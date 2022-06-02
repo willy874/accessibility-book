@@ -56,9 +56,9 @@ export default {
     SearchBar,
   },
   props: {
-    headerLogo: {
+    logo: {
       type: String,
-      default: 'https://eyestudy.org/media/static/Logo.jpg',
+      required: true,
     },
   },
   data() {
