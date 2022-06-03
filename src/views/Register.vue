@@ -95,12 +95,65 @@
         </div>
       </form>
     </div>
+    <div v-if="step === 3">
+      <h2 class="form-title">密碼設定</h2>
+      <form @submit="submitStep3">
+        <div class="form-item">
+          <label>帳號</label>
+          <input
+            v-model="form.account"
+            :class="{ 'is-valid': isValid(errors, 'account') }"
+            type="text"
+            name="account"
+            title="請輸入帳號"
+            placeholder="請輸入帳號"
+          />
+        </div>
+        <div class="form-item">
+          <label>密碼</label>
+          <input
+            v-model="form.password1"
+            :class="{ 'is-valid': isValid(errors, 'password1') }"
+            type="password"
+            name="password"
+            title="請輸入密碼"
+            placeholder="請輸入密碼"
+          />
+        </div>
+        <div class="form-item">
+          <label>確認密碼</label>
+          <input
+            v-model="form.password2"
+            :class="{ 'is-valid': isValid(errors, 'password2') }"
+            type="password"
+            name="password_check"
+            title="請輸入確認密碼"
+            placeholder="請輸入確認密碼"
+          />
+        </div>
+        <div class="form-item">
+          <label>電子信箱</label>
+          <input
+            v-model="form.email"
+            class="form-item"
+            :class="{ 'is-valid': isValid(errors, 'email') }"
+            type="text"
+            name="email"
+            title="請輸入電子郵件信箱"
+            placeholder="請輸入郵件電子信箱"
+          />
+        </div>
+        <div class="submit-btn-container">
+          <button type="submit">送出</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { apiPostPasswordRegister } from '@/api'
+import { apiPostPasswordRegister, apiPostRegistration } from '@/api'
 import {
   validate,
   isValid,
@@ -113,7 +166,7 @@ import {
   isAxiosError,
 } from '@/utils'
 import { RouterName, Actions, ValidateType, LifecycleHook } from '@/consts'
-
+import Config from '@/config'
 /**
  * @typedef {Object} RegistrationForm
  * @property {string} first_name
@@ -122,6 +175,7 @@ import { RouterName, Actions, ValidateType, LifecycleHook } from '@/consts'
  * @property {Blob} photo
  * @property {string} password1
  * @property {string} password2
+ * @property {string} account
  */
 /** @type {RegistrationForm} **/
 const form = {
@@ -131,6 +185,7 @@ const form = {
   photo: null,
   password1: '',
   password2: '',
+  account: '',
 }
 
 /**
@@ -208,7 +263,12 @@ export default {
      */
     async effectRoute(type) {
       if (type === LifecycleHook.CREATED) {
-        await this.fetchUserInfo()
+        const route = Config.getRoute(this)
+        if (!route.query.isRegister) {
+          await this.fetchUserInfo()
+        } else {
+          this.step = 3
+        }
         if (this.userInfo.is_password_set === false) {
           this.step = 1
         } else if (this.userInfo.last_name === '') {
@@ -371,6 +431,56 @@ export default {
           },
         },
       })
+    },
+    async validateStep3() {
+      // 一般使用註冊
+      const form = {
+        account: this.form.account,
+        password1: this.form.password1,
+        password2: this.form.password2,
+        email: this.form.email,
+      }
+      return await validate(form, {
+        email: this.isEmailEmpty
+          ? {
+              [ValidateType.IS_EMPTY]: { message: '請填寫電子郵件信箱' },
+              [ValidateType.EMAIL]: { message: '請輸入正確的電子郵件信箱格式' },
+            }
+          : undefined,
+        password1: {
+          [ValidateType.IS_EMPTY]: { message: '請填寫密碼' },
+          [ValidateType.PASSWORD]: { min: 6, max: 30 },
+        },
+        password2: {
+          [ValidateType.IS_EMPTY]: { message: '請填寫確認密碼' },
+          [ValidateType.EQUAL]: { message: '請確認填寫密碼是否相等', equal: form.password1 },
+        },
+      })
+    },
+    async submitStep3(e) {
+      // 一般使用註冊
+      if (!this.throttle()) {
+        return
+      }
+      e.preventDefault()
+      this.errors = await this.validateStep3()
+      if (isValid(this.errors)) {
+        alert('註冊失敗！\n\n' + errorsToArray(this.errors).toString().replace(/,/g, '，\n') + '。')
+        return
+      }
+      try {
+        const res = await apiPostRegistration({
+          new_password1: this.form.password1,
+          new_password2: this.form.password2,
+          username: this.form.account,
+          email: this.form.email,
+        })
+        console.log(res)
+        // this.step = 2
+      } catch (error) {
+        handleHttpErrorLog(error)
+        this.$router.replace({ name: RouterName.LOGIN })
+      }
     },
   },
 }
