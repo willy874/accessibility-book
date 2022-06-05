@@ -153,8 +153,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { apiPostPasswordRegister } from '@/api'
-// apiPostRegistration
+import { apiPostPasswordRegister, apiPostRegistration } from '@/api'
 import {
   validate,
   isValid,
@@ -471,31 +470,19 @@ export default {
       //   return
       // }
       try {
-        // const res = await apiPostRegistration({
-        //   new_password1: this.form.password1,
-        //   new_password2: this.form.password2,
-        //   username: this.form.account,
-        //   email: this.form.email,
-        // })
-        const body = {
+        const res = await apiPostRegistration({
           password1: this.form.password1,
           password2: this.form.password2,
           username: this.form.account,
           email: this.form.email,
-        }
-
-        const res = await fetch('https://api.pastwind.org/dj-rest-auth/registration/', {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-          },
-          body: JSON.stringify(body),
         })
-        console.log(res)
-        // this.step = 2
+        localStorage.setItem('token', res.data.key)
+        await this.fetchUserInfo()
+        this.step = 2
       } catch (error) {
         handleHttpErrorLog(error)
-        this.$router.replace({ name: RouterName.LOGIN })
+        console.log(error)
+        // this.$router.replace({ name: RouterName.LOGIN })
       }
     },
   },
