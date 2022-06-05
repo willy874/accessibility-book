@@ -65,7 +65,9 @@ export default {
         new_password2: this.password.checkPassword,
       }
       const res = await apiPostPasswordRegister(data)
-      console.log(res)
+      if (res.status === 200) {
+        alert('變更密碼成功')
+      }
     },
     async submitHandler() {
       if (!this.throttle()) {
