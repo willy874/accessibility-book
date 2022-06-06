@@ -476,12 +476,16 @@ export default {
           username: this.form.account,
           email: this.form.email,
         })
-        localStorage.setItem('token', res.data.key)
-        await this.fetchUserInfo()
-        this.step = 2
+        if (isAxiosError(res)) {
+          throw res
+        } else {
+          localStorage.setItem('token', res.data.key)
+          await this.fetchUserInfo()
+          this.step = 2
+        }
       } catch (error) {
         handleHttpErrorLog(error)
-        console.log(error)
+        alert('註冊失敗')
         // this.$router.replace({ name: RouterName.LOGIN })
       }
     },

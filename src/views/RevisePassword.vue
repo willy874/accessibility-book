@@ -24,7 +24,7 @@
  */
 import { apiPostPasswordRegister } from '@/api/index'
 import { ValidateType } from '@/consts'
-import { validate, throttle, isValid, errorsToArray, flatten } from '@/utils'
+import { validate, throttle, isValid, flatten, isAxiosError, errorsToArray } from '@/utils'
 export default {
   data() {
     return {
@@ -64,9 +64,16 @@ export default {
         new_password1: this.password.newPassword,
         new_password2: this.password.checkPassword,
       }
-      const res = await apiPostPasswordRegister(data)
-      if (res.status === 200) {
-        alert('變更密碼成功')
+      try {
+        const res = await apiPostPasswordRegister(data)
+        if (isAxiosError(res)) {
+          throw res
+        } else {
+          alert('變更密碼成功')
+        }
+      } catch (error) {
+        console.dir(error)
+        alert('變更失敗')
       }
     },
     async submitHandler() {
