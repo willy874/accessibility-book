@@ -26,6 +26,13 @@
       </div>
       <button type="submit" title="點擊登入" class="btn-submit">登入</button>
       <a title="點擊使用Line登入" class="btn-submit" :href="lineUrl">Line登入</a>
+      <router-link
+        :to="{ name: RouterName.REGISTER, query: { isRegister: true } }"
+        title="點擊註冊"
+        class="btn-submit"
+        :href="lineUrl"
+        >一般註冊</router-link
+      >
     </form>
   </main>
 </template>

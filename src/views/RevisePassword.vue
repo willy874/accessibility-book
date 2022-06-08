@@ -1,10 +1,9 @@
 <template>
   <div class="revise-password-wrapper">
-    <form @submit.prevent="validatePassword">
+    <form @submit.prevent="submitHandler">
       <div class="form-item">
         <label>密碼</label>
         <input v-model="password.newPassword" title="請輸入密碼" placeholder="請輸入密碼" type="password" />
-        <small>{{}}</small>
       </div>
       <div class="form-item">
         <label>確認密碼</label>
@@ -18,9 +17,14 @@
 </template>
 
 <script>
+/**
+ * @typedef {Object} RegistrationError
+ * @property {string[]} password1
+ * @property {string[]} password2
+ */
 import { apiPostPasswordRegister } from '@/api/index'
 import { ValidateType } from '@/consts'
-import { validate } from '@/utils'
+import { validate, throttle, isValid, flatten, isAxiosError, errorsToArray } from '@/utils'
 export default {
   data() {
     return {
@@ -28,9 +32,16 @@ export default {
         newPassword: '',
         checkPassword: '',
       },
+      /** @type {Partial<RegistrationError>} */
+      errors: {},
     }
   },
   methods: {
+    isValid,
+    throttle: throttle(() => true, 400),
+    errorsToArray() {
+      return flatten(Object.values(this.errors)).filter((v) => v)
+    },
     async validatePassword() {
       const form = {
         password1: this.password.newPassword,
@@ -46,7 +57,6 @@ export default {
           [ValidateType.EQUAL]: { message: '請確認填寫密碼是否相等', equal: form.password1 },
         },
       })
-      console.log(result)
       return result
     },
     async revisePassword() {
@@ -54,8 +64,28 @@ export default {
         new_password1: this.password.newPassword,
         new_password2: this.password.checkPassword,
       }
-      const res = await apiPostPasswordRegister(data)
-      console.log(res)
+      try {
+        const res = await apiPostPasswordRegister(data)
+        if (isAxiosError(res)) {
+          throw res
+        } else {
+          alert('變更密碼成功')
+        }
+      } catch (error) {
+        console.dir(error)
+        alert('變更失敗')
+      }
+    },
+    async submitHandler() {
+      if (!this.throttle()) {
+        return
+      }
+      this.errors = await this.validatePassword()
+      if (isValid(this.errors)) {
+        alert('註冊失敗！\n\n' + errorsToArray(this.errors).toString().replace(/,/g, '，\n') + '。')
+        return
+      }
+      this.revisePassword()
     },
   },
 }
