@@ -85,10 +85,10 @@ export default {
             await dispatch(Actions.REMOVE_STORAGE, StorageKey.REPLACE_ROUTE)
           } else {
             await vm.$router.replace({ name: RouterName.HOME })
-            if (queryCode) {
-              const body = new URLSearchParams({ code: queryCode })
-              await apiPostLineConnect(body)
-            }
+          }
+          if (queryCode) {
+            const body = new URLSearchParams({ code: queryCode })
+            await apiPostLineConnect(body)
           }
         }
         return true
