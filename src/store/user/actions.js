@@ -1,5 +1,5 @@
 import { HttpError, handleHttpErrorLog, isAxiosError } from '@/utils'
-import { apiGetUserInfo, apiPatchUserInfo, apiPostUserLogin, apiPostLogout } from '@/api'
+import { apiGetUserInfo, apiPatchUserInfo, apiPostUserLogin, apiPostLogout, apiPostLineConnect } from '@/api'
 import { RouterName, StorageKey, Mutations, Actions } from '@/consts'
 import Config from '@/config'
 
@@ -74,12 +74,21 @@ export default {
       const token = await dispatch(Actions.GET_STORAGE, StorageKey.TOKEN)
       if (token) {
         if (loginRoutes.includes(route.name)) {
+          const responseType = Config.value.lineLoginRequestParam.response_type
+          let queryCode = ''
+          if (vm.$route.query[responseType]) {
+            queryCode = vm.$route.query[responseType]
+          }
           const replaceRoute = await dispatch(Actions.GET_STORAGE, StorageKey.REPLACE_ROUTE)
           if (replaceRoute) {
             await vm.$router.replace({ name: replaceRoute })
             await dispatch(Actions.REMOVE_STORAGE, StorageKey.REPLACE_ROUTE)
           } else {
             await vm.$router.replace({ name: RouterName.HOME })
+            if (queryCode) {
+              const body = new URLSearchParams({ code: queryCode })
+              await apiPostLineConnect(body)
+            }
           }
         }
         return true
