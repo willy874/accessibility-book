@@ -97,7 +97,7 @@
     </div>
     <div v-if="step === 3">
       <h2 class="form-title">密碼設定</h2>
-      <form @submit="submitStep3">
+      <form @submit.prevent="submitStep3">
         <div class="form-item">
           <label>帳號</label>
           <input
@@ -268,6 +268,7 @@ export default {
           await this.fetchUserInfo()
         } else {
           this.step = 3
+          return
         }
         if (this.userInfo.is_password_set === false) {
           this.step = 1
@@ -459,27 +460,33 @@ export default {
     },
     async submitStep3(e) {
       // 一般使用註冊
-      if (!this.throttle()) {
-        return
-      }
-      e.preventDefault()
-      this.errors = await this.validateStep3()
-      if (isValid(this.errors)) {
-        alert('註冊失敗！\n\n' + errorsToArray(this.errors).toString().replace(/,/g, '，\n') + '。')
-        return
-      }
+      // if (!this.throttle()) {
+      //   return
+      // }
+      // e.preventDefault()
+      // this.errors = await this.validateStep3()
+      // if (isValid(this.errors)) {
+      //   alert('註冊失敗！\n\n' + errorsToArray(this.errors).toString().replace(/,/g, '，\n') + '。')
+      //   return
+      // }
       try {
         const res = await apiPostRegistration({
-          new_password1: this.form.password1,
-          new_password2: this.form.password2,
+          password1: this.form.password1,
+          password2: this.form.password2,
           username: this.form.account,
           email: this.form.email,
         })
-        console.log(res)
-        // this.step = 2
+        if (isAxiosError(res)) {
+          throw res
+        } else {
+          localStorage.setItem('token', res.data.key)
+          await this.fetchUserInfo()
+          this.step = 2
+        }
       } catch (error) {
         handleHttpErrorLog(error)
-        this.$router.replace({ name: RouterName.LOGIN })
+        alert('註冊失敗')
+        // this.$router.replace({ name: RouterName.LOGIN })
       }
     },
   },

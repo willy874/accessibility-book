@@ -119,5 +119,5 @@ export function isTextExcludes(data, text) {
  * @returns {res is AxiosError<any>}
  */
 export function isAxiosError(res) {
-  return res && '' in res
+  return res && res.isAxiosError
 }

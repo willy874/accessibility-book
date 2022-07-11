@@ -144,4 +144,4 @@ export const apiPostSearch = (data) => request.post(`search/`, data)
  */
 export const apiGetSiteConf = () => request.get(`site_conf/`)
 
-export const apiPostRegistration = (data) => request.post(`dj-rest-auth/registration/`, data)
+export const apiPostRegistration = (data) => authRequest.post(`registration/`, data)
