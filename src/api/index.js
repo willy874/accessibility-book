@@ -145,3 +145,6 @@ export const apiPostSearch = (data) => request.post(`search/`, data)
 export const apiGetSiteConf = () => request.get(`site_conf/`)
 
 export const apiPostRegistration = (data) => authRequest.post(`registration/`, data)
+
+export const aipLineConnect = () => authRequest.get(`line/connect/`)
+// export const aipLineConnect = () => authRequest.get('/dj-rest-auth/line/connect/')
