@@ -75,10 +75,7 @@ export default {
       if (token) {
         if (loginRoutes.includes(route.name)) {
           const responseType = Config.value.lineLoginRequestParam.response_type
-          let queryCode = ''
-          if (vm.$route.query[responseType]) {
-            queryCode = vm.$route.query[responseType]
-          }
+          const queryCode = vm.$route.query[responseType]
           const replaceRoute = await dispatch(Actions.GET_STORAGE, StorageKey.REPLACE_ROUTE)
           if (replaceRoute) {
             await vm.$router.replace({ name: replaceRoute })
@@ -88,7 +85,7 @@ export default {
           }
           if (queryCode) {
             const body = { code: queryCode }
-            await apiPostLineConnect(JSON.stringify(body))
+            await apiPostLineConnect(body)
           }
         }
         return true
