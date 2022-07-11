@@ -87,8 +87,8 @@ export default {
             await vm.$router.replace({ name: RouterName.HOME })
           }
           if (queryCode) {
-            const body = new URLSearchParams({ code: queryCode })
-            await apiPostLineConnect(body)
+            const body = { code: queryCode }
+            await apiPostLineConnect(JSON.stringify(body))
           }
         }
         return true
