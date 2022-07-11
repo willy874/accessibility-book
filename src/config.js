@@ -75,6 +75,13 @@ const config = {
     scope: 'profile openid email',
     redirect_uri: location.origin + '/login',
   },
+  lineBindRequestParam: {
+    response_type: 'code',
+    client_id: process.env.VUE_APP_CLIENT_ID,
+    nonce: '09876xyz',
+    scope: 'profile openid email',
+    redirect_uri: location.origin + '/navigation',
+  },
   isApp: isApp(),
   liffId: process.env.VUE_APP_LIFF_ID,
   liff: location.host === process.env.VUE_APP_LIFF_HOST,
