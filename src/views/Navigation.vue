@@ -65,7 +65,7 @@ export default {
   computed: {
     lineUrl() {
       const qs = new URLSearchParams({
-        ...Config.value.lineLoginRequestParam,
+        ...Config.value.lineBindRequestParam,
         state: 'state=12345abcde',
       }).toString()
       console.log('https://access.line.me/oauth2/v2.1/authorize?' + qs)
