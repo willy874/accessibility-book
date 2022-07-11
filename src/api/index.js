@@ -21,7 +21,7 @@ export const apiPostLineLogin = (data) => authRequest.post(`line/`, data)
 /**
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
-export const apiPostLineConnect = () => authRequest.post(`line/connect/`)
+export const apiPostLineConnect = (data) => authRequest.post(`line/connect/`, data)
 
 /**
  * @param {PasswordRegisterRequestParam} data
@@ -145,6 +145,3 @@ export const apiPostSearch = (data) => request.post(`search/`, data)
 export const apiGetSiteConf = () => request.get(`site_conf/`)
 
 export const apiPostRegistration = (data) => authRequest.post(`registration/`, data)
-
-export const aipLineConnect = () => authRequest.get(`line/connect/`)
-// export const aipLineConnect = () => authRequest.get('/dj-rest-auth/line/connect/')

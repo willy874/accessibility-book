@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import { aipLineConnect } from '@/api'
 import { RouterName, Actions } from '@/consts'
 import { mapActions } from 'vuex'
 import Config from '@/config'
@@ -65,9 +64,9 @@ export default {
   computed: {
     lineUrl() {
       const qs = new URLSearchParams({
-        ...Config.value.lineBindRequestParam,
+        ...Config.value.lineLoginRequestParam,
         state: 'state=12345abcde',
-      }).toString()
+      })
       console.log('https://access.line.me/oauth2/v2.1/authorize?' + qs)
       console.log(qs)
       return `https://access.line.me/oauth2/v2.1/authorize?${qs}`
@@ -75,10 +74,6 @@ export default {
   },
   methods: {
     logout: throttle(logout, 400),
-    async connectLine() {
-      const res = await aipLineConnect()
-      console.log(res)
-    },
   },
 }
 </script>
