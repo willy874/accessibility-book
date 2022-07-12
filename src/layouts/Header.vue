@@ -21,6 +21,7 @@
           <ul v-show="model.child && model.uuid === showMenu">
             <li v-for="child in sortMenuList(model.child)" :key="child.uuid">
               <a
+                class="menu-btn"
                 :class="{ active: isActiveId(child.uuid) }"
                 :title="`前往${model.label}的${child.label}`"
                 @click="pushMenuRouter(child.uuid)"
@@ -184,6 +185,13 @@ header {
   }
   .header-logo {
     width: 30px;
+  }
+}
+.menu-btn {
+  cursor: pointer;
+  &:hover {
+    background-color: #68c79c;
+    color: #fff;
   }
 }
 </style>

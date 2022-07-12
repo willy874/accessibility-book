@@ -135,5 +135,9 @@ export default {
 .tag-item {
   padding: 4px 16px;
   white-space: nowrap;
+  &:hover {
+    background-color: #68c79c;
+    color: #fff;
+  }
 }
 </style>

@@ -232,6 +232,7 @@ export default {
   text-align: center;
   &:hover {
     background-color: #1a5f34;
+    color: #fff;
   }
 }
 

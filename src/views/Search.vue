@@ -50,6 +50,10 @@ export default {
 .serch-list {
   font-size: 18px;
   padding: 8px;
+  &:hover {
+    background-color: #68c79c;
+    color: #fff;
+  }
 }
 h2 {
   margin-bottom: 8px;
