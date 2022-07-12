@@ -108,5 +108,9 @@ h2 {
 .tag__list-item {
   padding: 8px;
   font-size: 20px;
+  &:hover {
+    background-color: #68c79c;
+    color: #fff;
+  }
 }
 </style>

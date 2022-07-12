@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>關於</h2>
-    <div v-html="text"></div>
+    <div class="py-4" v-html="text"></div>
   </div>
 </template>
 

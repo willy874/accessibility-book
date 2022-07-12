@@ -146,5 +146,11 @@ h3 {
 .book__list-item {
   padding: 8px;
   font-size: 20px;
+  &:hover {
+    &:hover {
+      background-color: #68c79c;
+      color: #fff;
+    }
+  }
 }
 </style>

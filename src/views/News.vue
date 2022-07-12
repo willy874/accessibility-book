@@ -104,6 +104,10 @@ export default {
     border: 1px solid #000;
     padding: 16px;
     margin: 8px 0;
+    &:hover {
+      background-color: #68c79c;
+      color: #fff;
+    }
   }
 }
 </style>
