@@ -4,8 +4,8 @@
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="bookmarkList.length">
       <div v-for="model in bookmarkList" :key="model.id">
-        <div class="bookmark__list-item">
-          <RouterLink :to="getChapterRoute(model.chapter)">{{ model.chapter_name }}</RouterLink>
+        <div class="bookmark__list-item list-group-item">
+          <RouterLink class="d-flex" :to="getChapterRoute(model.chapter)">{{ model.chapter_name }}</RouterLink>
           <button @click="deleteBookmark(model.id)">刪除</button>
         </div>
       </div>
@@ -80,6 +80,13 @@ h2 {
   }
   button {
     flex-shrink: 0;
+  }
+  &:hover {
+    background-color: #68c79c;
+    color: #fff;
+    button {
+      color: #fff;
+    }
   }
 }
 </style>
