@@ -3,11 +3,23 @@
     <form @submit.prevent="submitHandler">
       <div class="form-item">
         <label>密碼</label>
-        <input v-model="password.newPassword" title="請輸入密碼" placeholder="請輸入密碼" type="password" />
+        <input
+          v-model="password.newPassword"
+          class="form-control"
+          title="請輸入密碼"
+          placeholder="請輸入密碼"
+          type="password"
+        />
       </div>
       <div class="form-item">
         <label>確認密碼</label>
-        <input v-model="password.checkPassword" title="請輸入確認密碼" placeholder="請輸入確認密碼" type="password" />
+        <input
+          v-model="password.checkPassword"
+          class="form-control"
+          title="請輸入確認密碼"
+          placeholder="請輸入確認密碼"
+          type="password"
+        />
       </div>
       <div class="revise-password-submit-btn">
         <button title="確認" class="btn btn-primary w-100" type="submit">確認</button>

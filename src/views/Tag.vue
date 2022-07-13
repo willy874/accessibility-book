@@ -4,15 +4,15 @@
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="tagListById && tagListById.length">
       <ul>
-        <li v-for="model in tagListById" :key="model.id" class="tag__list-item">
-          <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
+        <li v-for="model in tagListById" :key="model.id" class="tag__list-item list-group-item">
+          <RouterLink class="d-flex" :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
         </li>
       </ul>
     </div>
     <div v-else-if="tagList && tagList.length">
       <ul>
-        <li v-for="model in tagList" :key="model.id" class="tag__list-item">
-          <RouterLink :to="getTagDetailRoute(model.id)">{{ model.name }}</RouterLink>
+        <li v-for="model in tagList" :key="model.id" class="tag__list-item list-group-item">
+          <RouterLink class="d-flex" :to="getTagDetailRoute(model.id)">{{ model.name }}</RouterLink>
         </li>
       </ul>
     </div>
