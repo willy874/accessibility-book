@@ -2,14 +2,14 @@
   <nav>
     <h2>選單列表</h2>
     <ul>
-      <li v-for="(nav, name) in navigation" :key="name">
-        <RouterLink :to="{ name }">{{ nav.title }}</RouterLink>
+      <li v-for="(nav, name) in navigation" :key="name" class="navigation-list list-group-item">
+        <RouterLink class="d-flex" :to="{ name }">{{ nav.title }}</RouterLink>
+      </li>
+      <li class="navigation-list list-group-item">
+        <a :href="lineUrl" class="d-flex">綁定信箱</a>
       </li>
       <li>
-        <a :href="lineUrl">綁定信箱</a>
-      </li>
-      <li>
-        <button class="logout-button" type="button" @click="logout">登出</button>
+        <button class="logout-button btn btn-primary" type="button" @click="logout">登出</button>
       </li>
     </ul>
   </nav>
@@ -89,7 +89,15 @@ nav {
 }
 .logout-button {
   padding: 1rem;
-  background: gray;
   color: white;
+  &:hover {
+    color: white;
+  }
+}
+.navigation-list {
+  &:hover {
+    background-color: #68c79c;
+    color: #fff;
+  }
 }
 </style>

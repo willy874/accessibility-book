@@ -84,8 +84,12 @@ export default {
             await vm.$router.replace({ name: RouterName.HOME })
           }
           if (queryCode) {
-            const body = { code: queryCode }
+            const body = {
+              code: queryCode,
+              return_url: process.env.VUE_APP_BIND_LINE,
+            }
             await apiPostLineConnect(body)
+            console.log(process.env.VUE_APP_BIND_LINE)
           }
         }
         return true
