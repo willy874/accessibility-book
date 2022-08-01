@@ -5,7 +5,12 @@
         <div v-if="activeData" :key="activeData.text">{{ activeData.text }}</div>
       </div>
       <ul ref="list" class="tip-list" role="list" :style="listStyle">
-        <li v-for="(item, index) in listData" :key="item.id" :class="{ item: true, active: index === active }">
+        <li
+          v-for="(item, index) in listData"
+          :key="item.id"
+          :class="{ item: true, active: index === active }"
+          :title="item.text"
+        >
           {{ item.text }}
         </li>
       </ul>
