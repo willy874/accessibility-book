@@ -1,9 +1,18 @@
 <template>
   <div class="search-bar">
-    <div class="title"><slot name="default" /></div>
+    <div class="title">
+      <slot name="default" />
+    </div>
     <div class="input">
       <form @submit.prevent="submitHandler">
-        <input v-model="inputText" class="form-control" type="text" @input="onInput" @keydown="onKeydown" />
+        <input
+          v-model="inputText"
+          class="form-control"
+          type="text"
+          title="請輸入搜尋文字"
+          @input="onInput"
+          @keydown="onKeydown"
+        />
       </form>
       <TipList ref="tip" @change="onChange" @enter="onEnter" />
     </div>
