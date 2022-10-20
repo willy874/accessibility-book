@@ -485,7 +485,12 @@ export default {
         }
       } catch (error) {
         handleHttpErrorLog(error)
-        alert('註冊失敗')
+        const errData = error.response.data
+        const errMsg = []
+        for (const key in errData) {
+          errMsg.push(errData[key][0])
+        }
+        alert(errMsg.length ? errMsg.join('') : '')
         // this.$router.replace({ name: RouterName.LOGIN })
       }
     },
