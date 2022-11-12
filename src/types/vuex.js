@@ -67,6 +67,7 @@
  * @property {boolean} init
  * @property {Route} route
  * @property {boolean} loading
+ * @property {string} aboutText
  */
 /**
  * @template {(...args: any) => any} F

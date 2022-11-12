@@ -4,8 +4,8 @@
     <div v-else-if="targetModel">
       <h2>{{ targetModel.name }} - 章節列表</h2>
       <ul role="list">
-        <li v-for="model in chapterListSort" :key="model.id" class="book__list-item">
-          <RouterLink :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
+        <li v-for="model in chapterListSort" :key="model.id" class="book__list-item list-group-item">
+          <RouterLink class="d-flex" :to="getChapterRoute(model.id)">{{ model.name }}</RouterLink>
         </li>
       </ul>
     </div>
@@ -13,8 +13,8 @@
       <h2 v-if="queryTagName">{{ queryTagName }} - 書籍列表</h2>
       <h2 v-else>書籍列表</h2>
       <ul role="list">
-        <li v-for="model in bookListByLast" :key="model.id" class="book__list-item">
-          <RouterLink :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
+        <li v-for="model in bookListByLast" :key="model.id" class="book__list-item list-group-item">
+          <RouterLink class="d-flex" :to="getBookRoute(model.id)">{{ model.name }}</RouterLink>
         </li>
       </ul>
     </div>
@@ -122,7 +122,9 @@ export default {
       const id = route.params.id
       if (id) {
         this.active = id
-        await this.fetchBookById(id)
+        const res = await this.fetchBookById(id)
+        const title = document.querySelector('title')
+        title.innerHTML = title.innerHTML + '-' + res.name
       } else if (this.queryTagName) {
         this.active = ''
         this.bookListByLast = await this.fetchBookByQuery(route.query)
@@ -144,5 +146,9 @@ h3 {
 .book__list-item {
   padding: 8px;
   font-size: 20px;
+  &:hover {
+    background-color: #68c79c;
+    color: #fff;
+  }
 }
 </style>

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './routes'
+import Config from '@/config'
 
 Vue.use(VueRouter)
 
@@ -20,6 +21,11 @@ router.beforeEach((to, from, next) => {
     init = true
   }
   next()
+})
+
+router.afterEach((to, from, next) => {
+  const title = `${Config.value.site_conf.site_name} - ${to.meta.title}`
+  document.querySelector('title').innerHTML = title
 })
 
 export default router

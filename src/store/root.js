@@ -1,10 +1,13 @@
 import { Mutations } from '@/consts'
 import Config from '@/config'
+import { HttpError, handleHttpErrorLog, isAxiosError } from '@/utils'
+import { apiGetSiteConf } from '@/api/index'
 
 export const state = {
   init: false,
   route: null,
   loading: false,
+  aboutText: '',
 }
 
 /** @type {GetterTree<RootState>} */
@@ -25,6 +28,11 @@ export const getters = {}
  * @param {RootState} state
  * @param {boolean} bool
  */
+/**
+ * @callback aboutText
+ * @param {RootState} state
+ * @param {string} str
+ */
 /** @type {MutationTree<RootState>} */
 export const mutations = {
   /** @type {setInit} */
@@ -39,6 +47,10 @@ export const mutations = {
   setLoading(state, bool) {
     state.loading = bool
   },
+  /** @type {aboutText} */
+  setAboutText(state, str) {
+    state.aboutText = str
+  },
 }
 
 /**
@@ -46,6 +58,11 @@ export const mutations = {
  * @param {ActionContext<RootState>} store
  * @param {Vue} vm
  * @returns {Promise<Route>}
+ */
+/**
+ * @callback fetchSiteConf
+ * @param {ActionContext<RootState>} store
+ * @returns {Promise<SiteConf>}
  */
 /** @type {ActionTree<RootState>} */
 export const actions = {
@@ -55,5 +72,19 @@ export const actions = {
     const route = Config.getRoute(vm)
     commit(Mutations.SET_ROUTE, route)
     return route
+  },
+  /** @type {fetchSiteConf} */
+  async fetchSiteConf(store) {
+    try {
+      const res = await apiGetSiteConf()
+      if (isAxiosError(res)) {
+        throw new HttpError(res)
+      } else {
+        store.commit(Mutations.SET_ABOUT_TEXT, res.data.about)
+        return res.data
+      }
+    } catch (error) {
+      handleHttpErrorLog(error)
+    }
   },
 }

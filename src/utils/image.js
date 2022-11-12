@@ -64,3 +64,16 @@ export function transformFileSize(value) {
     return value
   }
 }
+
+/**
+ * @param {string} url
+ * @return {Promise<any>}
+ */
+export function useImage(url) {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+    image.onload = resolve
+    image.onerror = reject
+    image.src = url
+  })
+}

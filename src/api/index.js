@@ -21,7 +21,7 @@ export const apiPostLineLogin = (data) => authRequest.post(`line/`, data)
 /**
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
-export const apiPostLineConnect = () => authRequest.post(`line/connect/`)
+export const apiPostLineConnect = (data) => authRequest.post(`line/connect/`, data)
 
 /**
  * @param {PasswordRegisterRequestParam} data
@@ -134,4 +134,14 @@ export const apiGetNewsList = () => request.get(`news/`)
  */
 export const apiGetNewsById = (id) => request.get(`news/${id}/`)
 
+/**
+ * @returns {Promise<AxiosResponse<ResponseCollection<SearchModel>>>}
+ */
 export const apiPostSearch = (data) => request.post(`search/`, data)
+
+/**
+ * @returns {Promise<AxiosResponse<SiteConf>>}
+ */
+export const apiGetSiteConf = () => request.get(`site_conf/`)
+
+export const apiPostRegistration = (data) => authRequest.post(`registration/`, data)
