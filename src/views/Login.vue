@@ -6,7 +6,7 @@
         <label class="form-label" title="帳號信箱">帳號信箱</label>
         <input
           v-model="form.username"
-          class="form-input"
+          class="form-input form-control"
           :class="{ 'is-valid': isValid(errors, 'username') }"
           type="text"
           name="email"
@@ -17,7 +17,7 @@
         <label class="form-label" title="密碼">密碼</label>
         <input
           v-model="form.password"
-          class="form-input"
+          class="form-input form-control"
           :class="{ 'is-valid': isValid(errors, 'password') }"
           type="password"
           name="password"
@@ -96,13 +96,16 @@ export default {
       return `https://access.line.me/oauth2/v2.1/authorize?${qs}`
     },
   },
-  created() {
+  async created() {
     if (process.env.NODE_ENV === 'development') {
       this.form = { username: 'user', password: 'zY7bSBgk' }
     }
     const responseType = Config.value.lineLoginRequestParam.response_type
+    const token = localStorage.getItem('token')
     if (this.$route.query[responseType]) {
-      this.fetchLineLogin(this.$route.query[responseType])
+      if (!token) {
+        this.fetchLineLogin(this.$route.query[responseType])
+      }
     }
   },
   methods: {
@@ -229,6 +232,7 @@ export default {
   text-align: center;
   &:hover {
     background-color: #1a5f34;
+    color: #fff;
   }
 }
 

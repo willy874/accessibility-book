@@ -2,11 +2,14 @@
   <nav>
     <h2>選單列表</h2>
     <ul>
-      <li v-for="(nav, name) in navigation" :key="name">
-        <RouterLink :to="{ name }">{{ nav.title }}</RouterLink>
+      <li v-for="(nav, name) in navigation" :key="name" class="navigation-list list-group-item">
+        <RouterLink class="d-flex" :to="{ name }">{{ nav.title }}</RouterLink>
+      </li>
+      <li class="navigation-list list-group-item">
+        <a :href="lineUrl" class="d-flex">綁定信箱</a>
       </li>
       <li>
-        <button class="logout-button" type="button" @click="logout">登出</button>
+        <button class="logout-button btn btn-primary" type="button" @click="logout">登出</button>
       </li>
     </ul>
   </nav>
@@ -15,7 +18,7 @@
 <script>
 import { RouterName, Actions } from '@/consts'
 import { mapActions } from 'vuex'
-
+import Config from '@/config'
 import { throttle } from '@/utils'
 /**
  * @type {{
@@ -58,6 +61,17 @@ export default {
       },
     }
   },
+  computed: {
+    lineUrl() {
+      const qs = new URLSearchParams({
+        ...Config.value.lineLoginRequestParam,
+        state: 'state=12345abcde',
+      })
+      console.log('https://access.line.me/oauth2/v2.1/authorize?' + qs)
+      console.log(qs)
+      return `https://access.line.me/oauth2/v2.1/authorize?${qs}`
+    },
+  },
   methods: {
     logout: throttle(logout, 400),
   },
@@ -75,7 +89,15 @@ nav {
 }
 .logout-button {
   padding: 1rem;
-  background: gray;
   color: white;
+  &:hover {
+    color: white;
+  }
+}
+.navigation-list {
+  &:hover {
+    background-color: #68c79c;
+    color: #fff;
+  }
 }
 </style>

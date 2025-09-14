@@ -21,7 +21,7 @@ export const apiPostLineLogin = (data) => authRequest.post(`line/`, data)
 /**
  * @returns {Promise<AxiosResponse<LoginResponseData>>}
  */
-export const apiPostLineConnect = () => authRequest.post(`line/connect/`)
+export const apiPostLineConnect = (data) => authRequest.post(`line/connect/`, data)
 
 /**
  * @param {PasswordRegisterRequestParam} data

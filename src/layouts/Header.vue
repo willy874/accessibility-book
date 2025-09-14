@@ -7,8 +7,9 @@
     </SearchBar>
     <nav>
       <ul v-if="menuList.length">
-        <li v-for="model in sortMenuList(menuList)" :key="model.uuid">
+        <li v-for="model in sortMenuList(menuList)" :key="model.uuid" class="p-0">
           <a
+            class="dropdown__btn d-flex align-items-center"
             :class="{ active: model.uuid === showMenu }"
             :title="`開關${model.label}選單`"
             :aria-expanded="String(model.uuid === showMenu)"
@@ -21,6 +22,7 @@
           <ul v-show="model.child && model.uuid === showMenu">
             <li v-for="child in sortMenuList(model.child)" :key="child.uuid">
               <a
+                class="menu-btn"
                 :class="{ active: isActiveId(child.uuid) }"
                 :title="`前往${model.label}的${child.label}`"
                 @click="pushMenuRouter(child.uuid)"
@@ -184,6 +186,36 @@ header {
   }
   .header-logo {
     width: 30px;
+  }
+}
+.menu-btn {
+  cursor: pointer;
+  &:hover {
+    background-color: #68c79c;
+    color: #fff;
+  }
+}
+.dropdown__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::after {
+    content: '';
+    margin: 4px 0 0 4px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: #000 transparent transparent transparent;
+  }
+  &:hover {
+    &:after {
+      border-color: #fff transparent transparent transparent;
+    }
+  }
+  &.active {
+    &:after {
+      border-color: #fff transparent transparent transparent;
+    }
   }
 }
 </style>

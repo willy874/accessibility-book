@@ -3,9 +3,9 @@
     <div v-if="isLoading">讀取中</div>
     <div v-else-if="activeModel && activeModel.child && activeModel.child.length">
       <h2>{{ activeModel.label }} - 列表</h2>
-      <ul>
-        <li v-for="model in activeModel.child" :key="model.id" class="menu__list-item">
-          <RouterLink :to="getBookRouteByTagName(model.targetTag)">{{ model.label }} </RouterLink>
+      <ul class="list-group">
+        <li v-for="model in activeModel.child" :key="model.id" class="menu__list-item list-group-item">
+          <RouterLink class="d-flex" :to="getBookRouteByTagName(model.targetTag)">{{ model.label }} </RouterLink>
         </li>
       </ul>
     </div>
@@ -79,5 +79,9 @@ h3 {
 .menu__list-item {
   padding: 8px;
   font-size: 20px;
+  &:hover {
+    background-color: #68c79c;
+    color: #fff;
+  }
 }
 </style>
