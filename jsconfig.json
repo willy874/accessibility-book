@@ -3,7 +3,6 @@
     "./src/**/*"
   ],
   "compilerOptions": {
-    "checkJs": true,
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {

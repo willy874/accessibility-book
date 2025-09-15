@@ -12,6 +12,24 @@ module.exports = {
     port: 8000,
     https: true,
     hotOnly: false,
+    proxy: {
+      '/api': {
+        target: `https://${process.env.VUE_APP_API_URL}`,
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/api': '/api',
+        },
+      },
+      '/dj-rest-auth': {
+        target: `https://${process.env.VUE_APP_API_URL}`,
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/dj-rest-auth': '/dj-rest-auth',
+        },
+      },
+    },
   },
   css: {
     sourceMap: true,
