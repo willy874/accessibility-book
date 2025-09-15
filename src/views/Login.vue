@@ -98,7 +98,7 @@ export default {
   },
   async created() {
     if (process.env.NODE_ENV === 'development') {
-      this.form = { username: 'user', password: 'zY7bSBgk' }
+      this.form = { username: 'kent1026@gmail.com', password: '1qaz2wsx' }
     }
     const responseType = Config.value.lineLoginRequestParam.response_type
     const token = localStorage.getItem('token')

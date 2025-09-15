@@ -5,7 +5,7 @@ let app = null
 
 class VueConfig {
   static assignConfig(value) {
-    const base = location.protocol + '//' + value.baseUrl
+    const base = value.baseUrl ? location.protocol + '//' + value.baseUrl : ''
     return {
       ...value,
       base: {
@@ -65,7 +65,7 @@ const config = {
     site_name: '',
     domain: process.env.VUE_APP_API_URL,
   },
-  baseUrl: process.env.VUE_APP_API_URL,
+  baseUrl: '',
   env: process.env,
   package: JSON.parse(process.env.VUE_APP_PACKAGE),
   lineLoginRequestParam: {
@@ -81,10 +81,11 @@ const config = {
   authorizationHeaderPrefix: 'Token',
   loginRoutes: [RouterName.LOGIN, RouterName.REGISTER, RouterName.NO_AUTHORIZED],
   ...VueConfig.assignConfig({
-    baseUrl: process.env.VUE_APP_API_URL,
+    // baseUrl: process.env.VUE_APP_API_URL,
+    baseUrl: '',
   }),
 }
 
 VueConfig.value = config
-
+console.log('Config:', VueConfig.value)
 export default VueConfig

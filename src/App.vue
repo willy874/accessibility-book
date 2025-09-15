@@ -89,7 +89,7 @@ export default {
         Object.assign(
           config,
           Config.assignConfig({
-            baseUrl: data.domain,
+            // baseUrl: data.domain,
             site_conf: data,
           })
         )

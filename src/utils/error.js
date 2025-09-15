@@ -31,7 +31,7 @@ export class HttpError extends Error {
         status: 0,
       },
       config: {
-        baseURL: '',
+        baseURL: '/',
         method: '',
         url: '',
       },
@@ -41,7 +41,7 @@ export class HttpError extends Error {
     super(message)
     this.status = res.response?.status || 0
     this.methods = res.config.method.toUpperCase() || 'GET'
-    const baseURL = res.config.baseURL || ''
+    const baseURL = res.config.baseURL || '/'
     const url = res.config.url || ''
     this.url = baseURL + url
   }

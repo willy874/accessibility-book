@@ -100,7 +100,6 @@ export const actions = {
   async addBookmark(store, params) {
     const { commit } = store
     try {
-      commit(Mutations.SET_LOADING, params.chapter)
       const res = await apiPostBookMark(params)
       if (isAxiosError(res)) {
         throw new HttpError(res)
@@ -116,7 +115,6 @@ export const actions = {
   async deleteBookmark(store, id) {
     const { state, commit } = store
     try {
-      commit(Mutations.SET_LOADING, id)
       const res = await apiDeleteBookMark(id)
       if (isAxiosError(res)) {
         throw new HttpError(res)
